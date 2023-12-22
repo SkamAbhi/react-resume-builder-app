@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useStyletron } from "baseui";
 import { Textarea } from "baseui/textarea";
-import CustomButton from "../../components/CustomButton/page";
+import CustomButton from "../../components/CustomButton";
 
 const Summary: React.FC = () => {
   const [css, $theme] = useStyletron();
@@ -62,7 +62,7 @@ const Summary: React.FC = () => {
           />
         </div>
       </form>
-     
+
       <div
         className={css({
           display: "flex",

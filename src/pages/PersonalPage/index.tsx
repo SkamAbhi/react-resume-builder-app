@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useStyletron } from "baseui";
 import { FileUploader } from "baseui/file-uploader";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { Modal, ModalBody, ModalFooter, ModalButton } from "baseui/modal";
-import CustomButton from "../../components/CustomButton/page";
-import CustomInput from "../../components/CustomInput/page";
-import { userDataState } from "../../utlitis/resumeAtoms/page";
+import { Modal, ModalBody, ModalFooter } from "baseui/modal";
+import CustomButton from "../../components/CustomButton";
+import CustomInput from "../../components/CustomInput";
+import { userDataState } from "../../utlis/resumeAtoms";
 
 const Personal = () => {
   const [css, $theme] = useStyletron();
@@ -169,7 +169,6 @@ const Personal = () => {
                 </div>
               </ModalBody>
               <ModalFooter>
-                <ModalButton onClick={close}>Okay</ModalButton>
               </ModalFooter>
             </Modal>
           </div>

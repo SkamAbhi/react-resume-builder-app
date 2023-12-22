@@ -9,12 +9,10 @@ function Sidebar() {
   return (
     <div
       className={css({
-        height: "100%",
-        zIndex:9999,
-        display:'none',
+        zIndex: 9999,
+        display: "none",
         [$theme.mediaQuery.large]: {
-          display:'flex '
-
+          display: "flex ",
         },
       })}
     >
@@ -24,20 +22,18 @@ function Sidebar() {
           position: "fixed",
           padding: "20px",
           paddingBottom: "40px",
-          display:'none',
-          [$theme.mediaQuery.small]: {
-            
-          },
+          display: "none",
+          [$theme.mediaQuery.small]: {},
           [$theme.mediaQuery.medium]: {
             width: "10rem",
-            paddingLeft:'0',
-            display:'none'
+            paddingLeft: "0",
+            display: "none",
           },
           [$theme.mediaQuery.large]: {
             width: "13rem",
-            paddingLeft:'20px',
-            display:'block'
-
+            paddingLeft: "20px",
+            display: "block",
+            height: "100%",
           },
         })}
       >
@@ -55,7 +51,7 @@ function Sidebar() {
           current={current}
           overrides={{
             Root: {
-              style: ({ $theme }) => ({
+              style: () => ({
                 display: "flex",
                 flexDirection: "column",
                 maxWidth: "200px",
@@ -83,13 +79,13 @@ function Sidebar() {
               }),
             },
             Tail: {
-              style: ({ $theme }) => ({
-                left: "27px",
-                top: "-25px",
+              style: () => ({
+                left: "21px",
+                top: "-23px",
               }),
             },
             Content: {
-              style: ({ $theme }) => ({
+              style: () => ({
                 width: "150px",
               }),
             },
@@ -105,10 +101,10 @@ function Sidebar() {
 
         <div
           className={css({
-            margin: "15px",
             marginLeft: "10px",
             color: "white",
-            marginTop: "20px",
+            position: "absolute",
+            bottom: "65px",
 
             ...$theme.typography.LabelXSmall,
           })}

@@ -1,13 +1,13 @@
 "use client";
 
 interface educationData {
-  schoolName:string,
-  schoolLocation:string,
-  degree:string,
-  fieldOfStudy:string,
-  startDate:string,
-  endDate:string,
-  description:string,
+  schoolName: string;
+  schoolLocation: string;
+  degree: string;
+  fieldOfStudy: string;
+  startDate: string;
+  endDate: string;
+  description: string;
 }
 
 import React, { ChangeEvent, useEffect, useState } from "react";
@@ -16,14 +16,12 @@ import { useStyletron } from "baseui";
 import { StatefulDatepicker } from "baseui/datepicker";
 import { StatefulPopover } from "baseui/popover";
 import { Button } from "baseui/button";
-import { useRecoilState} from "recoil";
+import { useRecoilState } from "recoil";
 import { Textarea } from "baseui/textarea";
-import { educationData } from "../../utlitis/resumeAtoms/page";
-import CustomButton from "../../components/CustomButton/page";
-import CustomInput from "../../components/CustomInput/page";
+import { educationData } from "../../utlis/resumeAtoms";
+import CustomButton from "../../components/CustomButton";
+import CustomInput from "../../components/CustomInput";
 import { Add, Idea, Subtract } from "@carbon/icons-react";
-
-
 
 function Education() {
   const [value, setValue] = React.useState<Value>([]);
@@ -39,7 +37,6 @@ function Education() {
   const handleHiddenInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
-
 
   useEffect(() => {
     const storedEducationData = localStorage.getItem("educationData");
@@ -67,33 +64,56 @@ function Education() {
   return (
     <div
       className={css({
-        
-        [$theme.mediaQuery.medium]:{
-          marginTop:'40px',
-          marginLeft:'20px',
-          marginRight:'20px'
+        [$theme.mediaQuery.medium]: {
+          marginTop: "40px",
+          marginLeft: "20px",
+          marginRight: "20px",
         },
-        [$theme.mediaQuery.large]:{
+        [$theme.mediaQuery.large]: {
           display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        marginLeft: "17rem",
-        marginTop: "40px",
+          justifyContent: "center",
+          flexDirection: "column",
+          marginLeft: "17rem",
+          marginTop: "40px",
         },
-
-        ...$theme.typography.LabelMedium,
       })}
     >
       <div
         className={css({
           display: "flex",
           justifyContent: "space-between",
-          maxWidth:'1050px'
+          maxWidth: "1050px",
         })}
       >
-        <div className={css({})}>
-          <h1>Tell us about your education</h1>
-          <p>
+        <div
+          className={css({
+            marginLeft: "30px",
+            marginRight: "20px",
+
+            [$theme.mediaQuery.medium]: {
+              marginLeft: "0px",
+              marginRight: "0px",
+            },
+          })}
+        >
+          <h1
+            className={css({
+              ...$theme.typography.HeadingMedium,
+              [$theme.mediaQuery.medium]: {
+                ...$theme.typography.HeadingLarge,
+              },
+            })}
+          >
+            Tell us about your education
+          </h1>
+          <p
+            className={css({
+              ...$theme.typography.LabelSmall,
+              [$theme.mediaQuery.medium]: {
+                ...$theme.typography.LabelMedium,
+              },
+            })}
+          >
             Include every school, even if you are still there or did not
             graduate.
           </p>
@@ -168,17 +188,16 @@ function Education() {
       <div
         className={css({
           maxWidth: "1030px",
-          margin:'0 30px',
-        
+          margin: "0 30px",
         })}
       >
         <div
           className={css({
             display: "flex",
             Maxwidth: "1000px",
-            flexDirection:'column',
-            [$theme.mediaQuery.medium]:{
-              flexDirection:'row',
+            flexDirection: "column",
+            [$theme.mediaQuery.medium]: {
+              flexDirection: "row",
               gap: "30px",
             },
           })}
@@ -201,15 +220,22 @@ function Education() {
         <div
           className={css({
             display: "flex",
-            width: "1000px",
-            flexDirection:'column',
-            [$theme.mediaQuery.medium]:{
-              flexDirection:'row',
+            flexDirection: "column",
+            Maxwidth: "1000px",
+
+            [$theme.mediaQuery.medium]: {
+              flexDirection: "row",
               gap: "30px",
             },
-            })}
+          })}
         >
-          <div>
+          <div
+            className={css({
+              [$theme.mediaQuery.medium]: {
+                width: "50%",
+              },
+            })}
+          >
             <label
               className={css({
                 ...$theme.typography.LabelMedium,
@@ -240,7 +266,8 @@ function Education() {
                 ControlContainer: {
                   style: ({ $theme }) => ({
                     backgroundColor: $theme.colors.primaryB,
-                    width:'100%',
+                    width: "100%",
+                    marginTop: "12px",
                     border: "1.5px solid #838fa0",
                     ":focus-within": {
                       border: `2px solid #0070d6`,
@@ -249,36 +276,55 @@ function Education() {
                 },
                 Root: {
                   style: ({ $theme }) => ({
-                    marginTop: $theme.sizi,
-                    maxWidth: "487px",
-                  
+                    backgroundColor: $theme.colors.primaryB,
                   }),
                 },
               }}
             />
-            </div>
-            <div>
-          <CustomInput
-            placeholder={"e.g Financial Accounting"}
-            onChange={(e) => handleInputChange(e)}
-            label={"Field of Study"}
-            value={eduData.fieldOfStudy}
-            name={""}
-          />
+          </div>
+          <div
+            className={css({
+              width: "100%",
+              [$theme.mediaQuery.medium]: {
+                width: "50%",
+              },
+              [$theme.mediaQuery.large]: {
+                width: "50%",
+              },
+            })}
+          >
+            <CustomInput
+              placeholder={"e.g Financial Accounting"}
+              onChange={(e) => handleInputChange(e)}
+              label={"Field of Study"}
+              value={eduData.fieldOfStudy}
+              name={""}
+            />
           </div>
         </div>
 
         <div
           className={css({
             display: "flex",
-            width: "1000px",
-            flexDirection:'column',
-            [$theme.mediaQuery.medium]:{
-              flexDirection:'row',
+            maxWidth: "1000px",
+            flexDirection: "column",
+            [$theme.mediaQuery.medium]: {
+              flexDirection: "row",
               gap: "30px",
-            },          })}
+            },
+          })}
         >
-          <div>
+          <div
+            className={css({
+              width: "100%",
+              [$theme.mediaQuery.medium]: {
+                width: "50%",
+              },
+              [$theme.mediaQuery.large]: {
+                width: "50%",
+              },
+            })}
+          >
             <label>Start Date</label>
             <StatefulDatepicker
               aria-label="Select a start date"
@@ -306,7 +352,17 @@ function Education() {
               }}
             />
           </div>
-          <div>
+          <div
+            className={css({
+              width: "100%",
+              [$theme.mediaQuery.medium]: {
+                width: "50%",
+              },
+              [$theme.mediaQuery.large]: {
+                width: "50%",
+              },
+            })}
+          >
             <label>End Date</label>
             <StatefulDatepicker
               aria-label="Select an end date"
@@ -383,7 +439,6 @@ function Education() {
                       borderRadius: "4px",
                       minHeight: "300px",
                       backgroundColor: $theme.colors.primaryB,
-
                     }),
                   },
                 }}

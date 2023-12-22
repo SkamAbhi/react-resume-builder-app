@@ -1,9 +1,9 @@
 "use client";
 import * as React from "react";
-import { Input } from "baseui/input";
+import { StatefulInput } from "baseui/input";
 import { Button } from "baseui/button";
 import { useStyletron } from "baseui";
-import CustomButton from "../../components/CustomButton/page";
+import CustomButton from "../../components/CustomButton";
 import { TrashCan, Add } from "@carbon/icons-react";
 
 function Skills() {
@@ -29,13 +29,16 @@ function Skills() {
   return (
     <div
       className={css({
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        marginTop: "40px",
-        width: "1000px",
-        ...$theme.typography.LabelMedium,
-        marginLeft: "20rem",
+      
+        [$theme.mediaQuery.medium]: {},
+        [$theme.mediaQuery.large]: {
+          marginLeft: "20rem",
+          width: "1000px",
+          marginTop: "40px",
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+        },
       })}
     >
       <div
@@ -44,9 +47,37 @@ function Skills() {
           justifyContent: "space-between",
         })}
       >
-        <div>
-          <h1>What skills would you like to highlight ?</h1>
-          <p>Choose from our pre-written examples below or write your own.</p>
+        <div
+          className={css({
+            marginLeft: "20px",
+            marginRight: "20px",
+
+            [$theme.mediaQuery.medium]: {
+              marginLeft: "0px",
+              marginRight: "0px",
+            },
+          })}
+        >
+          <h1
+            className={css({
+              ...$theme.typography.HeadingMedium,
+              [$theme.mediaQuery.medium]: {
+                ...$theme.typography.HeadingLarge,
+              },
+            })}
+          >
+            What skills would you like to highlight ?
+          </h1>
+          <p
+            className={css({
+              ...$theme.typography.LabelSmall,
+              [$theme.mediaQuery.medium]: {
+                ...$theme.typography.LabelMedium,
+              },
+            })}
+          >
+            Choose from our pre-written examples below or write your own.
+          </p>
         </div>
       </div>
       <div
@@ -64,37 +95,44 @@ function Skills() {
               display: "flex",
               alignItems: "center",
               paddingBottom: "20px",
-              gap:'20px'
+              gap: "20px",
             }}
           >
-            <Input
+            <StatefulInput
               value={inputValue}
               onChange={(e) => handleInputChange(index, e.target.value)}
-              placeholder={`Add your Skill ${index + 1}`}
+              placeholder={` Skill ${index + 1}`}
               clearOnEscape
               overrides={{
                 Input: {
                   style: ({ $theme }) => ({
-                    backgroundColor: "white",
+                    backgroundColor: $theme.colors.primaryB,
                   }),
                 },
               }}
             />
-            <Button onClick={() => handleRemove(index)} ><TrashCan /></Button>
+            <Button onClick={() => handleRemove(index)}>
+              <TrashCan />
+            </Button>
           </div>
         ))}
-        <Button onClick={handleAddOneMore}  overrides={{
+        <Button
+          onClick={handleAddOneMore}
+          overrides={{
             BaseButton: {
               style: ({ $theme }) => ({
                 backgroundColor: $theme.colors.primaryB,
-                color:'#0C1986',
+                color: "#0C1986",
                 ":hover": {
                   backgroundColor: "rgba(232, 241, 247, 0.8)",
                 },
-
-              })
-            }
-          }}> <Add/> Add one another</Button>
+              }),
+            },
+          }}
+        >
+          {" "}
+          <Add /> Add one another
+        </Button>
         <div
           className={css({
             display: "flex",
@@ -121,4 +159,3 @@ function Skills() {
   );
 }
 export default Skills;
-  

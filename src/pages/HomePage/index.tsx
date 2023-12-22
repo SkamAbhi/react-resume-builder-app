@@ -5,13 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [css, $theme] = useStyletron();
-  
+
   const navigate = useNavigate();
 
-  const handleNextClick = () =>{
-  navigate("/personal")  
-}
-
+  const handleNextClick = () => {
+    navigate("/personal");
+  };
 
   return (
     <div
@@ -52,22 +51,22 @@ export default function Home() {
             marginTop: "30px",
           })}
         >
-            <Button
+          <Button
             onClick={handleNextClick}
-              overrides={{
-                BaseButton: {
-                  style: () => ({
-                    borderRadius: "30px",
+            overrides={{
+              BaseButton: {
+                style: () => ({
+                  borderRadius: "30px",
+                  backgroundColor: "#d04141",
+                  ":hover": {
                     backgroundColor: "#d04141",
-                    ':hover': {
-                      backgroundColor: "#d04141",
-                    },
-                  }),
-                },
-              }}
-            >
-              Try Our Resume Builder
-            </Button>
+                  },
+                }),
+              },
+            }}
+          >
+            Try Our Resume Builder
+          </Button>
         </div>
       </div>
     </div>
