@@ -59,7 +59,7 @@ function MobileHeader() {
               }),
             },
             Close: {
-              style: ({ $theme }) => ({
+              style: () => ({
                 display: "none",
               }),
             },
@@ -84,7 +84,7 @@ function MobileHeader() {
                 onClick={() => setIsOpen(false)}
                 overrides={{
                   BaseButton: {
-                    style: ({ $theme }) => ({
+                    style: () => ({
                       backgroundColor: "transparent",
                       zIndex: "10",
                       ":hover": {
@@ -145,7 +145,7 @@ function MobileHeader() {
           onClick={() => setIsOpen(!isOpen)}
           overrides={{
             BaseButton: {
-              style: ({ $theme }) => ({
+              style: () => ({
                 position: "fixed",
                 left: 0,
                 top: 0,

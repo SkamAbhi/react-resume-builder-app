@@ -17,7 +17,7 @@ export default function WorkExp() {
           flexDirection: "column",
           marginTop: "40px",
           width: "1000px",
-          marginLeft: "20rem",
+          marginLeft: "17rem",
         },
       })}
     >
@@ -75,7 +75,6 @@ export default function WorkExp() {
       >
         <div
           className={css({
-            margin: "0 15px",
             [$theme.mediaQuery.medium]: {
               display: "flex",
               gap: "30px",
@@ -103,7 +102,6 @@ export default function WorkExp() {
         </div>
         <div
           className={css({
-            margin: "0 15px",
             [$theme.mediaQuery.medium]: {
               display: "flex",
             },
@@ -124,13 +122,30 @@ export default function WorkExp() {
           className={css({
             display: "flex",
             flexDirection: "column",
-            margin: "0 15px",
             [$theme.mediaQuery.medium]: {
               flexDirection: "row",
+              gap: "30px",
             },
+            [$theme.mediaQuery.large]:{
+              maxWidth: "1030px",
+
+            }
           })}
         >
-          <div>
+          <div
+            className={css({
+              width: "100%",
+              ...$theme.typography.LabelMedium,
+
+              [$theme.mediaQuery.medium]: {
+                width: "calc(50% - 15px)"
+              
+              },
+              [$theme.mediaQuery.large]: {
+                width: "calc(50% - 15px)"
+              },
+            })}
+          >
             <label>Start Date</label>
             <StatefulDatepicker
               aria-label="Select a start date"
@@ -149,7 +164,8 @@ export default function WorkExp() {
                       InputContainer: {
                         style: ({ $theme }) => ({
                           backgroundColor: $theme.colors.primaryB,
-                          width: "470px",
+                          width:'470px',
+                          paddingRight:'25px'
                         }),
                       },
                     },
@@ -158,7 +174,20 @@ export default function WorkExp() {
               }}
             />
           </div>
-          <div>
+          <div
+            className={css({
+              width: "100%",
+              ...$theme.typography.LabelMedium,
+
+              [$theme.mediaQuery.medium]: {
+                width: "calc(50% - 15 px)"
+              
+              },
+              [$theme.mediaQuery.large]: {
+                width: "calc(50% - 15 px)"
+              },
+            })}
+          >
             <label>End Date</label>
             <StatefulDatepicker
               aria-label="Select an end date"
@@ -177,7 +206,6 @@ export default function WorkExp() {
                       InputContainer: {
                         style: ({ $theme }) => ({
                           backgroundColor: $theme.colors.primaryB,
-                          width: "470px",
                         }),
                       },
                     },
@@ -192,9 +220,7 @@ export default function WorkExp() {
         className={css({
           display: "flex",
           justifyContent: "space-between",
-          marginRight: "20px",
-          marginLeft: "20px",
-          paddingTop: "100px",
+           marginTop:'7vh',
         })}
       >
         <CustomButton

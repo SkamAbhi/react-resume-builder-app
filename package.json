@@ -16,6 +16,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.0",
     "recoil": "^0.7.7",
+    "styletron-engine-atomic": "^1.6.2",
     "styletron-engine-monolithic": "^1.0.0",
     "styletron-react": "^6.1.1",
     "types": "^0.1.1"

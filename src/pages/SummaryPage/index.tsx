@@ -22,10 +22,14 @@ const Summary: React.FC = () => {
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
-        marginTop: "40px",
-        width: "1000px",
+        MaxWidth: "1000px",
         ...$theme.typography.LabelMedium,
-        marginLeft: "20rem",
+
+        [$theme.mediaQuery.large]: {
+          marginLeft: "20rem",
+          marginTop: "40px",
+
+        },
       })}
     >
       <div
@@ -34,8 +38,25 @@ const Summary: React.FC = () => {
           justifyContent: "space-between",
         })}
       >
-        <div>
-          <h2>Briefly tell us about your background</h2>
+         <div
+          className={css({
+            marginLeft: "30px",
+            marginRight: "20px",
+
+            [$theme.mediaQuery.medium]: {
+              marginLeft: "0px",
+              marginRight: "0px",
+            },
+          })}
+        >
+          <h1
+            className={css({
+              ...$theme.typography.HeadingMedium,
+              [$theme.mediaQuery.medium]: {
+                ...$theme.typography.HeadingLarge,
+              },
+            })}
+          >Briefly tell us about your background</h1>
           <p>Choose from our pre-written examples below or write your own.</p>
         </div>
       </div>
@@ -46,17 +67,25 @@ const Summary: React.FC = () => {
           boxShadow: "0 2px 2px rgba(0, 0, 0, 0.1)",
         })}
       >
-        <div>
+        <div
+          className={css({
+            marginRight:'20px',
+            marginLeft:'20px',
+            backgroundColor: $theme.colors.primaryB,
+
+           })}
+        >
           <Textarea
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Enter your summary here..."
             overrides={{
               Input: {
-                style: {
+                style: ({ $theme }) => ({
                   borderRadius: "4px",
                   minHeight: "300px",
-                },
+                  backgroundColor: $theme.colors.primaryB,
+                }),
               },
             }}
           />

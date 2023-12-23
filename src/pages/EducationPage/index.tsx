@@ -285,6 +285,7 @@ function Education() {
           <div
             className={css({
               width: "100%",
+              
               [$theme.mediaQuery.medium]: {
                 width: "50%",
               },
@@ -306,22 +307,28 @@ function Education() {
         <div
           className={css({
             display: "flex",
-            maxWidth: "1000px",
             flexDirection: "column",
             [$theme.mediaQuery.medium]: {
               flexDirection: "row",
               gap: "30px",
             },
+            [$theme.mediaQuery.large]:{
+              maxWidth: "1030px",
+
+            }
           })}
         >
           <div
             className={css({
               width: "100%",
+              ...$theme.typography.LabelMedium,
+
               [$theme.mediaQuery.medium]: {
-                width: "50%",
+                width: "calc(50% - 15px)"
+              
               },
               [$theme.mediaQuery.large]: {
-                width: "50%",
+                width: "calc(50% - 15px)"
               },
             })}
           >
@@ -343,7 +350,8 @@ function Education() {
                       InputContainer: {
                         style: ({ $theme }) => ({
                           backgroundColor: $theme.colors.primaryB,
-                          width: "470px",
+                          width:'470px',
+                          paddingRight:'25px'
                         }),
                       },
                     },
@@ -355,11 +363,14 @@ function Education() {
           <div
             className={css({
               width: "100%",
+              ...$theme.typography.LabelMedium,
+
               [$theme.mediaQuery.medium]: {
-                width: "50%",
+                width: "calc(50% - 15 px)"
+              
               },
               [$theme.mediaQuery.large]: {
-                width: "50%",
+                width: "calc(50% - 15 px)"
               },
             })}
           >
@@ -381,7 +392,6 @@ function Education() {
                       InputContainer: {
                         style: ({ $theme }) => ({
                           backgroundColor: $theme.colors.primaryB,
-                          width: "470px",
                         }),
                       },
                     },
