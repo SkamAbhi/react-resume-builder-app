@@ -1,5 +1,5 @@
 "use client";
-import { Input } from "baseui/input";
+import { StatefulInput } from "baseui/input";
 import React from "react";
 import { FormControl } from "baseui/form-control";
 import { useStyletron } from "baseui";
@@ -10,6 +10,7 @@ interface CustomInputProps {
   label: string;
   value: string;
   name: string;
+  error?: string | null;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -18,9 +19,12 @@ const CustomInput: React.FC<CustomInputProps> = ({
   label,
   value,
   name,
+  error = null,
 }) => {
   const [css, $theme] = useStyletron();
 
+  const isEmailInput = name === "email";
+  const isError = Boolean(error);
   return (
     <div
       className={css({
@@ -30,18 +34,23 @@ const CustomInput: React.FC<CustomInputProps> = ({
       })}
     >
       <FormControl label={label}>
-        <Input
+        <StatefulInput
           value={value}
           placeholder={placeholder}
           onChange={(e) => onChange(e)}
           name={name}
+          error={isError}
           overrides={{
             Root: {
               style: ({ $theme }) => ({
                 width: "100%",
-                border: "1.5px solid #838fa0",
+                border: isEmailInput
+                  ? "2px solid #0070d6"
+                  : "1.5px solid #838fa0",
                 ":focus-within": {
-                  border: `2px solid #0070d6`,
+                  border: isEmailInput
+                    ? "2px solid #0070d6"
+                    : "2px solid #0070d6",
                 },
                 backgroundColor: $theme.colors.primaryB,
               }),

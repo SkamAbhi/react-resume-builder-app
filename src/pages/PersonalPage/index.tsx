@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useStyletron } from "baseui";
 import { FileUploader } from "baseui/file-uploader";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { Modal, ModalBody, ModalFooter } from "baseui/modal";
 import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { userDataState } from "../../utlis/resumeAtoms";
@@ -14,6 +13,7 @@ const Personal = () => {
   const setUserData = useSetRecoilState(userDataState);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [current, setCurrent] = React.useState(0);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -30,6 +30,10 @@ const Personal = () => {
       [name]: value,
     }));
 
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setEmailError(emailRegex.test(value) ? null : "Invalid email address");
+    }
     localStorage.setItem(
       "userData",
       JSON.stringify({
@@ -56,14 +60,20 @@ const Personal = () => {
     setUploadedFiles(files);
   }
 
-  const handleDrop = (acceptedFiles: File[], ) => {
+  const handleDrop = (acceptedFiles: File[]) => {
     handleFileUpload(acceptedFiles);
   };
-  const [picOpen, setPicOpen] = useState(false);
+  const [fileUploaderModalOpen, setFileUploaderModalOpen] = useState(false);
 
-  function close() {
-    setPicOpen(false);
-  }
+  const openFileUploaderModal = () => {
+    console.log("Opening modal");
+    setFileUploaderModalOpen(true);
+  };
+
+  const closeFileUploaderModal = () => {
+    console.log("Closing modal");
+    setFileUploaderModalOpen(false);
+  };
 
   return (
     <div
@@ -146,31 +156,73 @@ const Personal = () => {
           </div>
 
           <div className={css({})}>
-            <CustomButton
-              onClick={() => setPicOpen(true)}
-              name="Upload Photo"
-              to={""}
-              isSpecial
-            />
-            <Modal onClose={close} isOpen={picOpen}>
-              <ModalBody>
-                <div
-                  className={css({
-                    padding: "20px",
-                    ...$theme.typography.LabelMedium,
-                  })}
-                >
-                  <h3> Select Your Profile Photo</h3>
-                  <FileUploader
-                    onDrop={(acceptedFiles: File[] ) =>
-                      handleDrop(acceptedFiles, )
-                    }
-                  />
-                </div>
-              </ModalBody>
-              <ModalFooter>
-              </ModalFooter>
-            </Modal>
+            <button
+              onClick={openFileUploaderModal}
+              className={css({
+                backgroundColor: "#fff",
+                borderColor: "#0C1986",
+                color: "#0C1986",
+                border: "2px solid #0C1986",
+                PaddingRight: "0",
+                PaddingLeft: "0",
+                width: "100px",
+                height: "50px",
+                borderRadius: "20px",
+                ...$theme.typography.LabelXSmall,
+                [$theme.mediaQuery.medium]: {
+                  width: "140px",
+                  ...$theme.typography.LabelMedium,
+                },
+                ":hover": {
+                  backgroundColor: "rgba(232, 241, 247, 0.8)",
+                },
+              })}
+            >
+              Upload photo
+            </button>
+            <div
+              className={css({
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                zIndex: 999,
+                display: fileUploaderModalOpen ? "block" : "none",
+              })}
+              onClick={closeFileUploaderModal}
+            ></div>
+            <div
+              className={css({
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "white",
+                padding: "20px",
+                borderRadius: "8px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                zIndex: 999,
+                width: "500px",
+                height: "300px",
+                display: fileUploaderModalOpen ? "block" : "none",
+                ...$theme.typography.LabelMedium,
+              })}
+            >
+              <h3
+                className={css({
+                  marginBottom: "50px",
+                  marginLeft: "30px",
+                })}
+              >
+                {" "}
+                Select Your Profile Photo
+              </h3>
+              <FileUploader
+                onDrop={(acceptedFiles: File[]) => handleDrop(acceptedFiles)}
+              />
+            </div>
           </div>
         </div>
 
@@ -302,6 +354,7 @@ const Personal = () => {
               label={"Email"}
               value={userData.email}
               name="email"
+              error={emailError}
             />
           </div>
         </div>

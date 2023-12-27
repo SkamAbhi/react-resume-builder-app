@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { useStyletron } from "baseui";
-import { Textarea } from "baseui/textarea";
+import { StatefulTextarea, Textarea } from "baseui/textarea";
 import CustomButton from "../../components/CustomButton";
+import { StatefulInput } from "baseui/input";
 
 const Summary: React.FC = () => {
   const [css, $theme] = useStyletron();
@@ -28,7 +29,6 @@ const Summary: React.FC = () => {
         [$theme.mediaQuery.large]: {
           marginLeft: "20rem",
           marginTop: "40px",
-
         },
       })}
     >
@@ -38,7 +38,7 @@ const Summary: React.FC = () => {
           justifyContent: "space-between",
         })}
       >
-         <div
+        <div
           className={css({
             marginLeft: "30px",
             marginRight: "20px",
@@ -56,26 +56,25 @@ const Summary: React.FC = () => {
                 ...$theme.typography.HeadingLarge,
               },
             })}
-          >Briefly tell us about your background</h1>
+          >
+            Briefly tell us about your background
+          </h1>
           <p>Choose from our pre-written examples below or write your own.</p>
         </div>
       </div>
-      <form
+      <div
         className={css({
-          backgroundColor: "#F7F7F7",
-          borderRadius: "2px",
-          boxShadow: "0 2px 2px rgba(0, 0, 0, 0.1)",
+          display: "flex",
         })}
       >
         <div
           className={css({
-            marginRight:'20px',
-            marginLeft:'20px',
+            marginRight: "20px",
+            marginLeft: "20px",
             backgroundColor: $theme.colors.primaryB,
-
-           })}
+          })}
         >
-          <Textarea
+          <StatefulTextarea
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Enter your summary here..."
@@ -90,8 +89,103 @@ const Summary: React.FC = () => {
             }}
           />
         </div>
-      </form>
+        <div
+          className={css({
+            border: "1px solid #d3d9de",
+            borderRadius: "10px",
+            backgroundColor: "#f3f8ff",
+            maxHeight: "400px",
+          })}
+        >
+          <div>
+            <StatefulInput
+              placeholder="Search job roles..."
+              overrides={{
+                Root: {
+                  style: ({ $theme }) => ({
+                    width: "460px",
+                    maxWidth: "500px",
+                    border: "1.5px solid #838fa0",
+                    borderBottomLeftRadius: "0px",
+                    borderBottomRightRadius: "0px",
 
+                    ":focus-within": {
+                      border: `2px solid #0070d6`,
+                    },
+                    backgroundColor: $theme.colors.primaryB,
+                  }),
+                },
+                Input: {
+                  style: ({ $theme }) => ({
+                    width: "100%",
+                    backgroundColor: $theme.colors.primaryB,
+                  }),
+                },
+              }}
+            />
+            <ul
+              className={css({
+                listStyle: "none",
+                margin: "4px 0px",
+                padding: "0",
+                border: "1px solid #ccc",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                backgroundColor: "white",
+                position: "absolute",
+                zIndex: 1,
+                width: "100%",
+                maxWidth: "460px",
+                overflowY: "auto",
+                maxHeight: "300px",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+              })}
+            >
+              {/* Render job roles here */}
+            </ul>
+            <p
+              className={css({
+                ...$theme.typography.LabelMedium,
+                marginLeft: "20px",
+              })}
+            >
+              Pre-Written Examples
+            </p>
+            <div
+              className={css({
+                overflowY: "auto",
+                height: "300px",
+                margin: "0 15px",
+              })}
+            >
+              {/* Render pre-written examples here */}
+            </div>
+            <div
+              className={css({
+                position: "relative",
+                marginTop: "60px",
+              })}
+            >
+              <ul
+                className={css({
+                  overflowY: "auto",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  padding: "8px",
+                  marginTop: "8px",
+                  position: "absolute",
+                  zIndex: 1,
+                  top: "calc(100% + 8px)",
+                  width: "100%",
+                  maxWidth: "300px",
+                })}
+              >
+                {/* Render selected job skills here */}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
       <div
         className={css({
           display: "flex",

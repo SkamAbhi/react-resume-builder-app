@@ -1,0 +1,212 @@
+[
+  {
+    "jobRole": "Software Engineer",
+    "skillName": ["JavaScript", "React", "Node.js"],
+    "summary": "Develops software applications using JavaScript, React, and Node.js."
+  },
+  {
+    "jobRole": "Data Scientist",
+    "skillName": ["Python", "Machine Learning", "SQL"],
+    "summary": "Analyzes and interprets complex data sets using Python, Machine Learning, and SQL."
+  },
+  {
+    "jobRole": "UX/UI Designer",
+    "skillName": ["Adobe XD", "Figma", "User Research"],
+    "summary": "Creates user-friendly designs with tools like Adobe XD, Figma, and conducts User Research."
+  },
+  {
+    "jobRole": "Product Manager",
+    "skillName": ["Product Strategy", "Agile", "Project Management"],
+    "summary": "Leads product development, applying skillName in Product Strategy, Agile, and Project Management."
+  },
+  {
+    "jobRole": "Network Engineer",
+    "skillName": ["Cisco", "TCP/IP", "Firewall Configuration"],
+    "summary": "Manages network infrastructure using skillName in Cisco, TCP/IP, and Firewall Configuration."
+  },
+  {
+    "jobRole": "Marketing Specialist",
+    "skillName": ["Digital Marketing", "SEO", "Content Creation"],
+    "summary": "Executes digital marketing strategies with expertise in Digital Marketing, SEO, and Content Creation."
+  },
+  {
+    "jobRole": "DevOps Engineer",
+    "skillName": ["Docker", "Kubernetes", "CI/CD"],
+    "summary": "Implements and manages DevOps practices with tools like Docker, Kubernetes, and CI/CD."
+  },
+  {
+    "jobRole": "AI/ML Engineer",
+    "skillName": ["TensorFlow", "PyTorch", "Natural Language Processing"],
+    "summary": "Applies Artificial Intelligence and Machine Learning techniques using TensorFlow, PyTorch, and NLP."
+  },
+  {
+    "jobRole": "Full Stack Developer",
+    "skillName": ["HTML", "CSS", "JavaScript", "Node.js", "React", "Express"],
+    "summary": "Develops both frontend and backend components using HTML, CSS, JavaScript, Node.js, React, and Express."
+  },
+  {
+    "jobRole": "Cloud Architect",
+    "skillName": ["AWS", "Azure", "Google Cloud", "Serverless"],
+    "summary": "Designs and manages cloud infrastructure with expertise in AWS, Azure, Google Cloud, and Serverless architecture."
+  },
+  {
+    "jobRole": "Cybersecurity Analyst",
+    "skillName": ["Network Security", "Penetration Testing", "Security Policies"],
+    "summary": "Ensures network security through skillName in Network Security, Penetration Testing, and Security Policies."
+  },
+  {
+    "jobRole": "iOS Developer",
+    "skillName": ["Swift", "iOS Development", "Objective-C"],
+    "summary": "Develops iOS applications using Swift, iOS Development, and Objective-C."
+  },
+  {
+    "jobRole": "Android Developer",
+    "skillName": ["Java", "Kotlin", "Android Development"],
+    "summary": "Develops Android applications using Java, Kotlin, and Android Development tools."
+  },
+  {
+    "jobRole": "Web Designer",
+    "skillName": ["HTML", "CSS", "Adobe Creative Suite"],
+    "summary": "Creates visually appealing web designs with skillName in HTML, CSS, and Adobe Creative Suite."
+  },
+  {
+    "jobRole": "Database Administrator",
+    "skillName": ["SQL", "Database Management", "Performance Tuning"],
+    "summary": "Manages databases and ensures performance with skillName in SQL, Database Management, and Performance Tuning."
+  },
+  {
+    "jobRole": "Technical Writer",
+    "skillName": ["Technical Writing", "Documentation", "Communication"],
+    "summary": "Produces technical documentation with expertise in Technical Writing and effective communication."
+  },
+  {
+    "jobRole": "Game Developer",
+    "skillName": ["Unity", "C#", "Game Design"],
+    "summary": "Designs and develops games using Unity, C#, and Game Design principles."
+  },
+  {
+    "jobRole": "Business Analyst",
+    "skillName": ["Data Analysis", "Requirements Gathering", "Business Strategy"],
+    "summary": "Analyzes data and gathers requirements for business processes with skillName in Data Analysis and Business Strategy."
+  },
+  {
+    "jobRole": "Quality Assurance Engineer",
+    "skillName": ["Testing", "Test Automation", "Bug Tracking"],
+    "summary": "Ensures software quality through testing, test automation, and bug tracking."
+  },
+  {
+    "jobRole": "Frontend Developer",
+    "skillName": ["HTML", "CSS", "JavaScript", "React", "Vue.js"],
+    "summary": "Develops frontend components using HTML, CSS, JavaScript, React, and Vue.js."
+  },
+  {
+    "jobRole": "Backend Developer",
+    "skillName": ["Node.js", "Express", "Databases"],
+    "summary": "Develops server-side components using Node.js, Express, and databases."
+  },
+  {
+    "jobRole": "System Administrator",
+    "skillName": ["Linux", "Server Management", "Shell Scripting"],
+    "summary": "Manages system infrastructure with skillName in Linux, Server Management, and Shell Scripting."
+  },
+  {
+    "jobRole": "UX Researcher",
+    "skillName": ["User Interviews", "Prototyping", "Usability Testing"],
+    "summary": "Conducts user interviews, prototyping, and usability testing for user-centered design."
+  },
+  {
+    "jobRole": "IT Project Manager",
+    "skillName": ["Project Planning", "Team Management", "Risk Assessment"],
+    "summary": "Plans and manages IT projects with skillName in Project Planning, Team Management, and Risk Assessment."
+  },
+  {
+    "jobRole": "Network Administrator",
+    "skillName": ["Cisco", "Routing", "Switching"],
+    "summary": "Manages network infrastructure with skillName in Cisco, Routing, and Switching."
+  },
+  {
+    "jobRole": "Content Writer",
+    "skillName": ["Content Creation", "SEO Writing", "Copywriting"],
+    "summary": "Creates content for various platforms with skillName in Content Creation, SEO Writing, and Copywriting."
+  },
+  {
+    "jobRole": "Mobile App Developer",
+    "skillName": ["React Native", "Flutter", "Mobile Development"],
+    "summary": "Develops mobile applications using React Native, Flutter, and Mobile Development technologies."
+  },
+  {
+    "jobRole": "AI Ethics Specialist",
+    "skillName": ["Ethical AI Practices", "Bias Detection", "Policy Development"],
+    "summary": "Ensures ethical AI practices with skillName in Ethical AI Practices, Bias Detection, and Policy Development."
+  },
+  {
+    "jobRole": "UI Developer",
+    "skillName": ["HTML", "CSS", "JavaScript", "UI Frameworks"],
+    "summary": "Develops user interfaces using HTML, CSS, JavaScript, and UI frameworks."
+  },
+  {
+    "jobRole": "Healthcare Data Analyst",
+    "skillName": ["Health Informatics", "Data Analytics", "Medical Terminology"],
+    "summary": "Analyzes healthcare data using skillName in Health Informatics, Data Analytics, and Medical Terminology."
+  },
+  {
+    "jobRole": "Cloud Security Architect",
+    "skillName": ["Cloud Security", "Identity Management", "Security Audits"],
+    "summary": "Designs and implements cloud security measures with skillName in Cloud Security, Identity Management, and Security Audits."
+  },
+  {
+    "jobRole": "E-commerce Manager",
+    "skillName": ["Online Retail", "Digital Marketing", "E-commerce Platforms"],
+    "summary": "Manages and strategizes e-commerce operations with skillName in Online Retail, Digital Marketing, and E-commerce Platforms."
+  },
+  {
+    "jobRole": "Digital Strategist",
+    "skillName": ["Digital Marketing", "Social Media Strategy", "Analytics"],
+    "summary": "Develops digital marketing strategies with a focus on Social Media Strategy and Analytics."
+  },
+  {
+    "jobRole": "Solutions Architect",
+    "skillName": ["System Design", "Architecture Patterns", "Technical Leadership"],
+    "summary": "Designs and architects solutions with expertise in System Design, Architecture Patterns, and Technical Leadership."
+  },
+  {
+    "jobRole": "Embedded Systems Engineer",
+    "skillName": ["C/C++", "Microcontrollers", "Embedded Programming"],
+    "summary": "Develops embedded systems using skillName in C/C++, Microcontrollers, and Embedded Programming."
+  },
+  {
+    "jobRole": "Blockchain Developer",
+    "skillName": ["Blockchain", "Smart Contracts", "Cryptocurrency"],
+    "summary": "Develops blockchain solutions with skillName in Blockchain, Smart Contracts, and Cryptocurrency."
+  },
+  {
+    "jobRole": "Data Engineer",
+    "skillName": ["Big Data", "ETL", "Data Warehousing"],
+    "summary": "Develops data solutions with expertise in Big Data, ETL, and Data Warehousing."
+  },
+  {
+    "jobRole": "Social Media Manager",
+    "skillName": ["Social Media Marketing", "Content Strategy", "Analytics"],
+    "summary": "Manages social media presence and strategy with skillName in Social Media Marketing, Content Strategy, and Analytics."
+  },
+  {
+    "jobRole": "UX/UI Developer",
+    "skillName": ["React", "UI Frameworks", "User-Centered Design"],
+    "summary": "Develops user interfaces with a focus on React, UI Frameworks, and User-Centered Design."
+  },
+  {
+    "jobRole": "Artificial Intelligence Engineer",
+    "skillName": ["Machine Learning", "Deep Learning", "Natural Language Processing"],
+    "summary": "Develops AI solutions with expertise in Machine Learning, Deep Learning, and Natural Language Processing."
+  },
+  {
+    "jobRole": "GIS Specialist",
+    "skillName": ["Geospatial Analysis", "Mapping Software", "GIS Data Management"],
+    "summary": "Specializes in GIS with skillName in Geospatial Analysis, Mapping Software, and GIS Data Management."
+  },
+  {
+    "jobRole": "IT Support Specialist",
+    "skillName": ["Technical Support", "Troubleshooting", "Customer Service"],
+    "summary": "Provides IT support and troubleshooting with skillName in Technical Support and Customer Service."
+  }
+]
