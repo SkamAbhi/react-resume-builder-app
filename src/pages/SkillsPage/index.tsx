@@ -8,8 +8,6 @@ import CustomButton from "../../components/CustomButton";
 import { TrashCan, Add, Checkmark } from "@carbon/icons-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import jsonData from "../../data /data.json";
-import FloatingLabelInput from "../SummaryPage";
-
 interface JobData {
   jobRole: string;
   skills: string[];
@@ -83,10 +81,11 @@ function Skills() {
 
     setValues([selectedJob.jobRole]);
   };
+
   const skillsData: SkillData[] = jsonData.reduce(
     (accumulator: SkillData[], job) => {
       const skillsWithJobRole = job.skillName.map((skill, index) => ({
-        id: `${job.jobRole}_${index + 1}`, // Creating a unique ID using job role and index
+        id: `${job.jobRole}_${index + 1}`,
         jobRole: job.jobRole,
         skillName: skill,
         summary: job.summary,

@@ -7,6 +7,8 @@ import Skills from "../pages/SkillsPage";
 import Summary from "../pages/SummaryPage";
 import { useStyletron } from "baseui";
 import Layout from "../components/Layout";
+import Finalize from "../pages/FinalizePage";
+import Languages from "../pages/LanguagePage";
 
 function Navigation() {
   const [css] = useStyletron();
@@ -28,6 +30,8 @@ function Navigation() {
             <Route path="/work-exp" element={<WorkExp />} />
             <Route path="/skills" element={<Skills />} />
             <Route path="/summary" element={<Summary />} />
+            <Route path="/finalize" element={<Finalize/>} />
+            <Route path="/languages" element={<Languages nextLink={""} />} />
           </Routes>
         </Layout>
       )}
