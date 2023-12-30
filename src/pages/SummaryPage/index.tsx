@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useStyletron } from "baseui";
-import { StatefulTextarea, Textarea } from "baseui/textarea";
+import { Textarea } from "baseui/textarea";
 import CustomButton from "../../components/CustomButton";
 import { StatefulInput } from "baseui/input";
 import { Checkmark, Add } from "@carbon/icons-react";
@@ -186,9 +186,8 @@ const Summary: React.FC = () => {
                   margin: 0,
                 })}
               >
-                {skillsData.map((skill, index) => (
+                {skillsData.map((skill) => (
                   <div
-                    key={skill.id}
                     className={css({
                       border: "1.2px solid #d3d9de",
                       padding: "10px",

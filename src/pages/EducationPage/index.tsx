@@ -13,7 +13,7 @@ interface educationData {
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Select, Value } from "baseui/select";
 import { useStyletron } from "baseui";
-import { StatefulDatepicker } from "baseui/datepicker";
+import { Datepicker } from "baseui/datepicker";
 import { StatefulPopover } from "baseui/popover";
 import { Button } from "baseui/button";
 import { useRecoilState } from "recoil";
@@ -65,24 +65,29 @@ function Education() {
     <div
       className={css({
         [$theme.mediaQuery.medium]: {
-          marginTop: "40px",
-          marginLeft: "20px",
-          marginRight: "20px",
+          marginRight: "2rem",
+          paddingLeft: "25px",
+          paddingTop: "30px",
+          paddingBottom: "30px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         },
         [$theme.mediaQuery.large]: {
           display: "flex",
-          justifyContent: "center",
           flexDirection: "column",
           marginLeft: "17rem",
-          marginTop: "40px",
         },
       })}
     >
       <div
         className={css({
           display: "flex",
+          width: "100%",
           justifyContent: "space-between",
-          maxWidth: "1050px",
+          [$theme.mediaQuery.large]: {
+            maxWidth: "1100px",
+          },
         })}
       >
         <div
@@ -187,7 +192,10 @@ function Education() {
       </div>
       <div
         className={css({
-          maxWidth: "1030px",
+          [$theme.mediaQuery.medium]: {
+            width: "100%",
+            maxWidth: "1100px",
+          },
           margin: "0 30px",
         })}
       >
@@ -267,16 +275,30 @@ function Education() {
                   style: ({ $theme }) => ({
                     backgroundColor: $theme.colors.primaryB,
                     width: "100%",
-                    marginTop: "12px",
-                    border: "1.5px solid #838fa0",
-                    ":focus-within": {
-                      border: `2px solid #0070d6`,
-                    },
+                    borderWidth: "0",
+                    padding: "6px ",
+                    color: "#1a202c",
+                    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                    borderColor: "black",
+                    outline: "none",
+                    ring: "1px solid #cbd5e0",
+                    placeholder: { color: "#a0aec0" },
+                    focusRing: "2px solid #3b82f6",
+                    ...$theme.typography.LabelMedium,
                   }),
                 },
                 Root: {
                   style: ({ $theme }) => ({
                     backgroundColor: $theme.colors.primaryB,
+                    padding: "0",
+                    border: "1px solid black",
+                    borderRadius: "6px",
+                    marginTop: "12px",
+                  }),
+                },
+                ValueContainer: {
+                  style: () => ({
+                    padding: "0",
                   }),
                 },
               }}
@@ -285,7 +307,7 @@ function Education() {
           <div
             className={css({
               width: "100%",
-              
+
               [$theme.mediaQuery.medium]: {
                 width: "50%",
               },
@@ -312,10 +334,6 @@ function Education() {
               flexDirection: "row",
               gap: "30px",
             },
-            [$theme.mediaQuery.large]:{
-              maxWidth: "1030px",
-
-            }
           })}
         >
           <div
@@ -324,16 +342,15 @@ function Education() {
               ...$theme.typography.LabelMedium,
 
               [$theme.mediaQuery.medium]: {
-                width: "calc(50% - 15px)"
-              
+                width: "calc(50% - 15px)",
               },
               [$theme.mediaQuery.large]: {
-                width: "calc(50% - 15px)"
+                width: "calc(50% - 15px)",
               },
             })}
           >
             <label>Start Date</label>
-            <StatefulDatepicker
+            <Datepicker
               aria-label="Select a start date"
               clearable={true}
               initialState={{ value: [] }}
@@ -343,15 +360,22 @@ function Education() {
                   props: {
                     overrides: {
                       Root: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          border: "1px solid black",
+                          borderRadius: "6px",
                         }),
                       },
                       InputContainer: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           backgroundColor: $theme.colors.primaryB,
-                          width:'470px',
-                          paddingRight:'25px'
+                          width: "500px",
+                          padding: "0px 0px",
+                        }),
+                      },
+                      Input: {
+                        style: () => ({
+                          padding: "6px 10px",
                         }),
                       },
                     },
@@ -366,17 +390,16 @@ function Education() {
               ...$theme.typography.LabelMedium,
 
               [$theme.mediaQuery.medium]: {
-                width: "calc(50% - 15 px)"
-              
+                width: "calc(50% - 15px)",
               },
               [$theme.mediaQuery.large]: {
-                width: "calc(50% - 15 px)"
+                width: "calc(50% - 15px)",
               },
             })}
           >
             <label>End Date</label>
-            <StatefulDatepicker
-              aria-label="Select an end date"
+            <Datepicker
+              aria-label="Select a start date"
               clearable={true}
               initialState={{ value: [] }}
               highlightedDate={new Date("March 10, 2019")}
@@ -385,13 +408,22 @@ function Education() {
                   props: {
                     overrides: {
                       Root: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          border: "1px solid black",
+                          padding: "0px 0px",
                         }),
                       },
                       InputContainer: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          width: "500px",
+                          borderRadius: "6px",
+                        }),
+                      },
+                      Input: {
+                        style: () => ({
+                          padding: "6px 10px",
                         }),
                       },
                     },
@@ -462,7 +494,16 @@ function Education() {
           display: "flex",
           justifyContent: "space-between",
           marginRight: "20px",
-          marginTop: "50px",
+          marginLeft: "20px",
+          marginTop: "7vh",
+          [$theme.mediaQuery.medium]: {
+            width: "100%",
+            maxWidth: "760px",
+          },
+          [$theme.mediaQuery.large]: {
+            width: "100%",
+            maxWidth: "1100px",
+          },
         })}
       >
         <CustomButton

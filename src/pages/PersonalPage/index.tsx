@@ -81,12 +81,19 @@ const Personal = () => {
         [$theme.mediaQuery.small]: {},
         [$theme.mediaQuery.medium]: {
           marginRight: "2rem",
-          paddingLeft: "10px",
+          paddingLeft: "25px",
           paddingTop: "30px",
           paddingBottom: "30px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         },
+
         [$theme.mediaQuery.large]: {
           marginLeft: "17rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         },
       })}
     >
@@ -99,6 +106,10 @@ const Personal = () => {
             marginLeft: "0px",
             marginRight: "0px",
           },
+          [$theme.mediaQuery.large]: {
+            width: "100%",
+            maxWidth: "1100px",
+          },
         })}
       >
         <h1
@@ -106,6 +117,7 @@ const Personal = () => {
             ...$theme.typography.HeadingMedium,
             [$theme.mediaQuery.medium]: {
               ...$theme.typography.HeadingLarge,
+              marginTop: "13px",
             },
           })}
         >
@@ -130,9 +142,9 @@ const Personal = () => {
           [$theme.mediaQuery.medium]: {
             flexDirection: "row",
             justifyContent: "center",
-            gap: "60px",
+            gap: "30px",
           },
-          [$theme.mediaQuery.large]: {
+          [$theme.mediaQuery.large]: { 
             gap: "40px",
           },
         })}
@@ -140,22 +152,55 @@ const Personal = () => {
         <div
           className={css({
             display: "flex",
-            flexDirection: "column",
+            justifyContent:'flex-start',
+            width:'100%',
+            marginLeft:'20px',
             alignItems: "center",
+            [$theme.mediaQuery.medium]: {
+              top: "-60px",
+              position: "relative",
+              flexDirection: "column",
+              width:'auto'
+            },
           })}
         >
           <div className={css({ display: "flex", flexWrap: "wrap" })}>
-            {uploadedFiles.map((file, index) => (
+            {uploadedFiles.length > 0 ? (
+              uploadedFiles.map((file, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(file)}
+                  alt={file.name}
+                  style={{ width: "120px", height: "120px", margin: "10px" }}
+                />
+              ))
+            ) : (
               <img
-                key={index}
-                src={file ? URL.createObjectURL(file) : `/NoImage.jpg`}
-                alt={file.name}
-                style={{ width: "120px", height: "120px", margin: "10px" }}
+                src="/NoImage.jpg"
+                alt="Blank Photo"
+                className={css({
+                  width: "80px",
+                  height: "80px",
+                  margin: "10px",
+                  [$theme.mediaQuery.medium]:{
+                    width: "120px",
+                    height: "120px",
+                    margin: "10px",
+                  }
+                })}
               />
-            ))}
+            )}
           </div>
 
           <div className={css({})}>
+            <p className={css({
+              ...$theme.typography.LabelSmall,
+              [$theme.mediaQuery.medium]:{
+                display:'none'
+              }
+            })}>
+            Add a Photo to Your Resume (Optional)
+            </p>
             <button
               onClick={openFileUploaderModal}
               className={css({
@@ -237,6 +282,7 @@ const Personal = () => {
 
             [$theme.mediaQuery.medium]: {
               maxWidth: "530px",
+              marginLeft:'0'
             },
           })}
         >
@@ -264,7 +310,7 @@ const Personal = () => {
             <CustomInput
               placeholder={""}
               onChange={handleInputChange}
-              label={"SurName"}
+              label={"Surname"}
               value={userData.surName}
               name="surName"
             />
@@ -312,6 +358,7 @@ const Personal = () => {
               value={userData.city}
               name="city"
             />
+
             <CustomInput
               placeholder={""}
               onChange={handleInputChange}
@@ -324,7 +371,7 @@ const Personal = () => {
               onChange={handleInputChange}
               label={"PinCode"}
               value={userData.pinCode}
-              name={"PinCode"}
+              name={"Pincode"}
             />
           </div>
           <div
@@ -365,41 +412,18 @@ const Personal = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "300px",
-              height: "300px",
+              width: "230px",
+              height: "250px",
               border: "1px solid #ccc",
               borderRadius: "8px",
               padding: "20px",
               boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
               margin: "20px",
               flexDirection: "column",
-              overflow: "hidden",
             },
           })}
         >
           Preview
-          <div
-            className={css({
-              display: "flex",
-              gap: "10px",
-            })}
-          >
-            <p>{userData.firstName}</p>
-            <p>{userData.surName}</p>
-          </div>
-          <p>{userData.profession}</p>
-          <div
-            className={css({
-              display: "flex",
-              gap: "10px",
-            })}
-          >
-            <p>{userData.city}</p>
-            <p>{userData.country}</p>
-          </div>
-          <p>{userData.pinCode}</p>
-          <p>{userData.email}</p>
-          <p>{userData.phone}</p>
         </div>
       </div>
       <div
@@ -409,11 +433,17 @@ const Personal = () => {
           marginRight: "20px",
           marginLeft: "20px",
           marginTop: "7vh",
+          [$theme.mediaQuery.medium]: {
+            width: "100%",
+            maxWidth: "760px",
+          },
+          [$theme.mediaQuery.large]: {
+            width: "100%",
+            maxWidth: "1100px",
+          },
         })}
       >
-        <CustomButton name={"Back"} to={"/"} onClick={console.log} isSpecial>
-          {" "}
-        </CustomButton>
+        <CustomButton name={"Back"} to={"/"} onClick={console.log} isSpecial />
         <CustomButton
           name={"Next : Education"}
           onClick={handleNext}

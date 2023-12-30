@@ -150,28 +150,36 @@ function Skills() {
     setInputValue("");
   };
   useEffect(() => {
-    // Initialize with four empty strings when the component mounts
     setValues(["", "", "", ""]);
   }, []);
 
   return (
     <div
       className={css({
-        [$theme.mediaQuery.medium]: {},
-        [$theme.mediaQuery.large]: {
-          marginLeft: "17rem",
-          width: "1080px",
-          marginTop: "40px",
+        [$theme.mediaQuery.medium]: {
+          marginRight: "2rem",
+          paddingLeft: "25px",
+          paddingTop: "30px",
+          paddingBottom: "30px",
           display: "flex",
-          justifyContent: "center",
           flexDirection: "column",
+          alignItems: "center",
+        },
+        [$theme.mediaQuery.large]: {
+          display: "flex",
+          flexDirection: "column",
+          marginLeft: "17rem",
         },
       })}
     >
       <div
         className={css({
           display: "flex",
+          width: "100%",
           justifyContent: "space-between",
+          [$theme.mediaQuery.large]: {
+            maxWidth: "1100px",
+          },
         })}
       >
         <div
@@ -210,11 +218,15 @@ function Skills() {
       <div
         className={css({
           display: "flex",
-          margin: "0 20px",
-          gap: "70px",
-          backgroundColor: "#f3f8ff",
-          padding: "30px ",
-          borderRadius: "20px",
+          flexDirection:'column',
+          [$theme.mediaQuery.large]:{
+            margin: "0 20px",
+            gap: "50px",
+            backgroundColor: "#f3f8ff",
+            padding: "30px ",
+            borderRadius: "20px",
+            flexDirection:'row',
+          }
         })}
       >
         <div>
@@ -226,7 +238,6 @@ function Skills() {
                 alignItems: "center",
                 paddingBottom: "20px",
                 gap: "20px",
-
                 width: "100%",
               }}
             >
@@ -514,10 +525,15 @@ function Skills() {
           display: "flex",
           justifyContent: "space-between",
           marginRight: "20px",
-          marginTop: "5vh",
-          width: "100%",
+          marginLeft: "20px",
+          marginTop: "7vh",
           [$theme.mediaQuery.medium]: {
-            width: "75vw",
+            width: "100%",
+            maxWidth: "760px",
+          },
+          [$theme.mediaQuery.large]: {
+            width: "100%",
+            maxWidth: "1100px",
           },
         })}
       >

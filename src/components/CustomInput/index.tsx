@@ -53,13 +53,26 @@ const CustomInput: React.FC<CustomInputProps> = ({
                     : "2px solid #0070d6",
                 },
                 backgroundColor: $theme.colors.primaryB,
+                borderRadius: '6px', 
+
               }),
             },
             Input: {
-              style: ({ $theme }) => ({
-                width: "100%",
+              style: {
                 backgroundColor: $theme.colors.primaryB,
-              }),
+                width: '100%', 
+                borderWidth: '0',
+                padding: '8px ',
+                color: '#1a202c', 
+                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)', 
+                borderColor: 'transparent', 
+                outline: 'none', 
+                ring: '1px solid #cbd5e0', 
+                placeholder: { color: '#a0aec0' }, 
+                focusRing: '2px solid #3b82f6', 
+                fontSize: '1rem',
+                lineHeight: '1.25rem', 
+              },
             },
           }}
         />

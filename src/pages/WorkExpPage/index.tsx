@@ -1,22 +1,55 @@
+
 "use client";
 
+
+import React, { ChangeEvent, useState } from "react";
 import { useStyletron } from "baseui";
-import { StatefulDatepicker } from "baseui/datepicker";
+import { Datepicker } from "baseui/datepicker";
+import { StatefulPopover } from "baseui/popover";
+import { Button } from "baseui/button";
+import { Textarea } from "baseui/textarea";
 import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
+import { Add, Idea, Subtract } from "@carbon/icons-react";
 
-export default function WorkExp() {
+function Education() {
   const [css, $theme] = useStyletron();
+  const [showInput, setShowInput] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
+  const handleButtonClick = () => {
+    setShowInput(!showInput);
+  };
+
+  const handleHiddenInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        [name]: value,
+      })
+    );
+  };
   return (
     <div
       className={css({
+        [$theme.mediaQuery.medium]: {
+          marginRight: "2rem",
+          paddingLeft: "25px",
+          paddingTop: "30px",
+          paddingBottom: "30px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        },
         [$theme.mediaQuery.large]: {
           display: "flex",
-          justifyContent: "center",
           flexDirection: "column",
-          marginTop: "40px",
-          width: "1000px",
           marginLeft: "17rem",
         },
       })}
@@ -24,12 +57,16 @@ export default function WorkExp() {
       <div
         className={css({
           display: "flex",
+          width: "100%",
           justifyContent: "space-between",
+          [$theme.mediaQuery.large]: {
+            maxWidth: "1100px",
+          },
         })}
       >
         <div
           className={css({
-            marginLeft: "20px",
+            marginLeft: "30px",
             marginRight: "20px",
 
             [$theme.mediaQuery.medium]: {
@@ -45,10 +82,8 @@ export default function WorkExp() {
                 ...$theme.typography.HeadingLarge,
               },
             })}
-          >
-            Tell us about your most recent job{" "}
+          >          Tell us about your most recent job{" "}
           </h1>
-
           <p
             className={css({
               ...$theme.typography.LabelSmall,
@@ -57,26 +92,66 @@ export default function WorkExp() {
               },
             })}
           >
-            We will Start there and work backwards{" "}
+                  We will Start there and work backwards{" "}
+
           </p>
         </div>
+        <StatefulPopover
+          content={
+            <div
+              className={css({
+                backgroundColor: $theme.colors.primaryB,
+                padding: "0px 40px",
+
+                ...$theme.typography.LabelMedium,
+              })}
+            >            </div>
+          }
+          accessibilityType={"tooltip"}
+          placement={"bottomRight"}
+          overrides={{
+            Body: {
+              style: ({ $theme }) => ({
+                width: "500px",
+                backgroundColor: $theme.colors.primaryB,
+              }),
+            },
+          }}
+        >
+          <Button
+            overrides={{
+              BaseButton: {
+                style: ({ $theme }) => ({
+                  backgroundColor: "white",
+                  color: "#0C1986",
+                  ":hover": {
+                    backgroundColor: $theme.colors.white,
+                    color: "blue",
+                  },
+                }),
+              },
+            }}
+          >
+            <Idea /> Tips
+          </Button>
+        </StatefulPopover>
       </div>
       <div
         className={css({
-          marginTop: "20px",
-          display: "flex",
-          flexDirection: "column",
-          marginRight: "10px",
-          marginLeft:'15px',
-          [$theme.mediaQuery.large]: {
-            marginLeft: "60px",
+          [$theme.mediaQuery.medium]: {
+            width: "100%",
+            maxWidth: "1100px",
           },
+          margin: "0 30px",
         })}
       >
         <div
           className={css({
+            display: "flex",
+            Maxwidth: "1000px",
+            flexDirection: "column",
             [$theme.mediaQuery.medium]: {
-              display: "flex",
+              flexDirection: "row",
               gap: "30px",
             },
           })}
@@ -86,9 +161,7 @@ export default function WorkExp() {
             label={"Job Title"}
             value={""}
             name={""}
-            onChange={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            onChange={handleHiddenInputChange}
           />
           <CustomInput
             placeholder={"eg -company"}
@@ -102,13 +175,21 @@ export default function WorkExp() {
         </div>
         <div
           className={css({
-            [$theme.mediaQuery.medium]: {
-              display: "flex",
-            },
+            display: "flex",
+            flexDirection: "column",
+            Maxwidth: "1100px",
           })}
         >
-          {" "}
-          <CustomInput
+          <div
+            className={css({
+              width: "100%",
+              [$theme.mediaQuery.medium]:{
+                width: "48.5%",
+
+              }
+            })}
+          >
+            <CustomInput
             placeholder={"city state etc "}
             onChange={function (): void {
               throw new Error("Function not implemented.");
@@ -117,7 +198,9 @@ export default function WorkExp() {
             value={""}
             name={""}
           />
+          </div>
         </div>
+
         <div
           className={css({
             display: "flex",
@@ -126,10 +209,6 @@ export default function WorkExp() {
               flexDirection: "row",
               gap: "30px",
             },
-            [$theme.mediaQuery.large]:{
-              maxWidth: "1030px",
-
-            }
           })}
         >
           <div
@@ -138,16 +217,15 @@ export default function WorkExp() {
               ...$theme.typography.LabelMedium,
 
               [$theme.mediaQuery.medium]: {
-                width: "calc(50% - 15px)"
-              
+                width: "calc(50% - 15px)",
               },
               [$theme.mediaQuery.large]: {
-                width: "calc(50% - 15px)"
+                width: "calc(50% - 15px)",
               },
             })}
           >
             <label>Start Date</label>
-            <StatefulDatepicker
+            <Datepicker
               aria-label="Select a start date"
               clearable={true}
               initialState={{ value: [] }}
@@ -157,15 +235,22 @@ export default function WorkExp() {
                   props: {
                     overrides: {
                       Root: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          border: "1px solid black",
+                          borderRadius: "6px",
                         }),
                       },
                       InputContainer: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           backgroundColor: $theme.colors.primaryB,
-                          width:'470px',
-                          paddingRight:'25px'
+                          width: "500px",
+                          padding: "0px 0px",
+                        }),
+                      },
+                      Input: {
+                        style: () => ({
+                          padding: "6px 10px",
                         }),
                       },
                     },
@@ -180,17 +265,16 @@ export default function WorkExp() {
               ...$theme.typography.LabelMedium,
 
               [$theme.mediaQuery.medium]: {
-                width: "calc(50% - 15 px)"
-              
+                width: "calc(50% - 15px)",
               },
               [$theme.mediaQuery.large]: {
-                width: "calc(50% - 15 px)"
+                width: "calc(50% - 15px)",
               },
             })}
           >
             <label>End Date</label>
-            <StatefulDatepicker
-              aria-label="Select an end date"
+            <Datepicker
+              aria-label="Select a start date"
               clearable={true}
               initialState={{ value: [] }}
               highlightedDate={new Date("March 10, 2019")}
@@ -199,13 +283,22 @@ export default function WorkExp() {
                   props: {
                     overrides: {
                       Root: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          border: "1px solid black",
+                          padding: "0px 0px",
                         }),
                       },
                       InputContainer: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          width: "500px",
+                          borderRadius: "6px",
+                        }),
+                      },
+                      Input: {
+                        style: () => ({
+                          padding: "6px 10px",
                         }),
                       },
                     },
@@ -215,15 +308,80 @@ export default function WorkExp() {
             />
           </div>
         </div>
+        <div
+          className={css({
+            marginTop: "20px",
+          })}
+        >
+          <Button
+            onClick={handleButtonClick}
+            overrides={{
+              BaseButton: {
+                style: ({ $theme }) => ({
+                  backgroundColor: $theme.colors.primaryB,
+                  color: "#0C1986",
+                  ":hover": {
+                    backgroundColor: "rgba(232, 241, 247, 0.8)",
+                  },
+                }),
+              },
+            }}
+          >
+            {showInput ? (
+              <>
+                {" "}
+                <Subtract /> Add description about Job{" "}
+              </>
+            ) : (
+              <>
+                {" "}
+                <Add /> Add description about Job{" "}
+              </>
+            )}
+          </Button>
+
+          {showInput && (
+            <div
+              className={css({
+                marginTop: "10px",
+              })}
+            >
+              <Textarea
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="Enter your summary here..."
+                overrides={{
+                  Input: {
+                    style: ({ $theme }) => ({
+                      borderRadius: "4px",
+                      minHeight: "300px",
+                      backgroundColor: $theme.colors.primaryB,
+                    }),
+                  },
+                }}
+              />
+            </div>
+          )}
+        </div>
       </div>
       <div
         className={css({
           display: "flex",
           justifyContent: "space-between",
-           marginTop:'7vh',
+          marginRight: "20px",
+          marginLeft: "20px",
+          marginTop: "7vh",
+          [$theme.mediaQuery.medium]: {
+            width: "100%",
+            maxWidth: "760px",
+          },
+          [$theme.mediaQuery.large]: {
+            width: "100%",
+            maxWidth: "1100px",
+          },
         })}
       >
-        <CustomButton
+           <CustomButton
           name={"Back"}
           to={"/education"}
           onClick={console.log}
@@ -238,3 +396,5 @@ export default function WorkExp() {
     </div>
   );
 }
+export default Education;
+

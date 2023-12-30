@@ -1,10 +1,21 @@
-import React from "react";
-import { ProgressSteps, NumberedStep } from "baseui/progress-steps";
+import React, { useState } from "react";
 import { useStyletron } from "baseui";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
-  const [current, setCurrent] = React.useState(0);
   const [css, $theme] = useStyletron();
+  const navigate = useNavigate();
+
+  const sections = [
+    { label: "Personal", path: "/personal", icon: "/personal.svg" },
+    { label: "Education", path: "/education", icon: "/education.svg" },
+    { label: "Work Experience", path: "/work-exp", icon: "/work.svg" },
+    { label: "Skills", path: "/skills", icon: "/skills.svg" },
+    { label: "Summary", path: "/summary", icon: "/summary.svg" },
+    { label: "Finalize", path: "/finalize", icon: "/finalize.svg" },
+  ];
+
+  const [activeSection, setActiveSection] = useState(0);
 
   return (
     <div
@@ -30,8 +41,8 @@ function Sidebar() {
             display: "none",
           },
           [$theme.mediaQuery.large]: {
-            width: "13rem",
-            paddingLeft: "20px",
+            width: "14rem",
+            paddingLeft: "15px",
             display: "block",
             height: "100%",
           },
@@ -47,64 +58,55 @@ function Sidebar() {
         >
           Craftify
         </div>
-        <ProgressSteps
-          current={current}
-          overrides={{
-            Root: {
-              style: () => ({
-                display: "flex",
-                flexDirection: "column",
-                maxWidth: "200px",
-                paddingTop: "45px",
-                paddingBottom: "115px",
-              }),
-            },
-            Icon: {
-              style: ({ $theme }) => ({
-                backgroundColor: $theme.colors.primaryB,
-                color: $theme.colors.primary,
-                width: "20px",
-                height: "20px",
-                border: "4px solid #66778f",
-                marginTop: "0",
-              }),
-            },
-            Title: {
-              style: ({ $theme }) => ({
-                color: "white",
-                margin: 0,
-                ...$theme.typography.LabelSmall,
-                paddingTop: "5px",
-                paddingBottom: "5px",
-              }),
-            },
-            Tail: {
-              style: () => ({
-                left: "21px",
-                top: "-23px",
-              }),
-            },
-            Content: {
-              style: () => ({
-                width: "150px",
-              }),
-            },
-          }}
-        >
-          <NumberedStep title="Personal Details"></NumberedStep>
-          <NumberedStep title="Education"></NumberedStep>
-          <NumberedStep title="Work History"></NumberedStep>
-          <NumberedStep title="Skills"></NumberedStep>
-          <NumberedStep title="Summary"></NumberedStep>
-          <NumberedStep title="Finalize"></NumberedStep>
-        </ProgressSteps>
+        <div className={css({
+          marginTop:'40px'
+        })}>
+        {sections.map((section, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setActiveSection(index);
+                    navigate(section.path);
+                  }}
+                 className={css({
+                    cursor: "pointer",
+                    backgroundColor:
+                      index === activeSection ? "#1f2937" : "transparent",
+                    color:  "white",
+                    padding: " 8px 0",
+                    borderRadius: "8px",
+                    marginBottom: "5px",
+                    display: "flex",
+                    gap: "20px",
+                    maxWidth:'230px',
+                    ":hover":{
+                      backgroundColor:'#1f2937'
+                    },
+                 ...$theme.typography.LabelMedium
+                  })}
+                >
+                  <img
+                    src={section.icon}
+                    alt={section.label}
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      marginLeft: "14px",
+                      color:'white'
+                    }}
+                  />
+                  {section.label}
+                </div>
+              ))}
+              </div>
+            </div>
 
         <div
           className={css({
-            marginLeft: "10px",
+            marginLeft: "25px",
             color: "white",
             position: "absolute",
-            bottom: "65px",
+            bottom: "50px",
 
             ...$theme.typography.LabelXSmall,
           })}
@@ -114,7 +116,6 @@ function Sidebar() {
           <p> All rights reserved.</p>
         </div>
       </div>
-    </div>
   );
 }
 

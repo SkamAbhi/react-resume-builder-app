@@ -13,8 +13,7 @@ function Finalize() {
     { id: 3, label: "Option 3", link: "experience" },
   ];
 
-  const [clickedOptions, setClickedOptions] = useState<number[]>([]);
-
+  
   const handleCheckboxChange = (id: number) => {
     setSelectedCheckboxes((prevSelected) => {
       if (prevSelected.includes(id)) {
@@ -28,21 +27,7 @@ function Finalize() {
   const dynamicLinks = selectedCheckboxes.map(
     (id) => linkBase + checkboxOptions.find((option) => option.id === id)?.link
   );
-  const handleButtonClick = () => {
-    // If all three options are clicked, navigate to the second option
-    if (clickedOptions.length === 3) {
-      // Find the second option clicked (index 1) and navigate to its link
-      const secondOptionLink =
-        linkBase + checkboxOptions[clickedOptions[1]].link;
-      // You can replace the console.log with your navigation logic
-      console.log("Navigate to the next page with link:", secondOptionLink);
-    } else {
-      // If not all options are clicked, navigate to the last option clicked
-      const lastOptionLink = dynamicLinks[dynamicLinks.length - 1] || linkBase;
-      // You can replace the console.log with your navigation logic
-      console.log("Navigate to the next page with link:", lastOptionLink);
-    }
-  };
+
   return (
     <div>
       <div
@@ -91,31 +76,6 @@ function Finalize() {
         </div>
 
         <div>
-          <h3>Select Options:</h3>
-          {checkboxOptions.map((option) => (
-            <div key={option.id}>
-              <input
-                type="checkbox"
-                id={option.id}
-                checked={selectedCheckboxes.includes(option.id)}
-                onChange={() => handleCheckboxChange(option.id)}
-              />
-              <label htmlFor={option.id}>{option.label}</label>
-            </div>
-          ))}
-          <h3>Dynamic Links:</h3>
-          {dynamicLinks.map((link, index) => (
-            <p key={index}>{link}</p>
-          ))}
-          <CustomButton
-            to={
-              dynamicLinks.length > 0
-                ? dynamicLinks[dynamicLinks.length - 0]
-                : linkBase
-            }
-            name="Go to Dynamic Link"
-            onClick={handleButtonClick}
-          />
         </div>
       </div>
     </div>
