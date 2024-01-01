@@ -1,21 +1,21 @@
 import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
 import React, { useState } from "react";
-import { Drawer,  ANCHOR } from "baseui/drawer";
+import { Drawer, ANCHOR } from "baseui/drawer";
 import { useNavigate } from "react-router-dom";
 
 function MobileHeader() {
   const [css, $theme] = useStyletron();
   const [isOpen, setIsOpen] = React.useState(false);
-  const navigate = useNavigate(); 
-  
+  const navigate = useNavigate();
+
   const sections = [
     { label: "Personal", path: "/personal", icon: "/personal.svg" },
-    { label: "Work Experience", path: "/work-exp", icon: "" },
+    { label: "Work Experience", path: "/work-exp", icon: "/work.svg" },
     { label: "Education", path: "/education", icon: "/education.svg" },
     { label: "Skills", path: "/skills", icon: "/skills.svg" },
-    { label: "Summary", path: "/summary", icon: " " },
-    { label: "Finalize", path: "/finalize", icon: " " },
+    { label: "Summary", path: "/summary", icon: "/summary.svg" },
+    { label: "Finalize", path: "/finalize", icon: "/finalize.svg" },
   ];
 
   const [activeSection, setActiveSection] = useState(0);
@@ -46,7 +46,7 @@ function MobileHeader() {
             DrawerContainer: {
               style: ({ $theme }) => ({
                 width: "300px",
-                backgroundColor: "#011936",
+                backgroundColor: "#FFFFFF",
                 borderTopRightRadius: "30px",
                 borderBottomRightRadius: "30px",
 
@@ -59,7 +59,7 @@ function MobileHeader() {
               }),
             },
             Close: {
-              style: ({ $theme }) => ({
+              style: () => ({
                 display: "none",
               }),
             },
@@ -67,8 +67,7 @@ function MobileHeader() {
         >
           <div
             className={css({
-              width: "400px",
-              color: "white",
+              color: "black",
               ...$theme.typography.LabelMedium,
             })}
           >
@@ -77,6 +76,7 @@ function MobileHeader() {
                 display: "flex",
                 justifyContent: "space-between",
                 width: "250px",
+                borderBottom: "1px solid black",
               })}
             >
               <h2>Cratify</h2>
@@ -84,8 +84,9 @@ function MobileHeader() {
                 onClick={() => setIsOpen(false)}
                 overrides={{
                   BaseButton: {
-                    style: ({ $theme }) => ({
+                    style: () => ({
                       backgroundColor: "transparent",
+                      zIndex: "10",
                       ":hover": {
                         backgroundColor: "transparent",
                       },
@@ -114,19 +115,24 @@ function MobileHeader() {
                   style={{
                     cursor: "pointer",
                     backgroundColor:
-                      index === activeSection ? "white" : "transparent",
-                    color: index === activeSection ? "#07142b" : "white",
+                      index === activeSection ? "#A9D3FF" : "white",
+                    color: index === activeSection ? "#07142b" : "black",
                     padding: "10px",
-                    borderTopRightRadius: "30px",
-                    borderBottomRightRadius: "30px",
+                    borderRadius: "15px",
                     marginBottom: "5px",
-                    width: "210px",
+                    width: "215px",
+                    display: "flex",
+                    gap: "20px",
                   }}
                 >
                   <img
                     src={section.icon}
                     alt={section.label}
-                    style={{ width: "24px", height: "24px" }}
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      marginLeft: "24px",
+                    }}
                   />
                   {section.label}
                 </div>
@@ -139,7 +145,7 @@ function MobileHeader() {
           onClick={() => setIsOpen(!isOpen)}
           overrides={{
             BaseButton: {
-              style: ({ $theme }) => ({
+              style: () => ({
                 position: "fixed",
                 left: 0,
                 top: 0,
@@ -154,7 +160,7 @@ function MobileHeader() {
           <img
             src="/menu.svg"
             alt="Logo"
-            style={{ width: "24px", height: "24px", color: "white" }}
+            style={{ width: "24px", height: "24px", color: "black" }}
           />
         </Button>
       </div>

@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useStyletron } from "baseui";
 import { FileUploader } from "baseui/file-uploader";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { Modal, ModalBody, ModalFooter, ModalButton } from "baseui/modal";
-import CustomButton from "../../components/CustomButton/page";
-import CustomInput from "../../components/CustomInput/page";
-import { userDataState } from "../../utlitis/resumeAtoms/page";
+import CustomButton from "../../components/CustomButton";
+import CustomInput from "../../components/CustomInput";
+import { userDataState } from "../../utlis/resumeAtoms";
 
 const Personal = () => {
   const [css, $theme] = useStyletron();
@@ -14,6 +13,7 @@ const Personal = () => {
   const setUserData = useSetRecoilState(userDataState);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [current, setCurrent] = React.useState(0);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -30,6 +30,10 @@ const Personal = () => {
       [name]: value,
     }));
 
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setEmailError(emailRegex.test(value) ? null : "Invalid email address");
+    }
     localStorage.setItem(
       "userData",
       JSON.stringify({
@@ -56,14 +60,20 @@ const Personal = () => {
     setUploadedFiles(files);
   }
 
-  const handleDrop = (acceptedFiles: File[], ) => {
+  const handleDrop = (acceptedFiles: File[]) => {
     handleFileUpload(acceptedFiles);
   };
-  const [picOpen, setPicOpen] = useState(false);
+  const [fileUploaderModalOpen, setFileUploaderModalOpen] = useState(false);
 
-  function close() {
-    setPicOpen(false);
-  }
+  const openFileUploaderModal = () => {
+    console.log("Opening modal");
+    setFileUploaderModalOpen(true);
+  };
+
+  const closeFileUploaderModal = () => {
+    console.log("Closing modal");
+    setFileUploaderModalOpen(false);
+  };
 
   return (
     <div
@@ -71,12 +81,19 @@ const Personal = () => {
         [$theme.mediaQuery.small]: {},
         [$theme.mediaQuery.medium]: {
           marginRight: "2rem",
-          paddingLeft: "10px",
+          paddingLeft: "25px",
           paddingTop: "30px",
           paddingBottom: "30px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         },
+
         [$theme.mediaQuery.large]: {
           marginLeft: "17rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         },
       })}
     >
@@ -89,6 +106,10 @@ const Personal = () => {
             marginLeft: "0px",
             marginRight: "0px",
           },
+          [$theme.mediaQuery.large]: {
+            width: "100%",
+            maxWidth: "1100px",
+          },
         })}
       >
         <h1
@@ -96,6 +117,7 @@ const Personal = () => {
             ...$theme.typography.HeadingMedium,
             [$theme.mediaQuery.medium]: {
               ...$theme.typography.HeadingLarge,
+              marginTop: "13px",
             },
           })}
         >
@@ -120,9 +142,9 @@ const Personal = () => {
           [$theme.mediaQuery.medium]: {
             flexDirection: "row",
             justifyContent: "center",
-            gap: "60px",
+            gap: "30px",
           },
-          [$theme.mediaQuery.large]: {
+          [$theme.mediaQuery.large]: { 
             gap: "40px",
           },
         })}
@@ -130,48 +152,122 @@ const Personal = () => {
         <div
           className={css({
             display: "flex",
-            flexDirection: "column",
+            justifyContent:'flex-start',
+            width:'100%',
+            marginLeft:'20px',
             alignItems: "center",
+            [$theme.mediaQuery.medium]: {
+              top: "-60px",
+              position: "relative",
+              flexDirection: "column",
+              width:'auto'
+            },
           })}
         >
           <div className={css({ display: "flex", flexWrap: "wrap" })}>
-            {uploadedFiles.map((file, index) => (
+            {uploadedFiles.length > 0 ? (
+              uploadedFiles.map((file, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(file)}
+                  alt={file.name}
+                  style={{ width: "120px", height: "120px", margin: "10px" }}
+                />
+              ))
+            ) : (
               <img
-                key={index}
-                src={file ? URL.createObjectURL(file) : `/NoImage.jpg`}
-                alt={file.name}
-                style={{ width: "120px", height: "120px", margin: "10px" }}
+                src="/NoImage.jpg"
+                alt="Blank Photo"
+                className={css({
+                  width: "80px",
+                  height: "80px",
+                  margin: "10px",
+                  [$theme.mediaQuery.medium]:{
+                    width: "120px",
+                    height: "120px",
+                    margin: "10px",
+                  }
+                })}
               />
-            ))}
+            )}
           </div>
 
           <div className={css({})}>
-            <CustomButton
-              onClick={() => setPicOpen(true)}
-              name="Upload Photo"
-              to={""}
-              isSpecial
-            />
-            <Modal onClose={close} isOpen={picOpen}>
-              <ModalBody>
-                <div
-                  className={css({
-                    padding: "20px",
-                    ...$theme.typography.LabelMedium,
-                  })}
-                >
-                  <h3> Select Your Profile Photo</h3>
-                  <FileUploader
-                    onDrop={(acceptedFiles: File[] ) =>
-                      handleDrop(acceptedFiles, )
-                    }
-                  />
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <ModalButton onClick={close}>Okay</ModalButton>
-              </ModalFooter>
-            </Modal>
+            <p className={css({
+              ...$theme.typography.LabelSmall,
+              [$theme.mediaQuery.medium]:{
+                display:'none'
+              }
+            })}>
+            Add a Photo to Your Resume (Optional)
+            </p>
+            <button
+              onClick={openFileUploaderModal}
+              className={css({
+                backgroundColor: "#fff",
+                borderColor: "#0C1986",
+                color: "#0C1986",
+                border: "2px solid #0C1986",
+                PaddingRight: "0",
+                PaddingLeft: "0",
+                width: "100px",
+                height: "50px",
+                borderRadius: "20px",
+                ...$theme.typography.LabelXSmall,
+                [$theme.mediaQuery.medium]: {
+                  width: "140px",
+                  ...$theme.typography.LabelMedium,
+                },
+                ":hover": {
+                  backgroundColor: "rgba(232, 241, 247, 0.8)",
+                },
+              })}
+            >
+              Upload photo
+            </button>
+            <div
+              className={css({
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                zIndex: 999,
+                display: fileUploaderModalOpen ? "block" : "none",
+              })}
+              onClick={closeFileUploaderModal}
+            ></div>
+            <div
+              className={css({
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "white",
+                padding: "20px",
+                borderRadius: "8px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                zIndex: 999,
+                width: "500px",
+                height: "300px",
+                display: fileUploaderModalOpen ? "block" : "none",
+                ...$theme.typography.LabelMedium,
+              })}
+            >
+              <h3
+                className={css({
+                  marginBottom: "50px",
+                  marginLeft: "30px",
+                })}
+              >
+                {" "}
+                Select Your Profile Photo
+              </h3>
+              <FileUploader
+                onDrop={(acceptedFiles: File[]) => handleDrop(acceptedFiles)}
+              />
+            </div>
           </div>
         </div>
 
@@ -186,6 +282,7 @@ const Personal = () => {
 
             [$theme.mediaQuery.medium]: {
               maxWidth: "530px",
+              marginLeft:'0'
             },
           })}
         >
@@ -213,7 +310,7 @@ const Personal = () => {
             <CustomInput
               placeholder={""}
               onChange={handleInputChange}
-              label={"SurName"}
+              label={"Surname"}
               value={userData.surName}
               name="surName"
             />
@@ -261,6 +358,7 @@ const Personal = () => {
               value={userData.city}
               name="city"
             />
+
             <CustomInput
               placeholder={""}
               onChange={handleInputChange}
@@ -273,7 +371,7 @@ const Personal = () => {
               onChange={handleInputChange}
               label={"PinCode"}
               value={userData.pinCode}
-              name={"PinCode"}
+              name={"Pincode"}
             />
           </div>
           <div
@@ -303,6 +401,7 @@ const Personal = () => {
               label={"Email"}
               value={userData.email}
               name="email"
+              error={emailError}
             />
           </div>
         </div>
@@ -313,41 +412,18 @@ const Personal = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "300px",
-              height: "300px",
+              width: "230px",
+              height: "250px",
               border: "1px solid #ccc",
               borderRadius: "8px",
               padding: "20px",
               boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
               margin: "20px",
               flexDirection: "column",
-              overflow: "hidden",
             },
           })}
         >
           Preview
-          <div
-            className={css({
-              display: "flex",
-              gap: "10px",
-            })}
-          >
-            <p>{userData.firstName}</p>
-            <p>{userData.surName}</p>
-          </div>
-          <p>{userData.profession}</p>
-          <div
-            className={css({
-              display: "flex",
-              gap: "10px",
-            })}
-          >
-            <p>{userData.city}</p>
-            <p>{userData.country}</p>
-          </div>
-          <p>{userData.pinCode}</p>
-          <p>{userData.email}</p>
-          <p>{userData.phone}</p>
         </div>
       </div>
       <div
@@ -357,11 +433,17 @@ const Personal = () => {
           marginRight: "20px",
           marginLeft: "20px",
           marginTop: "7vh",
+          [$theme.mediaQuery.medium]: {
+            width: "100%",
+            maxWidth: "760px",
+          },
+          [$theme.mediaQuery.large]: {
+            width: "100%",
+            maxWidth: "1100px",
+          },
         })}
       >
-        <CustomButton name={"Back"} to={"/"} onClick={console.log} isSpecial>
-          {" "}
-        </CustomButton>
+        <CustomButton name={"Back"} to={"/"} onClick={console.log} isSpecial />
         <CustomButton
           name={"Next : Education"}
           onClick={handleNext}
