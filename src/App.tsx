@@ -1,6 +1,7 @@
 "use client";
 import { useStyletron } from "baseui";
-import Navigation from "./routes";
+import Routing from "./routes";
+import { NavigationProvider } from "./utlis/NavigationContext";
 
 export default function RootLayout() {
   const [css] = useStyletron();
@@ -15,7 +16,9 @@ export default function RootLayout() {
           }
         `}
       </style>
-      <Navigation />
+      <NavigationProvider>
+      <Routing />
+      </NavigationProvider>
     </div>
   );
 }

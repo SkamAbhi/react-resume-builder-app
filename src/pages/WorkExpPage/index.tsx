@@ -1,8 +1,6 @@
-
 "use client";
 
-
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useStyletron } from "baseui";
 import { Datepicker } from "baseui/datepicker";
 import { StatefulPopover } from "baseui/popover";
@@ -25,7 +23,6 @@ function Education() {
     setInputValue(e.target.value);
   };
 
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     localStorage.setItem(
@@ -38,10 +35,11 @@ function Education() {
   return (
     <div
       className={css({
+         marginTop:'50px',
         [$theme.mediaQuery.medium]: {
           marginRight: "2rem",
+          marginTop:'50px',
           paddingLeft: "25px",
-          paddingTop: "30px",
           paddingBottom: "30px",
           display: "flex",
           flexDirection: "column",
@@ -51,6 +49,8 @@ function Education() {
           display: "flex",
           flexDirection: "column",
           marginLeft: "17rem",
+          marginTop:'30px',
+
         },
       })}
     >
@@ -82,7 +82,9 @@ function Education() {
                 ...$theme.typography.HeadingLarge,
               },
             })}
-          >          Tell us about your most recent job{" "}
+          >
+            {" "}
+            Tell us about your most recent job{" "}
           </h1>
           <p
             className={css({
@@ -92,8 +94,7 @@ function Education() {
               },
             })}
           >
-                  We will Start there and work backwards{" "}
-
+            We will Start there and work backwards{" "}
           </p>
         </div>
         <StatefulPopover
@@ -101,19 +102,60 @@ function Education() {
             <div
               className={css({
                 backgroundColor: $theme.colors.primaryB,
-                padding: "0px 40px",
-
+                padding: "0px 25px",
+                [$theme.mediaQuery.medium]:{
+                  padding:"0px 40px"
+                },
                 ...$theme.typography.LabelMedium,
               })}
-            >            </div>
+            >
+              <h3>Expert Insights</h3>
+              <p
+                className={css({
+                  ...$theme.typography.LabelSmall,
+                })}
+              >
+                Ageism in the workforce still exists. If your degree is over ten
+                years old, consider removing the date.
+                <ul>
+                  <li
+                    className={css({
+                      marginBottom: "8px",
+                    })}
+                  >
+                    List the schools you have attended and any degrees you have
+                    earned, starting with your most recent.
+                  </li>
+                  <li
+                    className={css({
+                      marginBottom: "8px",
+                    })}
+                  >
+                    {" "}
+                    List relevant courses if you do not have much work
+                    experience.
+                  </li>
+                  <li
+                    className={css({
+                      marginBottom: "8px",
+                    })}
+                  >
+                    {" "}
+                    Certifications and training programs should be included in a
+                    separate section.
+                  </li>
+                </ul>
+              </p>
+            </div>
           }
           accessibilityType={"tooltip"}
           placement={"bottomRight"}
           overrides={{
             Body: {
               style: ({ $theme }) => ({
-                width: "500px",
+                maxWidth: "500px",
                 backgroundColor: $theme.colors.primaryB,
+                margin: "0 20px",
               }),
             },
           }}
@@ -124,6 +166,9 @@ function Education() {
                 style: ({ $theme }) => ({
                   backgroundColor: "white",
                   color: "#0C1986",
+                  position:"initial",
+                  marginTop:'15px',
+                  maxHeight: "50px",
                   ":hover": {
                     backgroundColor: $theme.colors.white,
                     color: "blue",
@@ -168,7 +213,7 @@ function Education() {
             onChange={function (): void {
               throw new Error("Function not implemented.");
             }}
-            label={"employer"}
+            label={"Employer"}
             value={""}
             name={""}
           />
@@ -183,21 +228,20 @@ function Education() {
           <div
             className={css({
               width: "100%",
-              [$theme.mediaQuery.medium]:{
+              [$theme.mediaQuery.medium]: {
                 width: "48.5%",
-
-              }
+              },
             })}
           >
             <CustomInput
-            placeholder={"city state etc "}
-            onChange={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-            label={"Location"}
-            value={""}
-            name={""}
-          />
+              placeholder={"city state etc "}
+              onChange={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+              label={"Location"}
+              value={""}
+              name={""}
+            />
           </div>
         </div>
 
@@ -214,10 +258,11 @@ function Education() {
           <div
             className={css({
               width: "100%",
-              ...$theme.typography.LabelMedium,
-
+              ...$theme.typography.LabelSmall,
+              paddingBottom: "15px",
               [$theme.mediaQuery.medium]: {
                 width: "calc(50% - 15px)",
+                ...$theme.typography.LabelMedium,
               },
               [$theme.mediaQuery.large]: {
                 width: "calc(50% - 15px)",
@@ -237,8 +282,10 @@ function Education() {
                       Root: {
                         style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          padding: "0",
                           border: "1px solid black",
                           borderRadius: "6px",
+                          marginTop: "8px",
                         }),
                       },
                       InputContainer: {
@@ -262,10 +309,11 @@ function Education() {
           <div
             className={css({
               width: "100%",
-              ...$theme.typography.LabelMedium,
-
+              ...$theme.typography.LabelSmall,
+              paddingBottom: "15px",
               [$theme.mediaQuery.medium]: {
                 width: "calc(50% - 15px)",
+                ...$theme.typography.LabelMedium,
               },
               [$theme.mediaQuery.large]: {
                 width: "calc(50% - 15px)",
@@ -285,8 +333,10 @@ function Education() {
                       Root: {
                         style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          padding: "0",
                           border: "1px solid black",
-                          padding: "0px 0px",
+                          borderRadius: "6px",
+                          marginTop: "8px",
                         }),
                       },
                       InputContainer: {
@@ -348,7 +398,7 @@ function Education() {
             >
               <Textarea
                 value={inputValue}
-                onChange={handleInputChange}
+                onChange={console.log}
                 placeholder="Enter your summary here..."
                 overrides={{
                   Input: {
@@ -373,7 +423,7 @@ function Education() {
           marginTop: "7vh",
           [$theme.mediaQuery.medium]: {
             width: "100%",
-            maxWidth: "760px",
+            maxWidth: "1100px",
           },
           [$theme.mediaQuery.large]: {
             width: "100%",
@@ -381,7 +431,7 @@ function Education() {
           },
         })}
       >
-           <CustomButton
+        <CustomButton
           name={"Back"}
           to={"/education"}
           onClick={console.log}
@@ -397,4 +447,3 @@ function Education() {
   );
 }
 export default Education;
-

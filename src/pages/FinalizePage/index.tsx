@@ -32,6 +32,7 @@ function Finalize() {
     <div>
       <div
         className={css({
+          marginTop:'50px',
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",

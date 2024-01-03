@@ -6,14 +6,14 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { userDataState } from "../../utlis/resumeAtoms";
+import { useNavigationContext } from "../../utlis/NavigationContext";
+
 
 const Personal = () => {
   const [css, $theme] = useStyletron();
   const userData = useRecoilValue(userDataState);
   const setUserData = useSetRecoilState(userDataState);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [current, setCurrent] = React.useState(0);
-  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -30,10 +30,6 @@ const Personal = () => {
       [name]: value,
     }));
 
-    if (name === "email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      setEmailError(emailRegex.test(value) ? null : "Invalid email address");
-    }
     localStorage.setItem(
       "userData",
       JSON.stringify({
@@ -43,11 +39,7 @@ const Personal = () => {
     );
   };
 
-  const handleNext = () => {
-    if (current < 5) {
-      setCurrent((prevCurrent) => prevCurrent + 1);
-    }
-  };
+
 
   function handleFileUpload(files: File[]) {
     const uploadedImages: string[] = [];
@@ -74,15 +66,16 @@ const Personal = () => {
     console.log("Closing modal");
     setFileUploaderModalOpen(false);
   };
+  const { activeSection, handleNextClick } = useNavigationContext(); 
 
   return (
     <div
       className={css({
-        [$theme.mediaQuery.small]: {},
+        marginTop: "70px",
         [$theme.mediaQuery.medium]: {
           marginRight: "2rem",
+          marginTop: "70px",
           paddingLeft: "25px",
-          paddingTop: "30px",
           paddingBottom: "30px",
           display: "flex",
           flexDirection: "column",
@@ -94,6 +87,7 @@ const Personal = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          marginTop: "30px",
         },
       })}
     >
@@ -144,7 +138,7 @@ const Personal = () => {
             justifyContent: "center",
             gap: "30px",
           },
-          [$theme.mediaQuery.large]: { 
+          [$theme.mediaQuery.large]: {
             gap: "40px",
           },
         })}
@@ -152,15 +146,15 @@ const Personal = () => {
         <div
           className={css({
             display: "flex",
-            justifyContent:'flex-start',
-            width:'100%',
-            marginLeft:'20px',
+            justifyContent: "flex-start",
+            width: "100%",
+            marginLeft: "20px",
             alignItems: "center",
             [$theme.mediaQuery.medium]: {
               top: "-60px",
               position: "relative",
               flexDirection: "column",
-              width:'auto'
+              width: "auto",
             },
           })}
         >
@@ -182,24 +176,26 @@ const Personal = () => {
                   width: "80px",
                   height: "80px",
                   margin: "10px",
-                  [$theme.mediaQuery.medium]:{
-                    width: "120px",
-                    height: "120px",
+                  [$theme.mediaQuery.medium]: {
+                    width: "100px",
+                    height: "100px",
                     margin: "10px",
-                  }
+                  },
                 })}
               />
             )}
           </div>
 
           <div className={css({})}>
-            <p className={css({
-              ...$theme.typography.LabelSmall,
-              [$theme.mediaQuery.medium]:{
-                display:'none'
-              }
-            })}>
-            Add a Photo to Your Resume (Optional)
+            <p
+              className={css({
+                ...$theme.typography.LabelSmall,
+                [$theme.mediaQuery.medium]: {
+                  display: "none",
+                },
+              })}
+            >
+              Add a Photo to Your Resume (Optional)
             </p>
             <button
               onClick={openFileUploaderModal}
@@ -211,19 +207,23 @@ const Personal = () => {
                 PaddingRight: "0",
                 PaddingLeft: "0",
                 width: "100px",
-                height: "50px",
+                height: "40px",
                 borderRadius: "20px",
                 ...$theme.typography.LabelXSmall,
                 [$theme.mediaQuery.medium]: {
-                  width: "140px",
-                  ...$theme.typography.LabelMedium,
+                  width: "120px",
+                  ...$theme.typography.LabelSmall,
                 },
                 ":hover": {
                   backgroundColor: "rgba(232, 241, 247, 0.8)",
                 },
               })}
             >
-              Upload photo
+              {uploadedFiles.length > 0 ? (
+                <div> Change photo </div>
+              ) : (
+                <div> Upload Photo </div>
+              )}
             </button>
             <div
               className={css({
@@ -241,7 +241,7 @@ const Personal = () => {
             <div
               className={css({
                 position: "fixed",
-                top: "50%",
+                top: "60%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 backgroundColor: "white",
@@ -249,24 +249,95 @@ const Personal = () => {
                 borderRadius: "8px",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 zIndex: 999,
-                width: "500px",
+                maxWidth: "300px",
                 height: "300px",
                 display: fileUploaderModalOpen ? "block" : "none",
+                width: "100%",
                 ...$theme.typography.LabelMedium,
+                [$theme.mediaQuery.medium]: {
+                  maxWidth: "500px",
+                },
               })}
             >
-              <h3
+              <div
                 className={css({
-                  marginBottom: "50px",
-                  marginLeft: "30px",
+                  display: "flex",
                 })}
               >
-                {" "}
-                Select Your Profile Photo
-              </h3>
+                <h3
+                  className={css({
+                    marginBottom: "50px",
+                    marginLeft: "0px",
+                  })}
+                >
+                  {" "}
+                  Select Your Profile Photo
+                </h3>
+                <button
+                  className={css({
+                    backgroundColor: "transparent",
+                    position: "fixed",
+                    right: "15px",
+                    top: "33px",
+                    border: 0,
+                    cursor: "pointer",
+                    ":hover": {
+                      backgroundColor: "transparent",
+                    },
+                  })}
+                  onClick={closeFileUploaderModal}
+                >
+                  <img
+                    src="/menuClose.svg"
+                    alt="menu-close"
+                    width="20px"
+                    color="black"
+                    className={css({
+                      color: "black",
+                      backgroundColor: "#fbaf3b",
+                      padding: "4px",
+                      borderRadius: "20px",
+                    })}
+                  />
+                </button>
+              </div>
               <FileUploader
                 onDrop={(acceptedFiles: File[]) => handleDrop(acceptedFiles)}
               />
+              <div
+                className={css({
+                  position: "fixed",
+                  bottom: "15px",
+                  right: "20px",
+                })}
+              >
+                <button
+                  className={css({
+                    height: "40px",
+                    backgroundColor: "#fbaf3b",
+                    borderColor: "#fbaf3b",
+                    color: "#07142b",
+                    width: "fit-content",
+                    ...$theme.typography.LabelXSmall,
+                    padding: "8px 20px",
+                    borderRadius: "20px",
+                    [$theme.mediaQuery.medium]: {
+                      width: "auto",
+                      ...$theme.typography.LabelMedium,
+                      height: "40px",
+                    },
+                    ":hover": {
+                      backgroundColor: "#fbaf3b",
+                    },
+                    border: 0,
+                    ...$theme.typography.LabelMedium,
+                  })}
+                  onClick={closeFileUploaderModal}
+                >
+                  {" "}
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -282,7 +353,7 @@ const Personal = () => {
 
             [$theme.mediaQuery.medium]: {
               maxWidth: "530px",
-              marginLeft:'0'
+              marginLeft: "0",
             },
           })}
         >
@@ -369,7 +440,7 @@ const Personal = () => {
             <CustomInput
               placeholder={""}
               onChange={handleInputChange}
-              label={"PinCode"}
+              label={"Pincode"}
               value={userData.pinCode}
               name={"Pincode"}
             />
@@ -401,7 +472,6 @@ const Personal = () => {
               label={"Email"}
               value={userData.email}
               name="email"
-              error={emailError}
             />
           </div>
         </div>
@@ -439,14 +509,15 @@ const Personal = () => {
           },
           [$theme.mediaQuery.large]: {
             width: "100%",
-            maxWidth: "1100px",
+            maxWidth: "1050px",
+            marginRight: "50px",
           },
         })}
       >
         <CustomButton name={"Back"} to={"/"} onClick={console.log} isSpecial />
         <CustomButton
           name={"Next : Education"}
-          onClick={handleNext}
+          onClick={handleNextClick}
           to={"/education"}
         />
       </div>

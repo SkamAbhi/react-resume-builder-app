@@ -10,7 +10,7 @@ import Layout from "../components/Layout";
 import Finalize from "../pages/FinalizePage";
 import Languages from "../pages/LanguagePage";
 
-function Navigation() {
+function Routing() {
   const [css] = useStyletron();
   const location = useLocation();
 
@@ -39,4 +39,4 @@ function Navigation() {
   );
 }
 
-export default Navigation;
+export default Routing;

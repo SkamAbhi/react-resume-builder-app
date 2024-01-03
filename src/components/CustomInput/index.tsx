@@ -23,7 +23,6 @@ const CustomInput: React.FC<CustomInputProps> = ({
 }) => {
   const [css, $theme] = useStyletron();
 
-  const isEmailInput = name === "email";
   const isError = Boolean(error);
   return (
     <div
@@ -44,14 +43,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
             Root: {
               style: ({ $theme }) => ({
                 width: "100%",
-                border: isEmailInput
-                  ? "2px solid #0070d6"
+                border
                   : "1.5px solid #838fa0",
-                ":focus-within": {
-                  border: isEmailInput
-                    ? "2px solid #0070d6"
-                    : "2px solid #0070d6",
-                },
+                  ":focus-within": {
+                    border: "2px solid #0070d6",
+                  },
                 backgroundColor: $theme.colors.primaryB,
                 borderRadius: '6px', 
 

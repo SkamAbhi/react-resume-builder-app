@@ -64,10 +64,11 @@ function Education() {
   return (
     <div
       className={css({
+        marginTop: "50px",
         [$theme.mediaQuery.medium]: {
           marginRight: "2rem",
+          marginTop: "50px",
           paddingLeft: "25px",
-          paddingTop: "30px",
           paddingBottom: "30px",
           display: "flex",
           flexDirection: "column",
@@ -77,6 +78,7 @@ function Education() {
           display: "flex",
           flexDirection: "column",
           marginLeft: "17rem",
+          marginTop: "30px",
         },
       })}
     >
@@ -128,8 +130,10 @@ function Education() {
             <div
               className={css({
                 backgroundColor: $theme.colors.primaryB,
-                padding: "0px 40px",
-
+                padding: "0px 25px",
+                [$theme.mediaQuery.medium]:{
+                  padding:"0px 40px"
+                },
                 ...$theme.typography.LabelMedium,
               })}
             >
@@ -142,17 +146,28 @@ function Education() {
                 Ageism in the workforce still exists. If your degree is over ten
                 years old, consider removing the date.
                 <ul>
-                  <li>
-                    {" "}
+                  <li
+                    className={css({
+                      marginBottom: "8px",
+                    })}
+                  >
                     List the schools you have attended and any degrees you have
                     earned, starting with your most recent.
                   </li>
-                  <li>List high school only if you did not go to college.</li>
-                  <li>
+                  <li
+                    className={css({
+                      marginBottom: "8px",
+                    })}
+                  >
+                    {" "}
                     List relevant courses if you do not have much work
                     experience.
                   </li>
-                  <li>
+                  <li
+                    className={css({
+                      marginBottom: "8px",
+                    })}
+                  >
                     {" "}
                     Certifications and training programs should be included in a
                     separate section.
@@ -166,8 +181,9 @@ function Education() {
           overrides={{
             Body: {
               style: ({ $theme }) => ({
-                width: "500px",
+                maxWidth: "500px",
                 backgroundColor: $theme.colors.primaryB,
+                margin: "0 20px",
               }),
             },
           }}
@@ -178,6 +194,9 @@ function Education() {
                 style: ({ $theme }) => ({
                   backgroundColor: "white",
                   color: "#0C1986",
+                  position:"initial",
+                  maxHeight: "50px",
+                  marginTop:'15px',
                   ":hover": {
                     backgroundColor: $theme.colors.white,
                     color: "blue",
@@ -246,7 +265,10 @@ function Education() {
           >
             <label
               className={css({
-                ...$theme.typography.LabelMedium,
+                ...$theme.typography.LabelSmall,
+                [$theme.mediaQuery.medium]: {
+                  ...$theme.typography.LabelMedium,
+                },
               })}
             >
               Degree
@@ -293,7 +315,8 @@ function Education() {
                     padding: "0",
                     border: "1px solid black",
                     borderRadius: "6px",
-                    marginTop: "12px",
+                    marginTop: "8px",
+                    zIndex: "0",
                   }),
                 },
                 ValueContainer: {
@@ -307,9 +330,10 @@ function Education() {
           <div
             className={css({
               width: "100%",
-
+              marginTop: "10px",
               [$theme.mediaQuery.medium]: {
                 width: "50%",
+                marginTop: 0,
               },
               [$theme.mediaQuery.large]: {
                 width: "50%",
@@ -339,17 +363,24 @@ function Education() {
           <div
             className={css({
               width: "100%",
-              ...$theme.typography.LabelMedium,
-
+              ...$theme.typography.LabelSmall,
+              paddingBottom: "15px",
               [$theme.mediaQuery.medium]: {
                 width: "calc(50% - 15px)",
+                ...$theme.typography.LabelMedium,
               },
               [$theme.mediaQuery.large]: {
                 width: "calc(50% - 15px)",
               },
             })}
           >
-            <label>Start Date</label>
+            <label
+              className={css({
+                marginBottom: "10px",
+              })}
+            >
+              Start Date
+            </label>
             <Datepicker
               aria-label="Select a start date"
               clearable={true}
@@ -362,8 +393,10 @@ function Education() {
                       Root: {
                         style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          padding: "0",
                           border: "1px solid black",
                           borderRadius: "6px",
+                          marginTop: "8px",
                         }),
                       },
                       InputContainer: {
@@ -387,10 +420,11 @@ function Education() {
           <div
             className={css({
               width: "100%",
-              ...$theme.typography.LabelMedium,
-
+              ...$theme.typography.LabelSmall,
+              paddingBottom: "15px",
               [$theme.mediaQuery.medium]: {
                 width: "calc(50% - 15px)",
+                ...$theme.typography.LabelMedium,
               },
               [$theme.mediaQuery.large]: {
                 width: "calc(50% - 15px)",
@@ -410,8 +444,10 @@ function Education() {
                       Root: {
                         style: () => ({
                           backgroundColor: $theme.colors.primaryB,
+                          padding: "0",
                           border: "1px solid black",
-                          padding: "0px 0px",
+                          borderRadius: "6px",
+                          marginTop: "8px",
                         }),
                       },
                       InputContainer: {
@@ -498,7 +534,7 @@ function Education() {
           marginTop: "7vh",
           [$theme.mediaQuery.medium]: {
             width: "100%",
-            maxWidth: "760px",
+            maxWidth: "1100px",
           },
           [$theme.mediaQuery.large]: {
             width: "100%",

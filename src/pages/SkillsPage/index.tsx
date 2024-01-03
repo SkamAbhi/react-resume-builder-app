@@ -99,56 +99,25 @@ function Skills() {
 
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
-  const handleAddSkill = (
-    skill: string,
-    skillName: string | undefined,
-    index: number
-  ) => {
-    setValues((prevValues) => {
-      const isSkillSelected = prevValues.includes(skill);
-
-      if (isSkillSelected) {
-        return prevValues.filter((selectedSkill) => selectedSkill !== skill);
-      }
-
-      const newValues = [...prevValues];
-      if (index !== undefined && index < newValues.length) {
-        newValues[index] = skill;
-      } else {
-        newValues.push(skill);
-      }
-
-      return newValues;
-    });
-
-    setSearchTerm("");
-    setSelectedJob(null);
-
-    if (skillName) {
-      if (selectedSkill === skillName) {
-        setSelectedSkill(null);
-      } else {
-        setSelectedSkill(skillName);
-      }
-
-      if (disabledSkills.includes(skillName)) {
-        setDisabledSkills((prevSkills) =>
-          prevSkills.filter((disabledSkill) => disabledSkill !== skillName)
-        );
-      } else {
-        setDisabledSkills((prevSkills) => [...prevSkills, skillName]);
-      }
-    }
-    if (index !== undefined) {
-      setSelectedSkills((prevSelectedSkills) => {
-        const newSelectedSkills = [...prevSelectedSkills];
-        newSelectedSkills[index] = skill;
-        return newSelectedSkills;
+  const handleAddSkill = (skill: string) => {
+    if (!selectedSkills.includes(skill)) {
+      setSelectedSkills((prevSkills) => [...prevSkills, skill]);
+  
+      setInputValue((prevValue) => {
+        // Check if the skill is already present in the input
+        const hasSkill = prevValue.includes(skill);
+  
+        if (hasSkill) {
+          // Remove the skill if it's already present
+          return prevValue.replace(new RegExp(`${skill}\n`), "");
+        } else {
+          // Add the skill with a newline if it's not present
+          return prevValue + skill + "\n";
+        }
       });
     }
-
-    setInputValue("");
   };
+  
   useEffect(() => {
     setValues(["", "", "", ""]);
   }, []);
@@ -156,10 +125,11 @@ function Skills() {
   return (
     <div
       className={css({
+        marginTop:'50px',
         [$theme.mediaQuery.medium]: {
           marginRight: "2rem",
+          marginTop:'50px',
           paddingLeft: "25px",
-          paddingTop: "30px",
           paddingBottom: "30px",
           display: "flex",
           flexDirection: "column",
@@ -168,7 +138,8 @@ function Skills() {
         [$theme.mediaQuery.large]: {
           display: "flex",
           flexDirection: "column",
-          marginLeft: "17rem",
+          marginLeft: "14rem",
+          marginTop:'30px',
         },
       })}
     >
@@ -178,19 +149,23 @@ function Skills() {
           width: "100%",
           justifyContent: "space-between",
           [$theme.mediaQuery.large]: {
-            maxWidth: "1100px",
+            maxWidth: "950px",
           },
         })}
       >
         <div
           className={css({
-            marginLeft: "20px",
-            marginRight: "20px",
+            marginLeft: "25px",
+            marginRight: "25px",
 
             [$theme.mediaQuery.medium]: {
-              marginLeft: "0px",
-              marginRight: "0px",
+              marginLeft: "auto",
+              marginRight: "auto",
             },
+            [$theme.mediaQuery.large]:{
+              marginRight:0,
+              marginLeft:0
+            }
           })}
         >
           <h1
@@ -218,49 +193,66 @@ function Skills() {
       <div
         className={css({
           display: "flex",
-          flexDirection:'column',
-          [$theme.mediaQuery.large]:{
+          flexDirection: "column",
+          marginRight: "25px",
+          marginLeft: "25px",
+          [$theme.mediaQuery.medium]: {
+            maxWidth: "530px",
+            width: "100%",
+            margin: "auto",
+          },
+          [$theme.mediaQuery.large]: {
             margin: "0 20px",
-            gap: "50px",
+            gap: "70px",
             backgroundColor: "#f3f8ff",
             padding: "30px ",
             borderRadius: "20px",
-            flexDirection:'row',
-          }
+            flexDirection: "row",
+            maxWidth: "900px",
+            paddingRight:'20px',
+          },
         })}
       >
         <div>
-          {values.map((inputValue, index) => (
+          {values.map((index) => (
             <div
               key={index}
-              style={{
+              className={css({
                 display: "flex",
                 alignItems: "center",
                 paddingBottom: "20px",
-                gap: "20px",
                 width: "100%",
-              }}
+                [$theme.mediaQuery.medium]:{
+                minWidth: "400px",  
+              }
+              })}
             >
               <div
-                style={{
+                className={css({
                   padding: "10px",
                   borderRadius: "8px",
                   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                   backgroundColor: "white",
-                  width: "400px",
-                }}
+                  width: "100%",
+                  [$theme.mediaQuery.medium]: {
+                    maxWidth: "600px",
+                  },
+                  [$theme.mediaQuery.large]: {
+                    minWidth: "400px",
+                  },
+                })}
               >
                 <div
-                  style={{
+                  className={css({
                     display: "flex",
                     flexWrap: "wrap",
-                  }}
+                  })}
                 ></div>
                 <div
-                  style={{
+                  className={css({
                     display: "flex",
                     margin: "0 5px",
-                  }}
+                  })}
                 >
                   <Input
                     placeholder={` Skill ${index + 1}`}
@@ -325,6 +317,11 @@ function Skills() {
             borderRadius: "10px",
             backgroundColor: "#f3f8ff",
             maxHeight: "400px",
+            width: "100%",
+            maxWidth: "520px",
+            [$theme.mediaQuery.large]: {
+              maxWidth: "400px",
+            },
           })}
         >
           <div>
@@ -337,8 +334,8 @@ function Skills() {
               overrides={{
                 Root: {
                   style: ({ $theme }) => ({
-                    width: "460px",
-                    maxWidth: "500px",
+                    width: "100%",
+                    maxWidth: "530px",
                     border: "1.5px solid #838fa0",
                     borderBottomLeftRadius: "0px",
                     borderBottomRightRadius: "0px",
@@ -357,7 +354,6 @@ function Skills() {
                 },
               }}
             />
-            {isOpen && (
               <ul
                 className={css({
                   listStyle: "none",
@@ -368,12 +364,22 @@ function Skills() {
                   backgroundColor: "white",
                   position: "absolute",
                   zIndex: 1,
-                  width: "100%",
-                  maxWidth: "460px",
+                  width: "85%",
                   overflowY: "auto",
                   maxHeight: "300px",
                   borderTopLeftRadius: "10px",
                   borderTopRightRadius: "10px",
+                  borderBottomLeftRadius: "10px",
+                  borderBottomRightRadius: "10px",
+                  maxWidth: "519px",
+                  [$theme.mediaQuery.medium]:{
+                    maxWidth: "519px",
+                    width:'100%'
+                  },
+                  [$theme.mediaQuery.large]:{
+                    maxWidth: "399px",
+
+                  }
                 })}
               >
                 {filteredData.length > 0 ? (
@@ -404,7 +410,7 @@ function Skills() {
                   </li>
                 )}
               </ul>
-            )}
+            
             <p
               className={css({
                 ...$theme.typography.LabelMedium,
@@ -443,6 +449,9 @@ function Skills() {
                     opacity: disabledSkills.includes(skill.skillName) ? 0.5 : 1,
                     transition: "opacity 0.3s ease-in-out",
                   })}
+                  onClick={() =>
+                    handleAddSkill(skill.skillName, skill.skillName, mapIndex)
+                  }
                 >
                   <button
                     className={css({
@@ -458,6 +467,7 @@ function Skills() {
                         ? 0.5
                         : 1,
                       transition: "opacity 0.3s ease-in-out",
+                      padding:'8px'
                     })}
                     onClick={() =>
                       handleAddSkill(skill.skillName, skill.skillName, mapIndex)
@@ -490,7 +500,7 @@ function Skills() {
               {selectedJob && (
                 <ul
                   className={css({
-                    overflowY: "auto",
+                    overflowY: "hidden",
                     border: "1px solid #ccc",
                     borderRadius: "4px",
                     padding: "8px",
@@ -500,6 +510,7 @@ function Skills() {
                     top: "calc(100% + 8px)",
                     width: "100%",
                     maxWidth: "300px",
+                    minWidth:"200px"
                   })}
                 >
                   {selectedJob.skills.map((skill, index) => (
@@ -524,16 +535,16 @@ function Skills() {
         className={css({
           display: "flex",
           justifyContent: "space-between",
-          marginRight: "20px",
-          marginLeft: "20px",
+          marginRight: "25px",
+          marginLeft: "25px",
           marginTop: "7vh",
           [$theme.mediaQuery.medium]: {
             width: "100%",
-            maxWidth: "760px",
+            maxWidth: "550px",
           },
           [$theme.mediaQuery.large]: {
             width: "100%",
-            maxWidth: "1100px",
+            maxWidth: "950px",
           },
         })}
       >
