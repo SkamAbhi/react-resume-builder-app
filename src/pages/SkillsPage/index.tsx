@@ -1,62 +1,78 @@
 "use client";
 
 import * as React from "react";
-import { Input, StatefulInput } from "baseui/input";
+import { Input } from "baseui/input";
 import { Button } from "baseui/button";
 import { useStyletron } from "baseui";
 import CustomButton from "../../components/CustomButton";
 import { TrashCan, Add, Checkmark } from "@carbon/icons-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import jsonData from "../../data /data.json";
+
 interface JobData {
   jobRole: string;
   skills: string[];
 }
 
 interface SkillData {
-  id: number;
+  id: string;
   jobRole: string;
   skillName: string;
   summary: string;
 }
 
-function Skills() {
-  const [values, setValues] = React.useState<string[]>([]);
+const Skills: React.FC = () => {
+  const [selectedSkills, setSelectedSkills] = React.useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [css, $theme] = useStyletron();
-
-  const handleAddOneMore = () => {
-    setValues((prevValues) => [...prevValues, ""]);
-  };
-  const handleInputChange = (
-    event: ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const newValue = event.target.value;
-    setSelectedSkills((prevSelectedSkills) => {
-      const newSelectedSkills = [...prevSelectedSkills];
-      newSelectedSkills[index] = newValue;
-      return newSelectedSkills;
-    });
-  };
-
-  const handleRemove = (index: number) => {
-    const newValues = [...values];
-    newValues.splice(index, 1);
-    setValues(newValues);
-
-    const removedSkill = values[index];
-    setDisabledSkills((prevSkills) =>
-      prevSkills.filter((disabledSkill) => disabledSkill !== removedSkill)
-    );
-  };
-
-  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState<SkillData[]>([]);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
+  const [disabledSkills, setDisabledSkills] = useState<string[]>([]);
+  const [isSkillSelected, setIsSkillSelected] = useState();
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const newSkills = [...selectedSkills];
+    newSkills[index] = event.target.value;
+    setSelectedSkills(newSkills);
+    setInputValue(inputValue);
+  };
 
+  const handleAddOneMore = () => {
+    setSelectedSkills((prevSkills) => [...prevSkills, ""]);
+  };
+
+  const handleRemove = (skillName: string) => {
+    setSelectedSkills((prevSkills) =>
+      prevSkills.filter((skill) => skill !== skillName)
+    );
+    setDisabledSkills((prevSkills) =>
+      prevSkills.filter((skill) => skill !== skillName)
+    );
+    setInputValue((prevValue) => prevValue.replace(skillName + "\n", ""));
+  };
+
+  const handleAddSkill = (skillData: SkillData) => {
+    const skillName = skillData.skillName;
+
+    if (selectedSkills.includes(skillName)) {
+      setSelectedSkills((prevSkills) =>
+        prevSkills.filter((skill) => skill !== skillName)
+      );
+      setDisabledSkills((prevSkills) =>
+        prevSkills.filter((skill) => skill !== skillName)
+      );
+      setInputValue((prevValue) => prevValue.replace(skillName + "\n", ""));
+    } else {
+      setSelectedSkills((prevSkills) => [...prevSkills, skillName]);
+      setInputValue((prevValue) => prevValue + skillName + "\n");
+      setDisabledSkills((prevSkills) => [...prevSkills, skillName]);
+    }
+    setInputValue(selectedSkills.join("\n"));
+  };
   const handleSearch = (inputValue: string) => {
     setSearchTerm(inputValue);
 
@@ -64,22 +80,20 @@ function Skills() {
       .filter((entry: SkillData) =>
         entry.jobRole.toLowerCase().includes(inputValue.toLowerCase())
       )
-      .map((entry: SkillData) => ({
-        id: entry.id,
-        jobRole: entry.jobRole,
-        skillName: entry.skillName,
-        summary: entry.summary,
-      }));
+      .reduce((uniqueResults: SkillData[], entry: SkillData) => {
+        // Check if the job role is already in uniqueResults
+        if (!uniqueResults.some((result) => result.jobRole === entry.jobRole)) {
+          uniqueResults.push({
+            id: entry.id,
+            jobRole: entry.jobRole,
+            skillName: entry.skillName,
+            summary: entry.summary,
+          });
+        }
+        return uniqueResults;
+      }, []);
 
     setFilteredData(filteredResults);
-  };
-
-  const handleJobSelect = (selectedJob: JobData) => {
-    setSelectedJob(selectedJob);
-
-    setSearchTerm(selectedJob ? selectedJob.jobRole : "");
-
-    setValues([selectedJob.jobRole]);
   };
 
   const skillsData: SkillData[] = jsonData.reduce(
@@ -94,41 +108,56 @@ function Skills() {
     },
     []
   );
+  useEffect(() => {
+    setSelectedSkills([]);
+  }, []);
+  const [currentSkillsData, setCurrentSkillsData] =
+    useState<SkillData[]>(skillsData);
 
-  const [disabledSkills, setDisabledSkills] = useState<string[]>([]);
-
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-
-  const handleAddSkill = (skill: string) => {
-    if (!selectedSkills.includes(skill)) {
-      setSelectedSkills((prevSkills) => [...prevSkills, skill]);
-  
-      setInputValue((prevValue) => {
-        // Check if the skill is already present in the input
-        const hasSkill = prevValue.includes(skill);
-  
-        if (hasSkill) {
-          // Remove the skill if it's already present
-          return prevValue.replace(new RegExp(`${skill}\n`), "");
-        } else {
-          // Add the skill with a newline if it's not present
-          return prevValue + skill + "\n";
-        }
-      });
+  const updateCurrentSkillsData = (selectedJobRole: string | null) => {
+    if (selectedJobRole) {
+      const skillsForSelectedJob = skillsData
+        .filter((skill) => skill.jobRole === selectedJobRole)
+        .map((skill) => ({
+          id: skill.id,
+          jobRole: skill.jobRole,
+          skillName: skill.skillName,
+          summary: skill.summary,
+        }));
+      setCurrentSkillsData(skillsForSelectedJob);
+    } else {
+      setCurrentSkillsData([]);
     }
   };
-  
-  useEffect(() => {
-    setValues(["", "", "", ""]);
-  }, []);
 
+  const handleJobSelect = (selectedJob: JobData | SkillData) => {
+    const isSkillSelected = "skills" in selectedJob;
+
+    if (isSkillSelected) {
+      setSelectedJob(selectedJob as JobData);
+      setSelectedSkills([selectedJob.jobRole]);
+      setSearchTerm(selectedJob ? selectedJob.jobRole : "");
+      setFilteredData([]);
+      updateCurrentSkillsData(selectedJob.jobRole);
+    } else {
+      setSelectedJob(selectedJob as JobData);
+      setSearchTerm(selectedJob ? selectedJob.jobRole : "");
+    }
+  };
+
+  const handleBlur = () => {
+    // Delay the setting of isOpen to true by 200 milliseconds
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 300);
+  };
   return (
     <div
       className={css({
-        marginTop:'50px',
+        marginTop: "50px",
         [$theme.mediaQuery.medium]: {
           marginRight: "2rem",
-          marginTop:'50px',
+          marginTop: "50px",
           paddingLeft: "25px",
           paddingBottom: "30px",
           display: "flex",
@@ -139,7 +168,7 @@ function Skills() {
           display: "flex",
           flexDirection: "column",
           marginLeft: "14rem",
-          marginTop:'30px',
+          marginTop: "30px",
         },
       })}
     >
@@ -162,10 +191,10 @@ function Skills() {
               marginLeft: "auto",
               marginRight: "auto",
             },
-            [$theme.mediaQuery.large]:{
-              marginRight:0,
-              marginLeft:0
-            }
+            [$theme.mediaQuery.large]: {
+              marginRight: 0,
+              marginLeft: 0,
+            },
           })}
         >
           <h1
@@ -209,22 +238,22 @@ function Skills() {
             borderRadius: "20px",
             flexDirection: "row",
             maxWidth: "900px",
-            paddingRight:'20px',
+            paddingRight: "20px",
           },
         })}
       >
         <div>
-          {values.map((index) => (
+          {selectedSkills.map((value, index) => (
             <div
-              key={index}
+              key={value}
               className={css({
                 display: "flex",
                 alignItems: "center",
                 paddingBottom: "20px",
                 width: "100%",
-                [$theme.mediaQuery.medium]:{
-                minWidth: "400px",  
-              }
+                [$theme.mediaQuery.medium]: {
+                  minWidth: "400px",
+                },
               })}
             >
               <div
@@ -256,7 +285,7 @@ function Skills() {
                 >
                   <Input
                     placeholder={` Skill ${index + 1}`}
-                    onChange={(e) => handleInputChange(e, index)}
+                    onChange={(e) => handleChange(e, index)}
                     value={selectedSkills[index] || ""}
                     overrides={{
                       Input: {
@@ -271,9 +300,8 @@ function Skills() {
                       },
                     }}
                   />
-
                   <Button
-                    onClick={() => handleRemove(index)}
+                    onClick={() => handleRemove(selectedSkills[index])}
                     overrides={{
                       BaseButton: {
                         style: {
@@ -325,12 +353,19 @@ function Skills() {
           })}
         >
           <div>
-            <StatefulInput
+            <Input
               placeholder="Search job roles..."
               value={searchTerm}
               onFocus={() => setIsOpen(true)}
-              onBlur={() => setIsOpen(false)}
-              onChange={(e) => handleSearch(e.target.value)}
+              onBlur={handleBlur}
+              onChange={(e) => {
+                handleSearch(e.target.value);
+                if (e.target.value.trim() === "") {
+                  setIsOpen(false);
+                } else {
+                  setIsOpen(true);
+                }
+              }}
               overrides={{
                 Root: {
                   style: ({ $theme }) => ({
@@ -354,6 +389,7 @@ function Skills() {
                 },
               }}
             />
+            {isOpen && (
               <ul
                 className={css({
                   listStyle: "none",
@@ -372,45 +408,53 @@ function Skills() {
                   borderBottomLeftRadius: "10px",
                   borderBottomRightRadius: "10px",
                   maxWidth: "519px",
-                  [$theme.mediaQuery.medium]:{
+                  display: isSkillSelected ? "none" : "block",
+                  [$theme.mediaQuery.medium]: {
                     maxWidth: "519px",
-                    width:'100%'
+                    width: "100%",
                   },
-                  [$theme.mediaQuery.large]:{
+                  [$theme.mediaQuery.large]: {
                     maxWidth: "399px",
-
-                  }
+                  },
                 })}
               >
-                {filteredData.length > 0 ? (
+                {searchTerm !== "" && filteredData.length === 0 && (
+                  <li
+                    className={css({
+                      cursor: "pointer",
+                      padding: "8px",
+                    })}
+                  >
+                    No results found.
+                  </li>
+                )}
+                {filteredData.length > 0 && (
                   <>
                     {filteredData.map((entry) => (
                       <li
-                        key={entry.jobRole}
-                        onClick={() => handleJobSelect(entry)}
+                        key={entry.id}
+                        onClick={() => {
+                          handleJobSelect(entry);
+                          setIsOpen(false);
+                        }}
                         className={css({
                           cursor: "pointer",
-                          padding: "8px",
-                          borderBottom: "1px solid #ccc",
+                          padding: "10px",
+                          paddingLeft: "20px",
+                          ...$theme.typography.LabelMedium,
+                          ":hover": {
+                            backgroundColor: "#E7E7E7",
+                            fontWeight: "bolder",
+                          },
                         })}
                       >
                         {entry.jobRole}
                       </li>
                     ))}
                   </>
-                ) : (
-                  <li
-                    className={css({
-                      cursor: "pointer",
-                      padding: "8px",
-                      borderBottom: "1px solid #ccc",
-                    })}
-                  >
-                    No results found.
-                  </li>
                 )}
               </ul>
-            
+            )}
             <p
               className={css({
                 ...$theme.typography.LabelMedium,
@@ -427,106 +471,134 @@ function Skills() {
                 margin: "0 15px",
               })}
             >
-              {skillsData.map((skill, mapIndex) => (
-                <div
-                  key={skill.id}
-                  className={css({
-                    border: "1.2px solid #d3d9de",
-                    padding: "10px",
-                    borderRadius: "12px",
-                    display: "flex",
-                    overflowY: "auto",
-                    height: "50px",
-                    marginBottom: "10px",
-                    ":hover": {
-                      borderColor: "#2b2d2f",
-                      boxShadow:
-                        "0 4px 12px 0 rgba(0,0,0,.06),0 12px 28px -2px rgba(0,0,0,.1)",
-                    },
-                    backgroundColor: disabledSkills.includes(skill)
-                      ? "#E4FDE1"
-                      : "white",
-                    opacity: disabledSkills.includes(skill.skillName) ? 0.5 : 1,
-                    transition: "opacity 0.3s ease-in-out",
-                  })}
-                  onClick={() =>
-                    handleAddSkill(skill.skillName, skill.skillName, mapIndex)
-                  }
-                >
-                  <button
-                    className={css({
-                      borderRadius: "50%",
-                      margin: "4px",
-                      backgroundColor: disabledSkills.includes(skill.skillName)
-                        ? "#2b2d2f"
-                        : "#2b2d2f",
-                      border: 0,
-                      width: "40px",
-                      cursor: "pointer",
-                      opacity: disabledSkills.includes(skill.skillName)
-                        ? 0.5
-                        : 1,
-                      transition: "opacity 0.3s ease-in-out",
-                      padding:'8px'
-                    })}
-                    onClick={() =>
-                      handleAddSkill(skill.skillName, skill.skillName, mapIndex)
-                    }
-                  >
-                    {disabledSkills.includes(skill.skillName) ? (
-                      <Checkmark color="#ffffff" size={24} />
-                    ) : (
-                      <Add color="#ffffff" size={24} />
-                    )}{" "}
-                  </button>
-                  <p
-                    className={css({
-                      ...$theme.typography.LabelMedium,
-                      marginLeft: "15px",
-                    })}
-                  >
-                    {" "}
-                    {skill.skillName}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <div
-              className={css({
-                position: "relative",
-                marginTop: "60px",
-              })}
-            >
-              {selectedJob && (
-                <ul
-                  className={css({
-                    overflowY: "hidden",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                    padding: "8px",
-                    marginTop: "8px",
-                    position: "absolute",
-                    zIndex: 1,
-                    top: "calc(100% + 8px)",
-                    width: "100%",
-                    maxWidth: "300px",
-                    minWidth:"200px"
-                  })}
-                >
-                  {selectedJob.skills.map((skill, index) => (
-                    <li
+              {selectedJob
+                ? currentSkillsData
+                    .filter(
+                      (skill) => skill.jobRole === (selectedJob?.jobRole || "" )
+                    )
+                    .map((skill, mapIndex) => (
+                      <div
+                        key={skill.id}
+                        className={css({
+                          border: "1.2px solid #d3d9de",
+                          padding: "10px",
+                          borderRadius: "12px",
+                          display: "flex",
+                          overflowY: "auto",
+                          height: "50px",
+                          marginBottom: "10px",
+                          ":hover": {
+                            borderColor: "#2b2d2f",
+                            boxShadow:
+                              "0 4px 12px 0 rgba(0,0,0,.06),0 12px 28px -2px rgba(0,0,0,.1)",
+                          },
+                          backgroundColor: disabledSkills.includes(skill)
+                            ? "#E4FDE1"
+                            : "white",
+                          opacity: disabledSkills.includes(skill.skillName)
+                            ? 0.5
+                            : 1,
+                          transition: "opacity 0.3s ease-in-out",
+                        })}
+                        onClick={() => handleAddSkill(skill)}
+                      >
+                        <button
+                          className={css({
+                            borderRadius: "50%",
+                            margin: "4px",
+                            backgroundColor: disabledSkills.includes(
+                              skill.skillName
+                            )
+                              ? "#2b2d2f"
+                              : "#2b2d2f",
+                            border: 0,
+                            width: "40px",
+                            cursor: "pointer",
+                            opacity: disabledSkills.includes(skill.skillName)
+                              ? 0.5
+                              : 1,
+                            transition: "opacity 0.3s ease-in-out",
+                            padding: "8px",
+                          })}
+                        >
+                          {disabledSkills.includes(skill.skillName) ? (
+                            <Checkmark color="#ffffff" size={24} />
+                          ) : (
+                            <Add color="#ffffff" size={24} />
+                          )}
+                        </button>
+                        <p
+                          className={css({
+                            ...$theme.typography.LabelMedium,
+                            marginLeft: "15px",
+                          })}
+                        >
+                          {skill.skillName}
+                        </p>
+                      </div>
+                    ))
+                    : skillsData.map((skill, mapIndex) => (
+                    <div
+                      key={skill.id}
                       className={css({
-                        cursor: "pointer",
-                        padding: "8px",
-                        borderBottom: "1px solid #ccc",
+                        border: "1.2px solid #d3d9de",
+                        padding: "10px",
+                        borderRadius: "12px",
+                        display: "flex",
+                        overflowY: "auto",
+                        height: "50px",
+                        marginBottom: "10px",
+                        ":hover": {
+                          borderColor: "#2b2d2f",
+                          boxShadow:
+                            "0 4px 12px 0 rgba(0,0,0,.06),0 12px 28px -2px rgba(0,0,0,.1)",
+                        },
+                        backgroundColor: disabledSkills.includes(skill)
+                          ? "#E4FDE1"
+                          : "white",
+                        opacity: disabledSkills.includes(skill.skillName)
+                          ? 0.5
+                          : 1,
+                        transition: "opacity 0.3s ease-in-out",
                       })}
-                      key={index}
+                      onClick={() => handleAddSkill(skill)}
                     >
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              )}
+                      <button
+                        className={css({
+                          borderRadius: "50%",
+                          margin: "4px",
+                          backgroundColor: disabledSkills.includes(
+                            skill.skillName
+                          )
+                            ? "#2b2d2f"
+                            : "#2b2d2f",
+                          border: 0,
+                          width: "40px",
+                          cursor: "pointer",
+                          opacity: disabledSkills.includes(skill.skillName)
+                            ? 0.5
+                            : 1,
+                          transition: "opacity 0.3s ease-in-out",
+                          padding: "8px",
+                        })}
+                      >
+                        {disabledSkills.includes(skill.skillName) ? (
+                          <Checkmark color="#ffffff" size={24} />
+                        ) : (
+                          <Add color="#ffffff" size={24} />
+                        )}
+                      </button>
+                      <p
+                        className={css({
+                          ...$theme.typography.LabelMedium,
+                          marginLeft: "15px",
+                        })}
+                      >
+                        {skill.skillName}
+                      </p>
+                    </div>
+                    ))
+                 }
             </div>
           </div>
         </div>
@@ -562,5 +634,5 @@ function Skills() {
       </div>
     </div>
   );
-}
+};
 export default Skills;

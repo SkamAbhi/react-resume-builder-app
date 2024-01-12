@@ -1,9 +1,8 @@
-import  { useState } from "react";
+import  { useEffect, useState } from "react";
 import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
 import { Drawer, ANCHOR } from "baseui/drawer";
 import { useNavigate } from "react-router-dom";
-import CustomButton from "../CustomButton";
 
 function Navigation() {
   const [css, $theme] = useStyletron();
@@ -20,13 +19,20 @@ function Navigation() {
 
   const [activeSection, setActiveSection] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const handleNextClick = () => {
-    const nextSectionIndex = (activeSection + 1) % sections.length;
-    setActiveSection(nextSectionIndex);
-    navigate(sections[nextSectionIndex].path);
-  };
 
+  useEffect(() => {
+    const sectionIndex = sections.findIndex(
+      (section) => section.path === location.pathname
+    );
+    if (sectionIndex !== -1) {
+      setActiveSection(sectionIndex);
+    }
+  }, [location.pathname, sections]);
 
+  // Update local storage when active section changes
+  useEffect(() => {
+    localStorage.setItem("activeSection", activeSection.toString());
+  }, [activeSection]);
   return (
     <>
       {/* Mobile Header */}

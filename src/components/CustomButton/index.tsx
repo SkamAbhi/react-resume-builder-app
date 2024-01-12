@@ -1,10 +1,17 @@
 // CustomButton.jsx
+const sections = [
+  { label: "Personal", path: "/personal", icon: "/personal.svg" },
+  { label: "Education", path: "/education", icon: "/education.svg" },
+  { label: "Work Experience", path: "/work-exp", icon: "/work.svg" },
+  { label: "Skills", path: "/skills", icon: "/skills.svg" },
+  { label: "Summary", path: "/summary", icon: "/summary.svg" },
+  { label: "Finalize", path: "/finalize", icon: "/finalize.svg" },
+];
 
 import React from "react";
 import { Button } from "baseui/button";
 import { useNavigate } from "react-router-dom";
 import { useNavigationContext } from "../../utlis/NavigationContext";
-
 interface CustomButtonProps {
   name: string;
   to?: string;
@@ -12,6 +19,7 @@ interface CustomButtonProps {
   children?: React.ReactNode;
   isSpecial?: boolean;
   onNextClick?: () => void;
+  onPrevClick?: () => void;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -21,20 +29,30 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   isSpecial = false,
   onClick,
   onNextClick,
+  onPrevClick,
 }) => {
   const navigate = useNavigate();
-  const { handleNextClick } = useNavigationContext();
+  const { activeSection, handleNextClick } = useNavigationContext();
+
+  const getPreviousSection = () => {
+    return (activeSection - 1 + sections.length) % sections.length;
+  };
 
   const handleClick = () => {
     if (to) {
       navigate(to);
       handleNextClick();
-
     } else if (onNextClick) {
       handleNextClick();
-
+    } else if (onPrevClick) {
+      getPreviousSection();
     } else if (onClick) {
       onClick();
+    } else if (activeSection !== undefined) {
+      // Default behavior: Navigate to the next section when no specific action is provided
+      const nextSection = (activeSection + 1) % sections.length;
+      navigate(sections[nextSection].path);
+      handleNextClick();
     }
   };
 

@@ -14,6 +14,8 @@ function Education() {
   const [css, $theme] = useStyletron();
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [summaryValue, setSummaryValue] = useState("");
+
 
   const handleButtonClick = () => {
     setShowInput(!showInput);
@@ -32,6 +34,10 @@ function Education() {
       })
     );
   };
+
+  const handleTextareaChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSummaryValue(event.target.value);}
+
   return (
     <div
       className={css({
@@ -397,8 +403,8 @@ function Education() {
               })}
             >
               <Textarea
-                value={inputValue}
-                onChange={console.log}
+                value={summaryValue}
+                onChange={handleTextareaChange}
                 placeholder="Enter your summary here..."
                 overrides={{
                   Input: {

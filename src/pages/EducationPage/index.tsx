@@ -34,10 +34,6 @@ function Education() {
     setShowInput(!showInput);
   };
 
-  const handleHiddenInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
   useEffect(() => {
     const storedEducationData = localStorage.getItem("educationData");
     if (storedEducationData) {
@@ -61,6 +57,16 @@ function Education() {
       })
     );
   };
+  const handleTextareaChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSelectChange = () => {
+    setValue(value);
+  };
+
   return (
     <div
       className={css({
@@ -131,8 +137,8 @@ function Education() {
               className={css({
                 backgroundColor: $theme.colors.primaryB,
                 padding: "0px 25px",
-                [$theme.mediaQuery.medium]:{
-                  padding:"0px 40px"
+                [$theme.mediaQuery.medium]: {
+                  padding: "0px 40px",
                 },
                 ...$theme.typography.LabelMedium,
               })}
@@ -194,9 +200,9 @@ function Education() {
                 style: ({ $theme }) => ({
                   backgroundColor: "white",
                   color: "#0C1986",
-                  position:"initial",
+                  position: "initial",
                   maxHeight: "50px",
-                  marginTop:'15px',
+                  marginTop: "15px",
                   ":hover": {
                     backgroundColor: $theme.colors.white,
                     color: "blue",
@@ -287,6 +293,7 @@ function Education() {
                 { label: "MCA", id: "#F2" },
                 { label: "MD", id: "#F3" },
                 { label: "No Degree", id: "#F4" },
+                { label: " Enter a Different Degree", id: "custom_degree" },
               ]}
               value={value}
               placeholder="Select Degree"
@@ -325,7 +332,21 @@ function Education() {
                   }),
                 },
               }}
-            />
+            /> 
+            <div className={css({
+
+              marginTop:'10px',
+            })}>
+            {value.some((v) => v.id === "custom_degree") && (
+              <CustomInput
+                value={eduData.degree}
+                onChange={handleSelectChange}
+                placeholder="Eg:- BHMS, MBBS "
+                label={"Enter a Difffrent Degree"}
+                name={""}
+              />
+            )}
+            </div>
           </div>
           <div
             className={css({
@@ -508,8 +529,8 @@ function Education() {
               })}
             >
               <Textarea
+                onChange={handleTextareaChange}
                 value={inputValue}
-                onChange={handleInputChange}
                 placeholder="Enter your summary here..."
                 overrides={{
                   Input: {
@@ -549,7 +570,7 @@ function Education() {
           isSpecial
         />
         <CustomButton
-          name={"Next: Work History"}
+          name={"Next: Work Experience"}
           onClick={console.log}
           to={"/work-exp"}
         />

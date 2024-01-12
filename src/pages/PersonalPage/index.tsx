@@ -514,7 +514,7 @@ const Personal = () => {
           },
         })}
       >
-        <CustomButton name={"Back"} to={"/"} onClick={console.log} isSpecial />
+        <CustomButton name={"Back"} to={"/"} isSpecial />
         <CustomButton
           name={"Next : Education"}
           onClick={handleNextClick}
