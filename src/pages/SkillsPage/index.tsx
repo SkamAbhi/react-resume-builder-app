@@ -31,28 +31,35 @@ const Skills: React.FC = () => {
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [disabledSkills, setDisabledSkills] = useState<string[]>([]);
   const [isSkillSelected, setIsSkillSelected] = useState();
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const newSkills = [...selectedSkills];
-    newSkills[index] = event.target.value;
-    setSelectedSkills(newSkills);
-    setInputValue(inputValue);
-  };
+  const [inputValues, setInputValues] = useState<string[]>([]);
 
   const handleAddOneMore = () => {
     setSelectedSkills((prevSkills) => [...prevSkills, ""]);
+    setInputValues((prevInputValues) => [...prevInputValues, ""]);
   };
 
-  const handleRemove = (skillName: string) => {
-    setSelectedSkills((prevSkills) =>
-      prevSkills.filter((skill) => skill !== skillName)
+  const handleChange = (index: number, newValue: string) => {
+    setSelectedSkills((prevSkills) => {
+      const newSkills = [...prevSkills];
+      newSkills[index] = newValue;
+      return newSkills;
+    });
+
+    setInputValues((prevInputValues) => {
+      const newInputValues = [...prevInputValues];
+      newInputValues[index] = newValue;
+      return newInputValues;
+    });
+  };
+
+  const handleRemove = (index: number) => {
+    setSelectedSkills((prevSkills) => prevSkills.filter((_, i) => i !== index));
+
+    setDisabledSkills((prevSkills) => prevSkills.filter((_, i) => i !== index));
+
+    setInputValues((prevInputValues) =>
+      prevInputValues.filter((_, i) => i !== index)
     );
-    setDisabledSkills((prevSkills) =>
-      prevSkills.filter((skill) => skill !== skillName)
-    );
-    setInputValue((prevValue) => prevValue.replace(skillName + "\n", ""));
   };
 
   const handleAddSkill = (skillData: SkillData) => {
@@ -73,27 +80,37 @@ const Skills: React.FC = () => {
     }
     setInputValue(selectedSkills.join("\n"));
   };
+
   const handleSearch = (inputValue: string) => {
     setSearchTerm(inputValue);
 
-    const filteredResults: SkillData[] = skillsData
-      .filter((entry: SkillData) =>
-        entry.jobRole.toLowerCase().includes(inputValue.toLowerCase())
-      )
-      .reduce((uniqueResults: SkillData[], entry: SkillData) => {
-        // Check if the job role is already in uniqueResults
-        if (!uniqueResults.some((result) => result.jobRole === entry.jobRole)) {
-          uniqueResults.push({
-            id: entry.id,
-            jobRole: entry.jobRole,
-            skillName: entry.skillName,
-            summary: entry.summary,
-          });
-        }
-        return uniqueResults;
-      }, []);
+    if (inputValue.trim() === "") {
+      // If the search term is empty, reset filteredData to display all skills
+      setFilteredData([]);
+    } else {
+      const filteredResults: SkillData[] = skillsData
+        .filter((entry: SkillData) =>
+          entry.jobRole.toLowerCase().includes(inputValue.toLowerCase())
+        )
+        .reduce((uniqueResults: SkillData[], entry: SkillData) => {
+          // Check if the job role is already in uniqueResults
+          if (
+            !uniqueResults.some((result) => result.jobRole === entry.jobRole)
+          ) {
+            uniqueResults.push({
+              id: entry.id,
+              jobRole: entry.jobRole,
+              skillName: entry.skillName,
+              summary: entry.summary,
+            });
+          }
+          return uniqueResults;
+        }, []);
 
-    setFilteredData(filteredResults);
+      setFilteredData(
+        filteredResults.length > 0 ? filteredResults : skillsData
+      );
+    }
   };
 
   const skillsData: SkillData[] = jsonData.reduce(
@@ -108,9 +125,11 @@ const Skills: React.FC = () => {
     },
     []
   );
+
   useEffect(() => {
     setSelectedSkills([]);
   }, []);
+
   const [currentSkillsData, setCurrentSkillsData] =
     useState<SkillData[]>(skillsData);
 
@@ -146,7 +165,6 @@ const Skills: React.FC = () => {
   };
 
   const handleBlur = () => {
-    // Delay the setting of isOpen to true by 200 milliseconds
     setTimeout(() => {
       setIsOpen(false);
     }, 300);
@@ -243,9 +261,8 @@ const Skills: React.FC = () => {
         })}
       >
         <div>
-          {selectedSkills.map((value, index) => (
+          {selectedSkills.map((_, index) => (
             <div
-              key={value}
               className={css({
                 display: "flex",
                 alignItems: "center",
@@ -284,9 +301,10 @@ const Skills: React.FC = () => {
                   })}
                 >
                   <Input
+                    key={index}
                     placeholder={` Skill ${index + 1}`}
-                    onChange={(e) => handleChange(e, index)}
-                    value={selectedSkills[index] || ""}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                    value={inputValues[index]}
                     overrides={{
                       Input: {
                         style: {
@@ -301,7 +319,7 @@ const Skills: React.FC = () => {
                     }}
                   />
                   <Button
-                    onClick={() => handleRemove(selectedSkills[index])}
+                    onClick={() => handleRemove(index)}
                     overrides={{
                       BaseButton: {
                         style: {
@@ -474,9 +492,9 @@ const Skills: React.FC = () => {
               {selectedJob
                 ? currentSkillsData
                     .filter(
-                      (skill) => skill.jobRole === (selectedJob?.jobRole || "" )
+                      (skill) => skill.jobRole === (selectedJob?.jobRole || "")
                     )
-                    .map((skill, mapIndex) => (
+                    .map((skill) => (
                       <div
                         key={skill.id}
                         className={css({
@@ -537,7 +555,7 @@ const Skills: React.FC = () => {
                         </p>
                       </div>
                     ))
-                    : skillsData.map((skill, mapIndex) => (
+                : skillsData.map((skill) => (
                     <div
                       key={skill.id}
                       className={css({
@@ -597,8 +615,7 @@ const Skills: React.FC = () => {
                         {skill.skillName}
                       </p>
                     </div>
-                    ))
-                 }
+                  ))}
             </div>
           </div>
         </div>
@@ -622,7 +639,7 @@ const Skills: React.FC = () => {
       >
         <CustomButton
           name={"Back"}
-          to={"/work-exp"}
+          to={"/project"}
           onClick={console.log}
           isSpecial
         />

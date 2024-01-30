@@ -292,8 +292,7 @@ function Education() {
                 { label: "BBA", id: "#F1" },
                 { label: "MCA", id: "#F2" },
                 { label: "MD", id: "#F3" },
-                { label: "No Degree", id: "#F4" },
-                { label: " Enter a Different Degree", id: "custom_degree" },
+                { label: "Other", id: "custom_degree" },
               ]}
               value={value}
               placeholder="Select Degree"
@@ -342,7 +341,7 @@ function Education() {
                 value={eduData.degree}
                 onChange={handleSelectChange}
                 placeholder="Eg:- BHMS, MBBS "
-                label={"Enter a Difffrent Degree"}
+                label={"Enter a  Degree"}
                 name={""}
               />
             )}

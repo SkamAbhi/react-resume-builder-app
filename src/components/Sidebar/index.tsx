@@ -12,6 +12,7 @@ function Navigation() {
     { label: "Personal", path: "/personal", icon: "/personal.svg" },
     { label: "Education", path: "/education", icon: "/education.svg" },
     { label: "Work Experience", path: "/work-exp", icon: "/work.svg" },
+    { label: "Project", path: "/project", icon: "/project.svg" },
     { label: "Skills", path: "/skills", icon: "/skills.svg" },
     { label: "Summary", path: "/summary", icon: "/summary.svg" },
     { label: "Finalize", path: "/finalize", icon: "/finalize.svg" },
@@ -33,6 +34,26 @@ function Navigation() {
   useEffect(() => {
     localStorage.setItem("activeSection", activeSection.toString());
   }, [activeSection]);
+  
+  const isSignInPage = location.pathname === "/sign-in";
+
+  if (isSignInPage) {
+    return null;
+  }
+  const isSignUpPage = location.pathname === "/sign-up";
+
+  if (isSignUpPage) {
+    return null;
+  }
+  const isForgotpasswordPage = location.pathname === '/forgot-password';
+  if(isForgotpasswordPage){
+    return null;
+  }
+  const isDownloadPage = location.pathname === "/download";
+
+  if (isDownloadPage) {
+    return null;
+  }
   return (
     <>
       {/* Mobile Header */}

@@ -11,6 +11,9 @@ export default function Home() {
   const handleNextClick = () => {
     navigate("/personal");
   };
+  const handleSignIn = () =>{
+    navigate("/sign-in")
+  }
 
   return (
     <div
@@ -25,6 +28,41 @@ export default function Home() {
         height: "500px",
       })}
     >
+      <div
+        className={css({
+          backgroundColor: "#fff",
+          padding: "10px",
+          color: "white",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          boxShadow: "0px 0px 18px rgba(0,0,0,.15)",
+
+        })}
+      >
+        <div
+          className={css({
+            fontSize: "1.5em",
+            color:'blue'
+          })}
+        >
+          Crafity
+        </div>
+        <button
+          className={css({
+            padding: "10px 20px",
+            backgroundColor: "#61dafb",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "1em",
+          })}
+          onClick={handleSignIn}
+        >
+          Login
+        </button>
+      </div>
       <div
         className={css({
           alignItems: "center",

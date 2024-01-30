@@ -2,6 +2,7 @@
 import { useStyletron } from "baseui";
 import Routing from "./routes";
 import { NavigationProvider } from "./utlis/NavigationContext";
+import { CheckboxProvider } from "./utlis/AdditonalSection/CheckboxProvider";
 
 export default function RootLayout() {
   const [css] = useStyletron();
@@ -17,7 +18,9 @@ export default function RootLayout() {
         `}
       </style>
       <NavigationProvider>
+      <CheckboxProvider>
       <Routing />
+      </CheckboxProvider>
       </NavigationProvider>
     </div>
   );

@@ -6,8 +6,12 @@ import { Client as Styletron } from "styletron-engine-monolithic";
 import { Provider as StyletronProvider } from "styletron-react";
 import { LightTheme, BaseProvider } from "baseui";
 import { RecoilRoot } from "recoil";
+import { initializeApp } from "firebase/app";
+import config from "./utlis/FirebaseConfig/config.ts";
 
 const engine = new Styletron();
+const app = initializeApp(config);
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

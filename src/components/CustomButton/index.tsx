@@ -91,12 +91,11 @@ const CustomButton: React.FC<CustomButtonProps> = ({
                   color: "#07142b",
                   width: "fit-content",
                   ...$theme.typography.LabelXSmall,
-                  padding: "8px 20px",
+                  padding: "14px 25px",
 
                   [$theme.mediaQuery.medium]: {
                     width: "auto",
                     ...$theme.typography.LabelMedium,
-                    height: "40px",
                   },
                   ":hover": {
                     backgroundColor: "#fbaf3b",

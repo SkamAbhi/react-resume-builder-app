@@ -9,13 +9,14 @@ import { Textarea } from "baseui/textarea";
 import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { Add, Idea, Subtract } from "@carbon/icons-react";
+import { useNavigate } from "react-router-dom";
 
 function Education() {
   const [css, $theme] = useStyletron();
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [summaryValue, setSummaryValue] = useState("");
-
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
     setShowInput(!showInput);
@@ -25,6 +26,18 @@ function Education() {
     setInputValue(e.target.value);
   };
 
+  const handleNextButtonClick = () => {
+    // Check if input data is provided
+    if (inputValue.trim() !== "") {
+      // Navigate to a different link when input data is provided
+      navigate("/work-exp-list");
+
+    } else {
+      // Navigate to the given link when no input data is provided
+      navigate("/project");
+
+    }
+  };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     localStorage.setItem(
@@ -444,9 +457,8 @@ function Education() {
           isSpecial
         />
         <CustomButton
-          name={"Next:Skills"}
-          onClick={console.log}
-          to={"/skills"}
+          name={"Next"}
+          onClick={handleNextButtonClick}
         />
       </div>
     </div>

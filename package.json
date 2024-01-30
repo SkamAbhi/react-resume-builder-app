@@ -12,6 +12,8 @@
   "dependencies": {
     "@carbon/icons-react": "^11.33.0",
     "baseui": "^14.0.0",
+    "baseweb": "^3.0.7",
+    "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.0",
