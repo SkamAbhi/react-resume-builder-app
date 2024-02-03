@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useStyletron } from "baseui";
 import { FileUploader } from "baseui/file-uploader";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -7,9 +7,52 @@ import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { userDataState } from "../../utlis/resumeAtoms";
 import { useNavigationContext } from "../../utlis/NavigationContext";
-
+import { useLazyLoadQuery } from 'react-relay/hooks';
+import {graphql} from 'babel-plugin-relay/macro';
+import { PersonalPageQuery } from '../../__generated__/PersonalPageQuery.graphql';
 
 const Personal = () => {
+  
+  const data = useLazyLoadQuery<PersonalPageQuery>(
+    graphql`
+      query PersonalPageQuery {
+        getAllPersonalInfo {
+          edges {
+            node {
+              id
+              firstName
+              middleName
+              lastName
+              birthdate
+              email
+              profession
+              personalAddress {
+                street
+                city
+                state
+                country
+                zipcode
+              }
+              resume {
+                id
+                name
+                user {
+                  id
+                  name
+                  email
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+    {},
+  );
+
+  // Access your data here
+  console.log(data.getAllPersonalInfo);
+
   const [css, $theme] = useStyletron();
   const userData = useRecoilValue(userDataState);
   const setUserData = useSetRecoilState(userDataState);
