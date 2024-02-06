@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 interface UserData {
   firstName: string;
-  surName: string;
+  lastName: string;
   profession: string;
   city: string;
   country: string;
@@ -15,7 +15,7 @@ export const userDataState = atom<UserData>({
   key: "userDataState",
   default: {
     firstName: "",
-    surName: "",
+    lastName: "",
     profession: "",
     city: "",
     country: "",

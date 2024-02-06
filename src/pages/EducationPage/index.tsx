@@ -10,7 +10,7 @@ interface educationData {
   description: string;
 }
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Select, Value } from "baseui/select";
 import { useStyletron } from "baseui";
 import { Datepicker } from "baseui/datepicker";
@@ -22,8 +22,45 @@ import { educationData } from "../../utlis/resumeAtoms";
 import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { Add, Idea, Subtract } from "@carbon/icons-react";
+import { useLazyLoadQuery, useMutation } from "react-relay/hooks";
+import { graphql } from 'babel-plugin-relay/macro';
+import { updateEducationalInfoMutation } from '../../mutations/educationalPageMutation';
+import { useNavigationContext } from "../../utlis/NavigationContext";
+import { EducationPageQuery } from '../../__generated__/EducationPageQuery.graphql'
 
 function Education() {
+
+  const [updateEducationalInfo] = useMutation(updateEducationalInfoMutation);
+
+  const Educationaldata = useLazyLoadQuery<EducationPageQuery>(
+    graphql`
+     query EducationPageQuery{
+    getEducationDetails(
+      id:"aa08cbcc-f8eb-4f14-9fb2-a1b1848adb4f")
+    {
+      
+      instituteName
+      instituteLocation
+      fieldOfStudy
+      startDate
+      endDate
+      board_name
+      gpa
+      resume{
+        id
+        name
+        
+      }
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  {},
+);
+
+console.log(Educationaldata.getEducationDetails)
+
   const [value, setValue] = React.useState<Value>([]);
   const [css, $theme] = useStyletron();
   const [eduData, setEduData] = useRecoilState(educationData);
@@ -67,6 +104,45 @@ function Education() {
     setValue(value);
   };
 
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      console.log(Educationaldata.getEducationDetails);
+    }
+    return () => {
+      isMounted.current = false; // Set the mount status to false when the component unmounts
+    };
+  }, [Educationaldata]);
+  
+  const { activeSection, handleNextClick } = useNavigationContext();
+
+  const handleNextButtonClick = async () => {
+    try {
+      const input = {
+        schoolName: eduData.schoolName,
+        schoolLocation: eduData.schoolLocation,
+        degree: eduData.degree,
+        fieldOfStudy: eduData.fieldOfStudy,
+        startDate: eduData.startDate,
+        endDate: eduData.endDate,
+        description: inputValue, // Assuming inputValue is the description for education
+        resumeId: "your_resume_id_here", // Replace with the actual resume ID
+      };
+  
+      const response = await updateEducationalInfo({ variables: { input } });
+  
+      // Handle the response from the server
+      console.log(`Educational data updated:`, response);
+  
+      if (isMounted.current) {
+        handleNextClick();
+      }
+    } catch (error) {
+      console.error('Error updating educational info:', error);
+    }
+  };
+  
   return (
     <div
       className={css({
@@ -570,8 +646,8 @@ function Education() {
         />
         <CustomButton
           name={"Next: Work Experience"}
-          onClick={console.log}
-          to={"/work-exp"}
+          onClick={handleNextButtonClick}
+          // to={"/work-exp"}
         />
       </div>
     </div>

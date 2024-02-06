@@ -1,4 +1,42 @@
+# ## schema.graphql
+# interface Node {
+#   id: ID!
+# }
+
+# type User implements Node {
+#   id: ID!
+#   name: String
+# }
+
+# type Query {
+#   user(id: ID!): User
+# }
+
+# schema {
+#   query: Query
+# }
 # schema.graphql
+type Mutation {
+  addNewPersonalInfo(input: AddNewPersonalInfoInput!): AddNewPersonalInfoPayload
+  addNewEducation(input: AddNewEducationInput!): AddEducationPayload
+}
+
+input AddNewPersonalInfoInput {
+  firstName: String
+  surName: String
+  profession: String
+  city: String
+  country: String
+  pinCode: String
+  phone: String
+  email: String
+}
+
+type AddNewPersonalInfoPayload {
+  success: Boolean
+  personalInfo: PersonalInfo # Add additional data if needed
+}
+
 type PersonalInfo {
   id: ID!
   firstName: String
@@ -30,9 +68,9 @@ type User {
   name: String
   email: String
 }
-
 type Query {
   getAllPersonalInfo: PersonalInfoConnection
+  getEducationDetails(id: ID!): EducationDetails
 }
 
 type PersonalInfoConnection {
@@ -41,4 +79,42 @@ type PersonalInfoConnection {
 
 type PersonalInfoEdge {
   node: PersonalInfo
+}
+
+type EducationDetails {
+  id: ID!
+  instituteName: String!
+  instituteLocation: String!
+  fieldOfStudy: String!
+  startDate: String!
+  endDate: String!
+  currentlyAttendsHere: Boolean!
+  board_name: String
+  gpa: Float
+  resume: Resume
+  createdAt: String!
+  updatedAt: String!
+  description: String!
+  degree: String!
+}
+
+input AddNewEducationInput {
+   instituteName: String!
+  instituteLocation: String!
+  degree: String!
+  fieldOfStudy: String!
+  startDate: String!
+  endDate: String!
+  description: String
+}
+
+type AddEducationPayload {
+  success: Boolean!
+  education: EducationDetails
+}
+
+type Resume {
+  id: ID!
+  name: String
+  user: User
 }

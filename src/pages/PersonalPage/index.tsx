@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStyletron } from "baseui";
 import { FileUploader } from "baseui/file-uploader";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -7,12 +7,15 @@ import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { userDataState } from "../../utlis/resumeAtoms";
 import { useNavigationContext } from "../../utlis/NavigationContext";
-import { useLazyLoadQuery } from 'react-relay/hooks';
-import {graphql} from 'babel-plugin-relay/macro';
-import { PersonalPageQuery } from '../../__generated__/PersonalPageQuery.graphql';
+import { useLazyLoadQuery, useMutation } from 'react-relay/hooks';
+import { graphql } from 'babel-plugin-relay/macro';
+import { PersonalPageQuery } from '../../__generated__/PersonalPageQuery.graphql'
+import { updatePersonalInfoMutation } from '../../mutations/personalPageMutation';
 
 const Personal = () => {
-  
+
+  const [updatePersonalInfo] = useMutation(updatePersonalInfoMutation);
+
   const data = useLazyLoadQuery<PersonalPageQuery>(
     graphql`
       query PersonalPageQuery {
@@ -82,7 +85,16 @@ const Personal = () => {
     );
   };
 
+  const isMounted = useRef(true);
 
+  useEffect(() => {
+    if (isMounted.current) {
+      console.log(data.getAllPersonalInfo);
+    }
+    return () => {
+      isMounted.current = false; // Set the mount status to false when the component unmounts
+    };
+  }, [data]);
 
   function handleFileUpload(files: File[]) {
     const uploadedImages: string[] = [];
@@ -109,7 +121,38 @@ const Personal = () => {
     console.log("Closing modal");
     setFileUploaderModalOpen(false);
   };
-  const { activeSection, handleNextClick } = useNavigationContext(); 
+  const { activeSection, handleNextClick } = useNavigationContext();
+
+  const handleNextButtonClick = async () => {
+    try {
+      const input = {
+        pinCode: userData.pinCode,
+        photo:'userData.photo',
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        profession: userData.profession,
+        idResume: "your_resume_id_here",
+      };
+
+
+      const response = await updatePersonalInfo({ variables: { input } });
+
+      // Handle the response from the server
+      console.log(`Data updated:`, response);
+
+      if (isMounted.current) {
+        // Handle the response from the server
+        console.log(`Data updated:`, response);
+
+        // Continue with navigation or other actions
+        handleNextClick();
+      }
+    } catch (error) {
+      console.error('Error updating personal info:', error);
+    }
+
+  };
 
   return (
     <div
@@ -560,8 +603,7 @@ const Personal = () => {
         <CustomButton name={"Back"} to={"/"} isSpecial />
         <CustomButton
           name={"Next : Education"}
-          onClick={handleNextClick}
-          to={"/education"}
+          onClick={handleNextButtonClick}
         />
       </div>
     </div>
