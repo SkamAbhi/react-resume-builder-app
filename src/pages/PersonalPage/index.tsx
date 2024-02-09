@@ -8,53 +8,36 @@ import CustomInput from "../../components/CustomInput";
 import { userDataState } from "../../utlis/resumeAtoms";
 import { useNavigationContext } from "../../utlis/NavigationContext";
 import { useLazyLoadQuery, useMutation } from 'react-relay/hooks';
-import { graphql } from 'babel-plugin-relay/macro';
-import { PersonalPageQuery } from '../../__generated__/PersonalPageQuery.graphql'
-import { updatePersonalInfoMutation } from '../../mutations/personalPageMutation';
+//import { graphql } from 'babel-plugin-relay/macro';
+//import { PersonalPageQuery } from '../../__generated__/PersonalPageQuery.graphql'
+import { addNewPersonalInfoMutation } from '../../mutations/personalPageMutation';
 
 const Personal = () => {
 
-  const [updatePersonalInfo] = useMutation(updatePersonalInfoMutation);
+ const [updatePersonalInfo] = useMutation(addNewPersonalInfoMutation);
 
-  const data = useLazyLoadQuery<PersonalPageQuery>(
-    graphql`
-      query PersonalPageQuery {
-        getAllPersonalInfo {
-          edges {
-            node {
-              id
-              firstName
-              middleName
-              lastName
-              birthdate
-              email
-              profession
-              personalAddress {
-                street
-                city
-                state
-                country
-                zipcode
-              }
-              resume {
-                id
-                name
-                user {
-                  id
-                  name
-                  email
-                }
-              }
-            }
-          }
-        }
-      }
-    `,
-    {},
-  );
+//   const data = useLazyLoadQuery<PersonalPageQuery>(
+//     graphql`
+//       query PersonalPageQuery {
+//   getPersonalInfo
+//   {
+//     id
+//     firstName
+//     lastName
+//     profession
+//     email
+//     photo
+//     created_at
+//     updated_at
+//   }
+// }
+
+//     `,
+//     {},
+//   );
 
   // Access your data here
-  console.log(data.getAllPersonalInfo);
+ // console.log(data.getPersonalInfo);
 
   const [css, $theme] = useStyletron();
   const userData = useRecoilValue(userDataState);
@@ -87,14 +70,14 @@ const Personal = () => {
 
   const isMounted = useRef(true);
 
-  useEffect(() => {
-    if (isMounted.current) {
-      console.log(data.getAllPersonalInfo);
-    }
-    return () => {
-      isMounted.current = false; // Set the mount status to false when the component unmounts
-    };
-  }, [data]);
+  // useEffect(() => {
+  //   if (isMounted.current) {
+  //     console.log(data.getAllPersonalInfo);
+  //   }
+  //   return () => {
+  //     isMounted.current = false; // Set the mount status to false when the component unmounts
+  //   };
+  // }, [data]);
 
   function handleFileUpload(files: File[]) {
     const uploadedImages: string[] = [];
@@ -125,17 +108,14 @@ const Personal = () => {
 
   const handleNextButtonClick = async () => {
     try {
-      const input = {
-        pinCode: userData.pinCode,
+      const input = {       
         photo:'userData.photo',
         email: userData.email,
         firstName: userData.firstName,
         lastName: userData.lastName,
         profession: userData.profession,
-        idResume: "your_resume_id_here",
+        idResume: "256517e4-acf3-4608-ad64-16e8e50494d3",
       };
-
-
       const response = await updatePersonalInfo({ variables: { input } });
 
       // Handle the response from the server

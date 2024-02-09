@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3a48e9981045a8c058e133403ebeaced>>
+ * @generated SignedSource<<7f9d2fd3c21a31b83b7057576740228d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,27 +9,22 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type AddNewEducationInput = {
-  degree: string;
-  description?: string | null | undefined;
-  endDate: string;
-  fieldOfStudy: string;
-  instituteLocation: string;
-  instituteName: string;
-  startDate: string;
+export type AddNewResumeInput = {
+  name?: string | null | undefined;
+  userId?: string | null | undefined;
 };
-export type educationalPageMutation$variables = {
-  input: AddNewEducationInput;
+export type resumeIdMutation$variables = {
+  input: AddNewResumeInput;
 };
-export type educationalPageMutation$data = {
-  readonly addNewEducation: {
+export type resumeIdMutation$data = {
+  readonly addNewResume: {
     readonly id: string;
-    readonly success: boolean;
+    readonly success: boolean | null | undefined;
   } | null | undefined;
 };
-export type educationalPageMutation = {
-  response: educationalPageMutation$data;
-  variables: educationalPageMutation$variables;
+export type resumeIdMutation = {
+  response: resumeIdMutation$data;
+  variables: resumeIdMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -50,9 +45,9 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "AddEducationPayload",
+    "concreteType": "AddNewResumePayload",
     "kind": "LinkedField",
-    "name": "addNewEducation",
+    "name": "addNewResume",
     "plural": false,
     "selections": [
       {
@@ -78,7 +73,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "educationalPageMutation",
+    "name": "resumeIdMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -87,20 +82,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "educationalPageMutation",
+    "name": "resumeIdMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "7d742a64057b7c9dfdb24243e26bf036",
+    "cacheID": "1cebd795896f1659f10d3997f71d7a78",
     "id": null,
     "metadata": {},
-    "name": "educationalPageMutation",
+    "name": "resumeIdMutation",
     "operationKind": "mutation",
-    "text": "mutation educationalPageMutation(\n  $input: AddNewEducationInput!\n) {\n  addNewEducation(input: $input) {\n    success\n    id\n  }\n}\n"
+    "text": "mutation resumeIdMutation(\n  $input: AddNewResumeInput!\n) {\n  addNewResume(input: $input) {\n    success\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "d5fa369acf89bbcbf3ce8c4afc7f274f";
+(node as any).hash = "6d78eb5836f9a046330860670eb930fe";
 
 export default node;

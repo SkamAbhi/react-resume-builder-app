@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2570d0491b29776131d8e3db3bf8e431>>
+ * @generated SignedSource<<0a328f8d9ae5b7075071af52515b2f6f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,14 +10,12 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type AddNewPersonalInfoInput = {
-  city?: string | null | undefined;
-  country?: string | null | undefined;
   email?: string | null | undefined;
   firstName?: string | null | undefined;
+  id?: string | null | undefined;
+  lastName?: string | null | undefined;
   phone?: string | null | undefined;
-  pinCode?: string | null | undefined;
   profession?: string | null | undefined;
-  surName?: string | null | undefined;
 };
 export type personalPageMutation$variables = {
   input: AddNewPersonalInfoInput;
@@ -42,37 +40,38 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "input",
-        "variableName": "input"
-      }
-    ],
-    "concreteType": "AddNewPersonalInfoPayload",
-    "kind": "LinkedField",
-    "name": "addNewPersonalInfo",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "success",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "input",
+    "variableName": "input"
   }
-];
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "success",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "personalPageMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "AddNewPersonalInfoPayload",
+        "kind": "LinkedField",
+        "name": "addNewPersonalInfo",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/)
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -81,15 +80,35 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "personalPageMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "AddNewPersonalInfoPayload",
+        "kind": "LinkedField",
+        "name": "addNewPersonalInfo",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "e5668e5f58d988ab2577742a003fceec",
+    "cacheID": "4356edfbe635308005b2f94fa688ecc4",
     "id": null,
     "metadata": {},
     "name": "personalPageMutation",
     "operationKind": "mutation",
-    "text": "mutation personalPageMutation(\n  $input: AddNewPersonalInfoInput!\n) {\n  addNewPersonalInfo(input: $input) {\n    success\n  }\n}\n"
+    "text": "mutation personalPageMutation(\n  $input: AddNewPersonalInfoInput!\n) {\n  addNewPersonalInfo(input: $input) {\n    success\n    id\n  }\n}\n"
   }
 };
 })();

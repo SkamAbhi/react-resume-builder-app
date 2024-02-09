@@ -8,6 +8,8 @@ import CustomButton from "../../components/CustomButton";
 import { TrashCan, Add, Checkmark } from "@carbon/icons-react";
 import { useEffect, useState } from "react";
 import jsonData from "../../data /data.json";
+import { useMutation } from "react-relay";
+import { addNewSkillMutation } from "../../mutations/skillPageMutation";
 
 interface JobData {
   jobRole: string;
@@ -36,6 +38,24 @@ const Skills: React.FC = () => {
   const handleAddOneMore = () => {
     setSelectedSkills((prevSkills) => [...prevSkills, ""]);
     setInputValues((prevInputValues) => [...prevInputValues, ""]);
+  };
+
+  const [commit, isInFlight] = useMutation(addNewSkillMutation);
+
+  const handleNextButtonSkill = async () => {
+    try {
+      const variables = {
+        input: {
+          idResume: "256517e4-acf3-4608-ad64-16e8e50494d3",
+          skillName: "Java"
+        }
+      };
+
+      const response = await commit(variables);
+      console.log('Mutation response:', response);
+    } catch (error) {
+      console.error('Error adding new skill:', error);
+    }
   };
 
   const handleChange = (index: number, newValue: string) => {
@@ -645,8 +665,8 @@ const Skills: React.FC = () => {
         />
         <CustomButton
           name={"Next : Summary"}
-          onClick={console.log}
-          to={"/summary"}
+          onClick={handleNextButtonSkill}
+          // to={"/summary"}
         />
       </div>
     </div>

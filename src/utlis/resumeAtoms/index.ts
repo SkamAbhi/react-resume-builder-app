@@ -68,3 +68,9 @@ export const dynamicLinksState = atom({
   key: "dynamicLinksState",
   default: [],
 });
+
+
+export const userIdState = atom({
+  key: 'userIdState',
+  default: null, // Initial value is null
+});

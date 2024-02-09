@@ -19,22 +19,47 @@
 type Mutation {
   addNewPersonalInfo(input: AddNewPersonalInfoInput!): AddNewPersonalInfoPayload
   addNewEducation(input: AddNewEducationInput!): AddEducationPayload
+  addNewResume(input: AddNewResumeInput!): AddNewResumePayload
+  addNewProject(input:AddNewProjectInput!):AddNewProjectPayload
+  addNewSkill(input: AddNewSkillInput!): AddNewSkillPayload!
+
+}
+input AddNewSkillInput {
+  idResume: ID!
+  skillName: String!
+}
+type AddNewSkillPayload {
+  id: ID!
+  success: Boolean!
+}
+
+input AddNewResumeInput {
+  userId: String
+  name: String
+}
+
+type AddNewResumePayload {
+  success: Boolean
+  id: ID!
+}
+
+type AddNewProjectPayload {
+  success: Boolean
+  id: ID!
 }
 
 input AddNewPersonalInfoInput {
+  id: ID
   firstName: String
-  surName: String
+  lastName: String
   profession: String
-  city: String
-  country: String
-  pinCode: String
   phone: String
   email: String
 }
 
 type AddNewPersonalInfoPayload {
   success: Boolean
-  personalInfo: PersonalInfo # Add additional data if needed
+  id: ID!
 }
 
 type PersonalInfo {
@@ -69,17 +94,12 @@ type User {
   email: String
 }
 type Query {
-  getAllPersonalInfo: PersonalInfoConnection
+  getPersonalInfo: PersonalInfo
   getEducationDetails(id: ID!): EducationDetails
 }
 
-type PersonalInfoConnection {
-  edges: [PersonalInfoEdge]
-}
 
-type PersonalInfoEdge {
-  node: PersonalInfo
-}
+
 
 type EducationDetails {
   id: ID!
@@ -89,8 +109,6 @@ type EducationDetails {
   startDate: String!
   endDate: String!
   currentlyAttendsHere: Boolean!
-  board_name: String
-  gpa: Float
   resume: Resume
   createdAt: String!
   updatedAt: String!
@@ -99,7 +117,7 @@ type EducationDetails {
 }
 
 input AddNewEducationInput {
-   instituteName: String!
+  instituteName: String!
   instituteLocation: String!
   degree: String!
   fieldOfStudy: String!
@@ -110,11 +128,20 @@ input AddNewEducationInput {
 
 type AddEducationPayload {
   success: Boolean!
-  education: EducationDetails
+  id: ID!
 }
 
 type Resume {
   id: ID!
   name: String
   user: User
+}
+
+input AddNewProjectInput {
+  idResume: ID!
+  projectName: String!
+  role: String!
+  technologies: [String!]
+  description: String
+  results: String
 }

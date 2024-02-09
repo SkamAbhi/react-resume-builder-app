@@ -7,6 +7,8 @@ import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
 import { useStyletron } from 'baseui';
 import { useNavigate } from 'react-router-dom';
+import { addNewProjectInfoMutation } from '../../mutations/projectPageMutation'
+import { useMutation } from 'react-relay';
 
 function Project() {
     const [css, $theme] = useStyletron();
@@ -14,7 +16,8 @@ function Project() {
     const [inputValue, setInputValue] = useState("");
     const [summaryValue, setSummaryValue] = useState("");
     const navigate = useNavigate()
-  
+    const [addNewProject] = useMutation(addNewProjectInfoMutation)
+
     const handleButtonClick = () => {
       setShowInput(!showInput);
     };
@@ -33,19 +36,43 @@ function Project() {
       );
     };
   
+    const handleNextButtonClick = async () => {
+      try {
+        const input = {
+          projectName:"abc",
+          role:"developer",
+          technologies:["react","react-relay"],
+          description:"",
+          results:"",
+          idResume: "256517e4-acf3-4608-ad64-16e8e50494d3",
+          };
+        const response = await addNewProject({ variables: { input } });
+  
+        if (inputValue.trim() !== "") {
+          navigate("/work-exp-list");
+        } else {
+          navigate("/skills");
+        }
+        // Handle the response from the server
+        console.log(`Data updated:`, response);
 
-  const handleNextButtonClick = () => {
-    // Check if input data is provided
-    if (inputValue.trim() !== "") {
-      // Navigate to a different link when input data is provided
-      navigate("/project-list");
+      } catch (error) {
+        console.error('Error updating personal info:', error);
+      }
+  
+    };
+  // const handleNextButtonClick = () => {
+  //   // Check if input data is provided
+  //   if (inputValue.trim() !== "") {
+  //     // Navigate to a different link when input data is provided
+  //     navigate("/project-list");
 
-    } else {
-      // Navigate to the given link when no input data is provided
-      navigate("/skills");
+  //   } else {
+  //     // Navigate to the given link when no input data is provided
+  //     navigate("/skills");
 
-    }
-  }
+  //   }
+  // }
     const handleTextareaChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
       setSummaryValue(event.target.value);}
   return (

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3a48e9981045a8c058e133403ebeaced>>
+ * @generated SignedSource<<1b15a9de718b07567ba58e9156fe73d8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,27 +9,26 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type AddNewEducationInput = {
-  degree: string;
+export type AddNewProjectInput = {
   description?: string | null | undefined;
-  endDate: string;
-  fieldOfStudy: string;
-  instituteLocation: string;
-  instituteName: string;
-  startDate: string;
+  idResume: string;
+  projectName: string;
+  results?: string | null | undefined;
+  role: string;
+  technologies?: ReadonlyArray<string> | null | undefined;
 };
-export type educationalPageMutation$variables = {
-  input: AddNewEducationInput;
+export type projectPageMutation$variables = {
+  input: AddNewProjectInput;
 };
-export type educationalPageMutation$data = {
-  readonly addNewEducation: {
+export type projectPageMutation$data = {
+  readonly addNewProject: {
     readonly id: string;
-    readonly success: boolean;
+    readonly success: boolean | null | undefined;
   } | null | undefined;
 };
-export type educationalPageMutation = {
-  response: educationalPageMutation$data;
-  variables: educationalPageMutation$variables;
+export type projectPageMutation = {
+  response: projectPageMutation$data;
+  variables: projectPageMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -50,9 +49,9 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "AddEducationPayload",
+    "concreteType": "AddNewProjectPayload",
     "kind": "LinkedField",
-    "name": "addNewEducation",
+    "name": "addNewProject",
     "plural": false,
     "selections": [
       {
@@ -78,7 +77,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "educationalPageMutation",
+    "name": "projectPageMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -87,20 +86,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "educationalPageMutation",
+    "name": "projectPageMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "7d742a64057b7c9dfdb24243e26bf036",
+    "cacheID": "8584adbac45fd9331b3e0abe30f234ce",
     "id": null,
     "metadata": {},
-    "name": "educationalPageMutation",
+    "name": "projectPageMutation",
     "operationKind": "mutation",
-    "text": "mutation educationalPageMutation(\n  $input: AddNewEducationInput!\n) {\n  addNewEducation(input: $input) {\n    success\n    id\n  }\n}\n"
+    "text": "mutation projectPageMutation(\n  $input: AddNewProjectInput!\n) {\n  addNewProject(input: $input) {\n    success\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "d5fa369acf89bbcbf3ce8c4afc7f274f";
+(node as any).hash = "a2d2e3dbf0e1053fc7909cfb3ea96031";
 
 export default node;

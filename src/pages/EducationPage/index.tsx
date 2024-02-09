@@ -23,49 +23,51 @@ import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { Add, Idea, Subtract } from "@carbon/icons-react";
 import { useLazyLoadQuery, useMutation } from "react-relay/hooks";
-import { graphql } from 'babel-plugin-relay/macro';
-import { updateEducationalInfoMutation } from '../../mutations/educationalPageMutation';
+//import { graphql } from 'babel-plugin-relay/macro';
+import { addNewEducationalInfoMutation } from '../../mutations/educationalPageMutation';
 import { useNavigationContext } from "../../utlis/NavigationContext";
-import { EducationPageQuery } from '../../__generated__/EducationPageQuery.graphql'
+import { useNavigate } from "react-router-dom";
+//import { EducationPageQuery } from '../../__generated__/EducationPageQuery.graphql'
 
 function Education() {
 
-  const [updateEducationalInfo] = useMutation(updateEducationalInfoMutation);
+  const [updateEducationalInfo] = useMutation(addNewEducationalInfoMutation);
 
-  const Educationaldata = useLazyLoadQuery<EducationPageQuery>(
-    graphql`
-     query EducationPageQuery{
-    getEducationDetails(
-      id:"aa08cbcc-f8eb-4f14-9fb2-a1b1848adb4f")
-    {
+//   const Educationaldata = useLazyLoadQuery<EducationPageQuery>(
+//     graphql`
+//      query EducationPageQuery{
+//     getEducationDetails(
+//       id:"aa08cbcc-f8eb-4f14-9fb2-a1b1848adb4f")
+//     {
       
-      instituteName
-      instituteLocation
-      fieldOfStudy
-      startDate
-      endDate
-      board_name
-      gpa
-      resume{
-        id
-        name
+//       instituteName
+//       instituteLocation
+//       fieldOfStudy
+//       startDate
+//       endDate
+//       board_name
+//       gpa
+//       resume{
+//         id
+//         name
         
-      }
-      createdAt
-      updatedAt
-    }
-  }
-  `,
-  {},
-);
+//       }
+//       createdAt
+//       updatedAt
+//     }
+//   }
+//   `,
+//   {},
+// );
 
-console.log(Educationaldata.getEducationDetails)
+//console.log(Educationaldata.getEducationDetails)
 
   const [value, setValue] = React.useState<Value>([]);
   const [css, $theme] = useStyletron();
   const [eduData, setEduData] = useRecoilState(educationData);
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
     setShowInput(!showInput);
@@ -106,32 +108,36 @@ console.log(Educationaldata.getEducationDetails)
 
   const isMounted = useRef(true);
 
-  useEffect(() => {
-    if (isMounted.current) {
-      console.log(Educationaldata.getEducationDetails);
-    }
-    return () => {
-      isMounted.current = false; // Set the mount status to false when the component unmounts
-    };
-  }, [Educationaldata]);
+  // useEffect(() => {
+  //   if (isMounted.current) {
+  //     console.log(Educationaldata.getEducationDetails);
+  //   }
+  //   return () => {
+  //     isMounted.current = false; // Set the mount status to false when the component unmounts
+  //   };
+  // }, [Educationaldata]);
   
   const { activeSection, handleNextClick } = useNavigationContext();
 
   const handleNextButtonClick = async () => {
     try {
       const input = {
-        schoolName: eduData.schoolName,
-        schoolLocation: eduData.schoolLocation,
-        degree: eduData.degree,
-        fieldOfStudy: eduData.fieldOfStudy,
-        startDate: eduData.startDate,
-        endDate: eduData.endDate,
-        description: inputValue, // Assuming inputValue is the description for education
-        resumeId: "your_resume_id_here", // Replace with the actual resume ID
-      };
-  
+        instituteName:"Skam institute",
+        instituteLocation:"skam-loc",
+        fieldOfStudy:"skaming ",
+        startDate:'2024-01-19',
+        endDate:'2021-02-20',      
+        idResume: "256517e4-acf3-4608-ad64-16e8e50494d3",
+        };
       const response = await updateEducationalInfo({ variables: { input } });
-  
+
+      if (inputValue.trim() !== "") {
+        // Navigate to a different link when input data is provided
+        navigate("/work-exp-list");
+      } else {
+        // Navigate to the given link when no input data is provided
+        navigate("/work-exp");
+      }
       // Handle the response from the server
       console.log(`Educational data updated:`, response);
   
@@ -647,7 +653,6 @@ console.log(Educationaldata.getEducationDetails)
         <CustomButton
           name={"Next: Work Experience"}
           onClick={handleNextButtonClick}
-          // to={"/work-exp"}
         />
       </div>
     </div>

@@ -1,17 +1,42 @@
 "use client";
 import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
+import { useMutation } from "react-relay";
 import { useNavigate } from "react-router-dom";
+import { addNewResumeMutation } from "../../mutations/resumeIdMutation";
+import { useState } from "react";
 
 export default function Home() {
   const [css, $theme] = useStyletron();
+  const [resumeId, setResumeId] = useState(null);
+  const [addNewResumeID] = useMutation(addNewResumeMutation)
+
 
   const navigate = useNavigate();
 
-  const handleNextClick = () => {
-    navigate("/personal");
+  const handleNextClick = async () => {
+    try {
+
+      const response = await addNewResumeID({
+        variables: {
+          input: {
+            userId: '9d9a45ac-578a-4977-b13e-212eb6e50565',
+            name: 'resume'
+
+          }
+        }
+      });
+
+    
+      console.log(response)
+
+    // navigate("/personal");
+    } catch (error) {
+      console.error('Error in mutation:', error);
+    }
   };
-  const handleSignIn = () =>{
+  console.log()
+  const handleSignIn = () => {
     navigate("/sign-in")
   }
 
@@ -43,7 +68,7 @@ export default function Home() {
         <div
           className={css({
             fontSize: "1.5em",
-            color:'blue'
+            color: 'blue'
           })}
         >
           Crafity
