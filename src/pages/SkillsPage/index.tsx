@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import jsonData from "../../data /data.json";
 import { useMutation } from "react-relay";
 import { addNewSkillMutation } from "../../mutations/skillPageMutation";
+import { useNavigate } from "react-router-dom";
 
 interface JobData {
   jobRole: string;
@@ -32,26 +33,31 @@ const Skills: React.FC = () => {
   const [filteredData, setFilteredData] = useState<SkillData[]>([]);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [disabledSkills, setDisabledSkills] = useState<string[]>([]);
-  const [isSkillSelected, setIsSkillSelected] = useState();
+  const [isSkillSelected] = useState();
   const [inputValues, setInputValues] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const handleAddOneMore = () => {
     setSelectedSkills((prevSkills) => [...prevSkills, ""]);
     setInputValues((prevInputValues) => [...prevInputValues, ""]);
   };
+  const finalSkills = selectedSkills.join(',');
 
-  const [commit, isInFlight] = useMutation(addNewSkillMutation);
+  const [commit] = useMutation(addNewSkillMutation);
 
   const handleNextButtonSkill = async () => {
     try {
       const variables = {
         input: {
-          idResume: "256517e4-acf3-4608-ad64-16e8e50494d3",
-          skillName: "Java"
+          idResume: "421b0456-439c-4d34-9e96-86fda0a4288f",
+          skillName: finalSkills
         }
       };
 
-      const response = await commit(variables);
+      const response = await commit({
+        variables: variables 
+      }); 
+      navigate('/summary')
       console.log('Mutation response:', response);
     } catch (error) {
       console.error('Error adding new skill:', error);
@@ -74,9 +80,7 @@ const Skills: React.FC = () => {
 
   const handleRemove = (index: number) => {
     setSelectedSkills((prevSkills) => prevSkills.filter((_, i) => i !== index));
-
     setDisabledSkills((prevSkills) => prevSkills.filter((_, i) => i !== index));
-
     setInputValues((prevInputValues) =>
       prevInputValues.filter((_, i) => i !== index)
     );
@@ -92,15 +96,17 @@ const Skills: React.FC = () => {
       setDisabledSkills((prevSkills) =>
         prevSkills.filter((skill) => skill !== skillName)
       );
+      setInputValues((prevInputValues) =>
+        prevInputValues.filter((value) => value !== skillName)
+      );
       setInputValue((prevValue) => prevValue.replace(skillName + "\n", ""));
     } else {
       setSelectedSkills((prevSkills) => [...prevSkills, skillName]);
       setInputValue((prevValue) => prevValue + skillName + "\n");
       setDisabledSkills((prevSkills) => [...prevSkills, skillName]);
+      setInputValues((prevInputValues) => [...prevInputValues, skillName]);
     }
-    setInputValue(selectedSkills.join("\n"));
   };
-
   const handleSearch = (inputValue: string) => {
     setSearchTerm(inputValue);
 
@@ -511,71 +517,10 @@ const Skills: React.FC = () => {
             >
               {selectedJob
                 ? currentSkillsData
-                    .filter(
-                      (skill) => skill.jobRole === (selectedJob?.jobRole || "")
-                    )
-                    .map((skill) => (
-                      <div
-                        key={skill.id}
-                        className={css({
-                          border: "1.2px solid #d3d9de",
-                          padding: "10px",
-                          borderRadius: "12px",
-                          display: "flex",
-                          overflowY: "auto",
-                          height: "50px",
-                          marginBottom: "10px",
-                          ":hover": {
-                            borderColor: "#2b2d2f",
-                            boxShadow:
-                              "0 4px 12px 0 rgba(0,0,0,.06),0 12px 28px -2px rgba(0,0,0,.1)",
-                          },
-                          backgroundColor: disabledSkills.includes(skill)
-                            ? "#E4FDE1"
-                            : "white",
-                          opacity: disabledSkills.includes(skill.skillName)
-                            ? 0.5
-                            : 1,
-                          transition: "opacity 0.3s ease-in-out",
-                        })}
-                        onClick={() => handleAddSkill(skill)}
-                      >
-                        <button
-                          className={css({
-                            borderRadius: "50%",
-                            margin: "4px",
-                            backgroundColor: disabledSkills.includes(
-                              skill.skillName
-                            )
-                              ? "#2b2d2f"
-                              : "#2b2d2f",
-                            border: 0,
-                            width: "40px",
-                            cursor: "pointer",
-                            opacity: disabledSkills.includes(skill.skillName)
-                              ? 0.5
-                              : 1,
-                            transition: "opacity 0.3s ease-in-out",
-                            padding: "8px",
-                          })}
-                        >
-                          {disabledSkills.includes(skill.skillName) ? (
-                            <Checkmark color="#ffffff" size={24} />
-                          ) : (
-                            <Add color="#ffffff" size={24} />
-                          )}
-                        </button>
-                        <p
-                          className={css({
-                            ...$theme.typography.LabelMedium,
-                            marginLeft: "15px",
-                          })}
-                        >
-                          {skill.skillName}
-                        </p>
-                      </div>
-                    ))
-                : skillsData.map((skill) => (
+                  .filter(
+                    (skill) => skill.jobRole === (selectedJob?.jobRole || "")
+                  )
+                  .map((skill) => (
                     <div
                       key={skill.id}
                       className={css({
@@ -635,7 +580,68 @@ const Skills: React.FC = () => {
                         {skill.skillName}
                       </p>
                     </div>
-                  ))}
+                  ))
+                : skillsData.map((skill) => (
+                  <div
+                    key={skill.id}
+                    className={css({
+                      border: "1.2px solid #d3d9de",
+                      padding: "10px",
+                      borderRadius: "12px",
+                      display: "flex",
+                      overflowY: "auto",
+                      height: "50px",
+                      marginBottom: "10px",
+                      ":hover": {
+                        borderColor: "#2b2d2f",
+                        boxShadow:
+                          "0 4px 12px 0 rgba(0,0,0,.06),0 12px 28px -2px rgba(0,0,0,.1)",
+                      },
+                      backgroundColor: disabledSkills.includes(skill)
+                        ? "#E4FDE1"
+                        : "white",
+                      opacity: disabledSkills.includes(skill.skillName)
+                        ? 0.5
+                        : 1,
+                      transition: "opacity 0.3s ease-in-out",
+                    })}
+                    onClick={() => handleAddSkill(skill)}
+                  >
+                    <button
+                      className={css({
+                        borderRadius: "50%",
+                        margin: "4px",
+                        backgroundColor: disabledSkills.includes(
+                          skill.skillName
+                        )
+                          ? "#2b2d2f"
+                          : "#2b2d2f",
+                        border: 0,
+                        width: "40px",
+                        cursor: "pointer",
+                        opacity: disabledSkills.includes(skill.skillName)
+                          ? 0.5
+                          : 1,
+                        transition: "opacity 0.3s ease-in-out",
+                        padding: "8px",
+                      })}
+                    >
+                      {disabledSkills.includes(skill.skillName) ? (
+                        <Checkmark color="#ffffff" size={24} />
+                      ) : (
+                        <Add color="#ffffff" size={24} />
+                      )}
+                    </button>
+                    <p
+                      className={css({
+                        ...$theme.typography.LabelMedium,
+                        marginLeft: "15px",
+                      })}
+                    >
+                      {skill.skillName}
+                    </p>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -666,7 +672,6 @@ const Skills: React.FC = () => {
         <CustomButton
           name={"Next : Summary"}
           onClick={handleNextButtonSkill}
-          // to={"/summary"}
         />
       </div>
     </div>

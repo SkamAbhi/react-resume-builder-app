@@ -84,29 +84,33 @@ function Finalize() {
         >
           <div
             className={css({
-              marginLeft: "30px",
-              marginRight: "20px",
+
               gap: "40px",
               backgroundColor: "#f3f8ff",
-              padding: " 30px 20px ",
-              paddingRight:'50px',
+              padding: " 30px 30px ",
               borderRadius: "20px",
               height: "100vh",
               width: "90%",
-
               display: "flex",
+              flexDirection: 'column',
               [$theme.mediaQuery.medium]: {
                 maxWidth: "800px",
+                paddingRight: '50px',
+
               },
-              
+
               [$theme.mediaQuery.medium]: {
                 marginLeft: "0px",
                 marginRight: "0px",
+                flexDirection: 'row',
+
               },
             })}
           >
             <div className={css({
-              paddingLeft:'60px'
+              [$theme.mediaQuery.large]: {
+                paddingLeft: '60px'
+              }
             })}>
               <h1
                 className={css({
@@ -159,7 +163,7 @@ function Finalize() {
                   </div>
                 ))}
               </div>
-            
+
               <div
                 className={css({
                   display: "flex",
@@ -188,10 +192,12 @@ function Finalize() {
             <div
               className={css({
                 border: "1px solid black",
-                width: "230px",
                 maxHeight: "300px",
                 borderRadius: "15px",
-                padding:' 0 10px'
+                padding: ' 0 10px',
+                [$theme.mediaQuery.medium]: {
+                  width: '230px'
+                }
 
               })}
             >
@@ -218,7 +224,7 @@ function Finalize() {
                 <li
                   className={css({
                     ...$theme.typography.LabelSmall,
-                    marginBottom:'15px',
+                    marginBottom: '15px',
                   })}
                 >
                   Additional sections are usually optional.
@@ -226,7 +232,7 @@ function Finalize() {
                 <li
                   className={css({
                     ...$theme.typography.LabelSmall,
-                    marginBottom:'15px'
+                    marginBottom: '15px'
                   })}
                 >
                   {" "}
@@ -253,11 +259,11 @@ function Finalize() {
           </div>
         </div>
       </div>
-    </div> 
-    
-        // <div>
-        //   <Resume data={resumeData}/>
-        // </div> 
+    </div>
+
+    // <div>
+    //   <Resume data={resumeData}/>
+    // </div> 
   );
 }
 

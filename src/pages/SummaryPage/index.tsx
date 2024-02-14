@@ -6,12 +6,15 @@ import CustomButton from "../../components/CustomButton";
 import { StatefulInput } from "baseui/input";
 import { Checkmark, Add } from "@carbon/icons-react";
 import jsonData from "../../data /data.json";
+import { addNewSummaryMutation } from "../../mutations/summaryPageMutation"
+import { useMutation } from "react-relay";
 
 const Summary: React.FC = () => {
   const [css, $theme] = useStyletron();
   const [inputValue, setInputValue] = useState<string>("");
   const [selectedSummary, setSelectedSummary] = useState<string | null>(null);
-
+  const [addSummaryMutation] = useMutation(addNewSummaryMutation);
+  
   const handleInputChange = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
     setInputValue((e.target as HTMLTextAreaElement).value);
     setSelectedSummary(null);
@@ -34,6 +37,22 @@ const Summary: React.FC = () => {
     );
   };
 
+  const handleNextClick = async () => {
+    try {
+      // Execute the mutation
+      const response = await addSummaryMutation({
+        variables: {
+          input: {
+            idResume: "421b0456-439c-4d34-9e96-86fda0a4288f",
+            summaryDetails: selectedSummary 
+            },
+        },
+      });
+      console.log("Mutation response:", response);
+    } catch (error) {
+      console.error("Error in mutation:", error);
+    }
+  };
   const skillsData = jsonData;
 
   return (
@@ -288,8 +307,8 @@ const Summary: React.FC = () => {
         />
         <CustomButton
           name={"Next: Final View"}
-          onClick={console.log}
-          to={"/finalize"}
+          onClick={handleNextClick}
+          // to={"/finalize"}
         />
       </div>
     </div>

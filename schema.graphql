@@ -20,9 +20,9 @@ type Mutation {
   addNewPersonalInfo(input: AddNewPersonalInfoInput!): AddNewPersonalInfoPayload
   addNewEducation(input: AddNewEducationInput!): AddEducationPayload
   addNewResume(input: AddNewResumeInput!): AddNewResumePayload
-  addNewProject(input:AddNewProjectInput!):AddNewProjectPayload
+  addNewProject(input: AddNewProjectInput!): AddNewProjectPayload
   addNewSkill(input: AddNewSkillInput!): AddNewSkillPayload!
-
+  addNewSummary(input: AddNewSummaryInput): AddSummaryPayload
 }
 input AddNewSkillInput {
   idResume: ID!
@@ -61,31 +61,12 @@ type AddNewPersonalInfoPayload {
   success: Boolean
   id: ID!
 }
-
-type PersonalInfo {
-  id: ID!
-  firstName: String
-  middleName: String
-  lastName: String
-  birthdate: String
-  email: String
-  profession: String
-  personalAddress: Address
-  resume: Resume
-}
-
 type Address {
   street: String
   city: String
   state: String
   country: String
   zipcode: String
-}
-
-type Resume {
-  id: ID!
-  name: String
-  user: User
 }
 
 type User {
@@ -96,26 +77,9 @@ type User {
 type Query {
   getPersonalInfo: PersonalInfo
   getEducationDetails(id: ID!): EducationDetails
+  getResume(id: ID!): ResumePreview
+  addNewSummary(id: ID!): Summary
 }
-
-
-
-
-type EducationDetails {
-  id: ID!
-  instituteName: String!
-  instituteLocation: String!
-  fieldOfStudy: String!
-  startDate: String!
-  endDate: String!
-  currentlyAttendsHere: Boolean!
-  resume: Resume
-  createdAt: String!
-  updatedAt: String!
-  description: String!
-  degree: String!
-}
-
 input AddNewEducationInput {
   instituteName: String!
   instituteLocation: String!
@@ -131,12 +95,6 @@ type AddEducationPayload {
   id: ID!
 }
 
-type Resume {
-  id: ID!
-  name: String
-  user: User
-}
-
 input AddNewProjectInput {
   idResume: ID!
   projectName: String!
@@ -144,4 +102,76 @@ input AddNewProjectInput {
   technologies: [String!]
   description: String
   results: String
+}
+
+type AddSummaryPayload {
+  id: ID!
+  success: Boolean!
+}
+input AddNewSummaryInput {
+  summaryDetails: String
+}
+input AddSkillInput {
+  idResume: ID!
+  skillName: String!
+}
+
+type AddSkillPayload {
+  id: ID
+  success: Boolean
+}
+
+type Summary {
+  id: ID!
+  summaryDetails: String!
+}
+
+type Skill {
+  skillName: String
+}
+
+type Project {
+  projectName: String
+  role: String
+  technologies: [String]
+  description: String
+}
+type EducationDetails {
+  id: ID!
+  instituteName: String!
+  instituteLocation: String!
+  fieldOfStudy: String!
+  startDate: String!
+  endDate: String!
+  currentlyAttendsHere: Boolean!
+  resume: Resume
+  createdAt: String!
+  updatedAt: String!
+  description: String!
+  degree: String!
+}
+type PersonalInfo {
+  id: ID!
+  firstName: String
+  middleName: String
+  lastName: String
+  birthdate: String
+  email: String
+  profession: String
+  phoneNumber:String
+  photo:String
+  personalAddress: Address
+  resume: Resume
+}
+type ResumePreview {
+  personalInfo: PersonalInfo
+  educationDetails: [EducationDetails]
+  summary: Summary
+  skills: [Skill]
+  projects: [Project]
+}
+
+type Resume {
+  personalInfo: PersonalInfo
+  educationDetails: [EducationDetails]
 }

@@ -9,6 +9,7 @@ interface UserData {
   pinCode: string;
   phone: string;
   email: string;
+  photo: string;
 }
 
 export const userDataState = atom<UserData>({
@@ -22,6 +23,7 @@ export const userDataState = atom<UserData>({
     pinCode: "",
     phone: "",
     email: "",
+    photo: "",
   },
 });
 
@@ -47,6 +49,23 @@ export const educationData = atom<educationData>({
     description: "",
   },
 });
+interface projectData {
+  projectName: string;
+  role: string;
+  technologies: string;
+  description: string;
+  results: string;
+}
+export const projectData = atom({
+  key: "projectData",
+  default: {
+    projectName: "",
+    role: "",
+    technologies: "",
+    description: "",
+    results: "",
+  },
+});
 
 export const userState = atom({
   key: "userState",
@@ -69,8 +88,7 @@ export const dynamicLinksState = atom({
   default: [],
 });
 
-
 export const userIdState = atom({
-  key: 'userIdState',
-  default: null, // Initial value is null
+  key: "userIdState",
+  default: null,
 });

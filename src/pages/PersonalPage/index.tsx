@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useStyletron } from "baseui";
 import { FileUploader } from "baseui/file-uploader";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -7,10 +7,11 @@ import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { userDataState } from "../../utlis/resumeAtoms";
 import { useNavigationContext } from "../../utlis/NavigationContext";
-import { useLazyLoadQuery, useMutation } from 'react-relay/hooks';
+import { useMutation } from 'react-relay/hooks';
 //import { graphql } from 'babel-plugin-relay/macro';
 //import { PersonalPageQuery } from '../../__generated__/PersonalPageQuery.graphql'
 import { addNewPersonalInfoMutation } from '../../mutations/personalPageMutation';
+import { useNavigate } from "react-router-dom";
 
 const Personal = () => {
 
@@ -43,6 +44,8 @@ const Personal = () => {
   const userData = useRecoilValue(userDataState);
   const setUserData = useSetRecoilState(userDataState);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -51,7 +54,7 @@ const Personal = () => {
     }
   }, [setUserData]);
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setUserData((prevUserData) => ({
@@ -85,6 +88,11 @@ const Personal = () => {
     files.forEach((file) => {
       const imageUrl = URL.createObjectURL(file);
       uploadedImages.push(imageUrl);
+
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        photo: uploadedImages[0], 
+      }));
     });
 
     setUploadedFiles(files);
@@ -105,22 +113,22 @@ const Personal = () => {
     setFileUploaderModalOpen(false);
   };
   const { activeSection, handleNextClick } = useNavigationContext();
-
+  console.log(activeSection)
   const handleNextButtonClick = async () => {
     try {
       const input = {       
-        photo:'userData.photo',
+        photo:userData.photo,
         email: userData.email,
         firstName: userData.firstName,
         lastName: userData.lastName,
         profession: userData.profession,
-        idResume: "256517e4-acf3-4608-ad64-16e8e50494d3",
+        idResume: "421b0456-439c-4d34-9e96-86fda0a4288f",
       };
       const response = await updatePersonalInfo({ variables: { input } });
 
       // Handle the response from the server
       console.log(`Data updated:`, response);
-
+      navigate("/education");
       if (isMounted.current) {
         // Handle the response from the server
         console.log(`Data updated:`, response);
@@ -447,9 +455,9 @@ const Personal = () => {
             <CustomInput
               placeholder={""}
               onChange={handleInputChange}
-              label={"Surname"}
-              value={userData.surName}
-              name="surName"
+              label={"Last Name"}
+              value={userData.lastName}
+              name="lastName"
             />
           </div>
           <div

@@ -3,31 +3,28 @@ import React from "react";
 
 interface ResumeProps {
   data: {
-    basics?: {
-      name?: string;
-      position?: string;
-    };
-    contact?: {
-      name?: string;
+    personalInfo?: {
+      firstName?: string;
+      lastName?:string;
       email?: string;
-      phone?: string;
+      phoneNumber?: string;
       location?: {
         address?: string;
       };
       website?: string;
-      position?: string;
+      profession?: string;
+      photo?:string;
     };
     summary?: {
       summary?: string;
     };
-    education?: Array<{
-      institution?: string;
-      studyType?: string;
-      area?: string;
-      location?: string;
+    educationDetails?: Array<{
+      instituteName?: string;
+      fieldOfStudy?: string;
+      instituteLocation?: string;
       startDate?: string;
       endDate?: string;
-      score?: string;
+      degree?: string;
     }>;
     work?: Array<{
       name?: string;
@@ -38,13 +35,10 @@ interface ResumeProps {
       highlights?: string[];
     }>;
     skills?: Array<{
-      name?: string;
+      skillName?: string;
       keywords?: string[];
     }>;
     projects?: Array<{
-      name: string | null | undefined;
-      description: string;
-      url: string;
       title?: string;
       role?: string;
       technologies?: string[];
@@ -68,7 +62,7 @@ interface ResumeProps {
   };
 }
 
-const Resume: React.FC<ResumeProps> = ({ data }) => {
+const Resume2: React.FC<ResumeProps> = ({ data }) => {
   const [css, $theme] = useStyletron();
 
   const styles = {
@@ -101,12 +95,12 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
     },
   };
 
-  const renderProfile = (basics?: ResumeProps["data"]["basics"]) => {
+  const renderProfile = (basics?: ResumeProps["data"]["personalInfo"]) => {
     if (!basics) {
       return null;
     }
 
-    const { name, position } = basics;
+    const { firstName, lastName, profession: position } = basics;
 
     return (
       <div
@@ -118,14 +112,13 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
       >
         <div
           className={css({
-            fontSize: "30px",
             textAlign: "left",
             position: "relative",
             left: "-6%",
             right: " 7%",
           })}
         >
-          <h2 style={styles.heading}>{name}</h2>
+          <h2 style={styles.heading}>{firstName}{lastName}</h2>
           <p
             className={css({
               fontSize: "20px",
@@ -272,7 +265,7 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
   };
 
   const renderEducation = (
-    education?: ResumeProps["data"]["education"],
+    education?: ResumeProps["data"]["educationDetails"],
     heading?: string
   ) => {
     if (!education) {
@@ -291,13 +284,13 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
         <h2 style={styles.heading}>{heading || "Education"}</h2>
         <ul style={styles.list}>
           {education.map((school) => (
-            <li key={school.institution} style={styles.listItem}>
-              <p>{`${school.studyType || ""} in ${school.area || ""}`}</p>
-              <p>{`${school.institution || ""}, ${school.location || ""}`}</p>
+            <li key={school.instituteName} style={styles.listItem}>
+              <p>{`${school.fieldOfStudy || ""} in ${school.area || ""}`}</p>
+              <p>{`${school.instituteName || ""}, ${school.instituteLocation || ""}`}</p>
               <p>{`${school.startDate || ""} – ${
                 school.endDate || "Present"
               }`}</p>
-              {school.score && <p>{`GPA: ${school.score}`}</p>}
+              {school.degree && <p>{`GPA: ${school.degree}`}</p>}
             </li>
           ))}
         </ul>
@@ -403,31 +396,28 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
             padding: "0",
           })}
         >
-          {skills.map((skill, index) => (
-            <li key={index}>
-              <p>{skill.name || ""}</p>
-              {skill.keywords && (
-                <ul
-                  className={css({
-                    marginBottom: "4px",
-                  })}
-                >
-                  {skill.keywords.map((keyword, subIndex) => (
-                    <li
-                      className={css({
-                        backgroundColor: "grey",
-                        padding: "10px",
-                        textAlign: "center",
-                        listStyle: "none",
-                        borderRadius: "10px",
-                      })}
-                      key={subIndex}
-                    >
-                      {keyword}
-                    </li>
-                  ))}
-                </ul>
-              )}
+         {skills.map((skill, groupIndex) => (
+            <li
+              className={css({
+                ...$theme.typography.LabelMedium,
+                backgroundColor: "grey",
+                padding: "10px",
+                textAlign: "center",
+                listStyle: "none",
+                borderRadius: "10px",
+            
+              })}
+              key={groupIndex}
+            >
+              {skill.skillName?.split(',').map((individualSkill, index) => (
+                <p className={css({
+                  padding: '5px',
+                  borderRadius: '10px',
+                  backgroundColor: 'white',
+                  textAlign:'center',
+                })} key={index}>{individualSkill.trim()}</p>
+              ))}
+
             </li>
           ))}
         </ul>
@@ -461,26 +451,11 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
               key={index}
               style={styles.listItem}
             >
-              <p
-                className={css({
-                  color: "#777",
-                })}
-              >
-                {project.title || ""}
-              </p>
-              <p
-                className={css({
-                  margin: "5px 0 ",
-                })}
-              >
-                {project.responsibilities || ""}
-              </p>
-              <p
-                className={css({
-                  margin: "5px 0 ",
-                })}
-              >
-                {project.results || ""}</p>
+              <h3 style={styles.subheading}>{project.title || ""}</h3>
+              <p>{`Project Role: ${project.role || ""}`}</p>
+              <p>{`Technologies: ${project.technologies?.join(", ") || ""}`}</p>
+              <p>{`Responsibilities: ${project.responsibilities || ""}`}</p>
+              <p>{`Results: ${project.results || ""}`}</p>
             </li>
           ))}
         </ul>
@@ -537,7 +512,7 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
           backgroundColor: "#f4f4f4",
         })}
       >
-        {renderProfile(data.basics)}
+        {renderProfile(data.personalInfo)}
       </div>
 
       <div
@@ -556,7 +531,7 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
           <div>
             {renderContact(data.contact)}
             {renderSkills(data.skills, data.headings?.skills)}
-            {renderEducation(data.education, data.headings?.education)}
+            {renderEducation(data.educationDetails, data.headings?.education)}
             {renderAwards(data.awards, data.headings?.awards)}
           </div>
         </div>
@@ -582,4 +557,4 @@ const Resume: React.FC<ResumeProps> = ({ data }) => {
   );
 };
 
-export default Resume;
+export default Resume2;

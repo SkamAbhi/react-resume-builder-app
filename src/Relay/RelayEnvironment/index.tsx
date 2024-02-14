@@ -9,7 +9,7 @@ const fetchFn = (params: { text: any; }, variables: any) => {
       }),
     });
   }
-  return fetch('https://6990-2405-201-1002-3014-6a4b-7e59-9aff-b1ea.ngrok-free.app/', {
+  return fetch('https://8cde-2405-201-1002-3014-6a4b-7e59-9aff-b1ea.ngrok-free.app/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

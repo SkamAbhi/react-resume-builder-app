@@ -17,6 +17,7 @@ import ProjectList from "../pages/ProjectPage/project-list";
 import ExperienceList from "../pages/WorkExpPage/workExpList";
 import Accomplishments from "../pages/ExtraPages/AccomplishmentPage";
 import Download from "../pages/DownloadPage";
+import EducationList from "../pages/EducationPage/education-list";
 
 function Routing() {
   const [css] = useStyletron();
@@ -36,6 +37,7 @@ function Routing() {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/personal" element={<Personal />} />
             <Route path="/education" element={<Education />} />
+            <Route path="/education-list" element={<EducationList />} />
             <Route path="/project" element={<Project />} />
             <Route path="/project-list" element={<ProjectList />} />
             <Route path="/work-exp-list" element={<ExperienceList />} />
