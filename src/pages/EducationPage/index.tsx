@@ -434,7 +434,7 @@
                   Root: {
                     style: ({ $theme }) => ({
                       backgroundColor: $theme.colors.primaryB,
-                      padding: "0",
+                      padding: $theme.sizing.scale0,
                       border: "1px solid black",
                       borderRadius: "6px",
                       marginTop: "8px",

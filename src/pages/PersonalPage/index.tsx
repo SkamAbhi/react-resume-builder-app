@@ -56,18 +56,19 @@ const Personal = () => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
+    const sanitizedValue = String(value);
+    
     setUserData((prevUserData) => ({
       ...prevUserData,
-      [name]: value,
-    }));
+      [name]: sanitizedValue,
+        }));
 
     localStorage.setItem(
       "userData",
       JSON.stringify({
         ...userData,
-        [name]: value,
-      })
+        [name]: sanitizedValue,
+            })
     );
   };
 
@@ -112,8 +113,8 @@ const Personal = () => {
     console.log("Closing modal");
     setFileUploaderModalOpen(false);
   };
-  const { activeSection, handleNextClick } = useNavigationContext();
-  console.log(activeSection)
+
+  const {  handleNextClick } = useNavigationContext();
   const handleNextButtonClick = async () => {
     try {
       const input = {       
@@ -122,10 +123,18 @@ const Personal = () => {
         firstName: userData.firstName,
         lastName: userData.lastName,
         profession: userData.profession,
-        idResume: "421b0456-439c-4d34-9e96-86fda0a4288f",
+        idResume: "9d9a45ac-578a-4977-b13e-212eb6e50565",
+        phone:userData.phoneNumber,
+        city: userData.city,
+        country: userData.country,
+        zipcode: userData.ZipCode, 
       };
-      const response = await updatePersonalInfo({ variables: { input } });
-
+  
+      const response = await updatePersonalInfo({
+        variables: {
+          input,
+        },
+      });
       // Handle the response from the server
       console.log(`Data updated:`, response);
       navigate("/education");
@@ -141,7 +150,8 @@ const Personal = () => {
     }
 
   };
-
+console.log(userData.ZipCode)
+console.log(userData.phoneNumber)
   return (
     <div
       className={css({
@@ -515,7 +525,7 @@ const Personal = () => {
               placeholder={""}
               onChange={handleInputChange}
               label={"Pincode"}
-              value={userData.pinCode}
+              value={userData.ZipCode}
               name={"Pincode"}
             />
           </div>
@@ -537,7 +547,7 @@ const Personal = () => {
               placeholder={""}
               onChange={handleInputChange}
               label={"Phone"}
-              value={userData.phone}
+              value={userData.phoneNumber}
               name={"phone"}
             />
             <CustomInput

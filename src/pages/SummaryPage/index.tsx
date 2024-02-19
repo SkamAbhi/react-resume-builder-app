@@ -8,13 +8,15 @@ import { Checkmark, Add } from "@carbon/icons-react";
 import jsonData from "../../data /data.json";
 import { addNewSummaryMutation } from "../../mutations/summaryPageMutation"
 import { useMutation } from "react-relay";
+import { useNavigate } from "react-router-dom";
 
 const Summary: React.FC = () => {
   const [css, $theme] = useStyletron();
   const [inputValue, setInputValue] = useState<string>("");
   const [selectedSummary, setSelectedSummary] = useState<string | null>(null);
   const [addSummaryMutation] = useMutation(addNewSummaryMutation);
-  
+  const navigate = useNavigate();
+
   const handleInputChange = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
     setInputValue((e.target as HTMLTextAreaElement).value);
     setSelectedSummary(null);
@@ -48,6 +50,7 @@ const Summary: React.FC = () => {
             },
         },
       });
+     navigate('/finalize')
       console.log("Mutation response:", response);
     } catch (error) {
       console.error("Error in mutation:", error);
@@ -308,7 +311,6 @@ const Summary: React.FC = () => {
         <CustomButton
           name={"Next: Final View"}
           onClick={handleNextClick}
-          // to={"/finalize"}
         />
       </div>
     </div>

@@ -1,8 +1,12 @@
+import { Email } from "@carbon/icons-react";
 import { useStyletron } from "baseui";
 import React from "react";
 
 interface ResumeProps {
   data: {
+    summary?: {
+      summaryDetails?: string;
+    }
     personalInfo?: {
       firstName: string;
       lastName: string;
@@ -62,10 +66,9 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
   const styles = {
     section: {
       padding: "20px",
-      paddingBottom:'10px',
+      paddingBottom: '10px',
       background: "#fff",
-      paddingLeft: "50px",
-      width: "100%",
+      paddingLeft: "25px",
     },
     heading: {
       color: "#333",
@@ -101,44 +104,59 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
     }
 
     const {
-      firstName,
-      lastName,
       email,
       phoneNumber: phone,
       location = {},
       website,
-      summaryDetails: summary,
-      profession: position,
     } = basics;
 
     return (
       <div className={css({})}>
-        <h1
+        <div
           className={css({
-            color: "white",
-            paddingLeft: "20px",
-            ...$theme.typography.HeadingLarge,
-            fontSizeAdjust: '40px',
-            lineHeight: '50px',
-            paddingRight: '100px',
-            marginBottom: '-15px',
+            paddingTop: $theme.sizing.scale800,
+            paddingLeft: $theme.sizing.scale800,
+            display: "flex",
+            flexDirection: "column",
+            gap: "3px",
+            flex: "1.5",
           })}
         >
-          {firstName}{lastName}
-        </h1>
-        <p
+          <div
+            className={css({
+              color: $theme.colors.primaryB,
+              textTransform: "uppercase",
+              letterSpacing: "0.8px",
+              ...$theme.typography.HeadingMedium,
+            })}
+          >
+            {data?.personalInfo?.firstName}
+          </div>
+          <div
+            className={css({
+              ...$theme.typography.HeadingMedium,
+              color: $theme.colors.primaryB,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.8px",
+            })}
+          >
+            {data?.personalInfo?.lastName}
+          </div>
+        </div>
+        <div
           className={css({
             ...$theme.typography.HeadingSmall,
-            padding: "10px",
-            color: "white",
-            paddingLeft: "20px",
+            color: $theme.colors.primaryB,
+            paddingLeft: $theme.sizing.scale800,
+            paddingTop: $theme.sizing.scale400
 
           })}
         >
-          {position}
-        </p>
+          {data?.personalInfo?.profession}
+        </div>
 
-        <h3
+        <div
           className={css({
             ...$theme.typography.HeadingMedium,
             borderBottom: "1px solid white",
@@ -150,7 +168,7 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
           })}
         >
           Contact
-        </h3>
+        </div>
         {email && (
           <p
             className={css({
@@ -161,7 +179,9 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
 
             })}
           >
-            Email: {email}
+            <span>
+              <Email size={16} />
+            </span> {email}
           </p>
         )}
         {phone && (
@@ -183,7 +203,7 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
 
             })}
           >
-            Location: {location.address}
+            Location:{location.address}
           </p>
         )}
         {website && (
@@ -199,32 +219,43 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
             </a>
           </p>
         )}
-        {summary && (
-          <div
-            className={css({
-              color: "white",
-              paddingLeft: "20px",
-            })}
-          >
-            <h1
-              className={css({
-                ...$theme.typography.HeadingMedium,
-                borderBottom: "1px solid white",
-                padding: "10px",
-                marginRight: "10px",
-              })}
-            >
-              Summary
-            </h1>
-            <p
-              className={css({
-                padding: "10px",
-              })}
-            >
-              {summary}
-            </p>
-          </div>
-        )}
+      </div>
+    );
+  };
+  const Summary = ({ summary }: { summary: string | undefined }) => {
+    const [css, $theme] = useStyletron();
+    if (!summary) {
+      return null;
+    }
+    return (
+      <div
+        className={css({
+          paddingTop: $theme.sizing.scale800,
+          paddingBottom: $theme.sizing.scale800,
+        })}
+      >
+        <div
+          className={css({
+            ...$theme.typography.HeadingSmall,
+            textTransform: "uppercase",
+            paddignTop: $theme.sizing.scale300,
+            paddingBottom: $theme.sizing.scale300,
+            paddingLeft: $theme.sizing.scale800,
+            color: $theme.colors.primaryB,
+          })}
+        >
+          Summary
+        </div>
+        <div
+          className={css({
+            ...$theme.typography.LabelSmall,
+            color: $theme.colors.primaryB,
+            padding: $theme.sizing.scale800,
+            paddingTop: $theme.sizing.scale0
+          })}
+        >
+          {summary}
+        </div>
       </div>
     );
   };
@@ -242,7 +273,7 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
         <h2 style={styles.heading}>{heading || "Education"}</h2>
         <ul style={styles.list}>
           {education.map((school) => (
-            <li key={education.instituteName} style={styles.listItem}>
+            <li style={styles.listItem}>
               <p style={styles.subheading}>{`${school.fieldOfStudy || ""} in ${school.instituteLocation || ""
                 }`}</p>
               {school.degree && (
@@ -324,7 +355,7 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
                 flexWrap: "wrap",
                 columnGap: "15px",
                 rowGap: '20px',
-                padding:'10px'
+                padding: '10px'
               })}
               key={groupIndex}
             >
@@ -333,7 +364,7 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
                   padding: '5px',
                   borderRadius: '10px',
                   backgroundColor: 'white',
-                  textAlign:'center',
+                  textAlign: 'center',
                 })} key={index}>{individualSkill.trim()}</p>
               ))}
 
@@ -412,6 +443,7 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
         })}
       >
         {renderProfile(data.personalInfo)}
+        <Summary summary={data.summary?.summaryDetails} />
       </div>
       <div>
         {renderWork(data.work, data.headings?.work)}

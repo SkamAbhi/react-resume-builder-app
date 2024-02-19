@@ -17,12 +17,16 @@
 # }
 # schema.graphql
 type Mutation {
-  addNewPersonalInfo(input: AddNewPersonalInfoInput!): AddNewPersonalInfoPayload
+  addNewPersonalInfoAndAddress(
+    input:  AddNewPersonalInfoAndAddressInput!
+  ): AddNewPersonalInfoAndAddressPayload!
   addNewEducation(input: AddNewEducationInput!): AddEducationPayload
   addNewResume(input: AddNewResumeInput!): AddNewResumePayload
   addNewProject(input: AddNewProjectInput!): AddNewProjectPayload
   addNewSkill(input: AddNewSkillInput!): AddNewSkillPayload!
   addNewSummary(input: AddNewSummaryInput): AddSummaryPayload
+  addNewWorkExperienceAndCompanyAndCompanyAddress(input: AddNewWorkExperienceAndCompanyAndCompanyAddressInput!): AddNewWorkExperienceAndCompanyAndCompanyAddressPayload!
+
 }
 input AddNewSkillInput {
   idResume: ID!
@@ -48,27 +52,23 @@ type AddNewProjectPayload {
   id: ID!
 }
 
-input AddNewPersonalInfoInput {
-  id: ID
-  firstName: String
-  lastName: String
-  profession: String
-  phone: String
-  email: String
+input  AddNewPersonalInfoAndAddressInput {
+  firstName: String!
+  lastName: String!
+  idResume: ID!
+  email: String!
+  profession: String!
+  phoneNumber: String!
+  city: String!
+  country: String!
+  zipcode: String!
 }
 
-type AddNewPersonalInfoPayload {
-  success: Boolean
-  id: ID!
+type AddNewPersonalInfoAndAddressPayload {
+  success: Boolean!
+  personalInfoId: ID
+  personalAddressId: ID
 }
-type Address {
-  street: String
-  city: String
-  state: String
-  country: String
-  zipcode: String
-}
-
 type User {
   id: ID!
   name: String
@@ -158,9 +158,8 @@ type PersonalInfo {
   birthdate: String
   email: String
   profession: String
-  phoneNumber:String
-  photo:String
-  personalAddress: Address
+  phoneNumber: String
+  photo: String
   resume: Resume
 }
 type ResumePreview {
@@ -174,4 +173,22 @@ type ResumePreview {
 type Resume {
   personalInfo: PersonalInfo
   educationDetails: [EducationDetails]
+}
+
+input AddNewWorkExperienceAndCompanyAndCompanyAddressInput {
+  jobTitle: String!
+  companyName: String!
+  city: String!
+  country: String!
+  idResume: ID!
+  startDate: String!
+  endDate: String!
+  description: String!
+}
+
+type AddNewWorkExperienceAndCompanyAndCompanyAddressPayload {
+  success: Boolean!
+  companyId: ID
+  companyAddressId: ID
+  workExperienceId: ID
 }

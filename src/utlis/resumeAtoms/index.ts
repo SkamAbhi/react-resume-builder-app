@@ -1,13 +1,13 @@
 import { atom } from "recoil";
 
 interface UserData {
+  phoneNumber: string;
   firstName: string;
   lastName: string;
   profession: string;
   city: string;
   country: string;
-  pinCode: string;
-  phone: string;
+  ZipCode: string;
   email: string;
   photo: string;
 }
@@ -20,8 +20,8 @@ export const userDataState = atom<UserData>({
     profession: "",
     city: "",
     country: "",
-    pinCode: "",
-    phone: "",
+    ZipCode: "",
+    phoneNumber: "",
     email: "",
     photo: "",
   },
@@ -45,6 +45,29 @@ export const educationData = atom<educationData>({
     degree: "",
     fieldOfStudy: "",
     startDate: "",
+    endDate: "",
+    description: "",
+  },
+});
+
+interface workExperienceData {
+  jobTitle: string;
+  CompanyName: string;
+  city: string;
+  Country: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+}
+
+export const workExperienceData = atom<workExperienceData>({
+  key: "workExpData",
+  default: {
+    jobTitle: "",
+    CompanyName: "",
+    city: "",
+    Country: "",
+    startDate: "",  
     endDate: "",
     description: "",
   },
@@ -92,3 +115,18 @@ export const userIdState = atom({
   key: "userIdState",
   default: null,
 });
+
+export const companyNameState = atom({
+  key: 'companyNameState',
+  default: '',
+});
+
+export const cityState = atom({
+  key: 'cityState',
+  default: '',
+});
+
+export const countryState = atom({
+  key: 'countryState',
+  default: '',
+})

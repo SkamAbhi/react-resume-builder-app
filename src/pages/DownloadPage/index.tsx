@@ -11,7 +11,7 @@ import CustomButton from '../../components/CustomButton';
 
 function Download() {
   const [css, $theme] = useStyletron();
-  const resumeId = "421b0456-439c-4d34-9e96-86fda0a4288f";
+  const resumeId = "300b3adb-5107-4185-b2c0-6018faed1f41";
   const data = useLazyLoadQuery<DownloadPageQuery>(
     graphql`
   query DownloadPageQuery($resumeId: ID!) {

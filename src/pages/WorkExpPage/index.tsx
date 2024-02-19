@@ -1,5 +1,4 @@
 "use client";
-
 import { ChangeEvent, useState } from "react";
 import { useStyletron } from "baseui";
 import { Datepicker } from "baseui/datepicker";
@@ -10,54 +9,144 @@ import CustomButton from "../../components/CustomButton";
 import CustomInput from "../../components/CustomInput";
 import { Add, Idea, Subtract } from "@carbon/icons-react";
 import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Input } from "baseui/input";
+import DropdownInput from "../../components/DropDownInput";
+import { useRecoilState } from "recoil";
+import { companyNameState, cityState, countryState, workExperienceData } from "../../utlis/resumeAtoms";
+import { useMutation } from "react-relay";
+import { addNewWorkExperienceAndCompanyAndCompanyAddress } from "../../mutations/workExpPageMutation";
 
-function Education() {
+function WorkExp() {
+
+  const [updateWorkExpInfo] = useMutation(addNewWorkExperienceAndCompanyAndCompanyAddress);
   const [css, $theme] = useStyletron();
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [summaryValue, setSummaryValue] = useState("");
+  const [workExpData , setWorkExpData] = useRecoilState(workExperienceData)
+
+  const GRAPHQL_ENDPOINT = 'https://bb7f-2405-201-1002-3014-6a4b-7e59-9aff-b1ea.ngrok-free.app/?';
+
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
     setShowInput(!showInput);
   };
 
-  const handleHiddenInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
+  // const handleHiddenInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setInputValue(e.target.value);
+  // };
+  const handleNextButtonClick = async () => {
+    try {
+      const input = {
+        jobTitle: workExpData.jobTitle,
+        companyName: workExpData.CompanyName,
+        city: cityState,
+        country:countryState,
+        startDate: workExpData.startDate,
+        endDate: workExpData.endDate,
+        idResume: "421b0456-439c-4d34-9e96-86fda0a4288f",
+      };
+      const response = await updateWorkExpInfo({ variables: { input } });
 
-  const handleNextButtonClick = () => {
-    // Check if input data is provided
-    if (inputValue.trim() !== "") {
-      // Navigate to a different link when input data is provided
-      navigate("/work-exp-list");
+      if (workExpData.jobTitle.trim() !== "") {
+        // Navigate to a different link when input data is provided
+        navigate("/work-exp-list");
+      } else {
+        // Navigate to the given link when no input data is provided
+        navigate("/project");
+      }
+      // Handle the response from the server
+      console.log(`Educational data updated:`, response);
 
-    } else {
-      // Navigate to the given link when no input data is provided
-      navigate("/project");
-
+    } catch (error) {
+      console.error('Error updating educational info:', error);
     }
   };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setWorkExpData((prevUserData) => ({
+      ...prevUserData,
+      [name]: value,
+    }));
+
     localStorage.setItem(
       "userData",
       JSON.stringify({
+        ...workExpData,
         [name]: value,
       })
     );
   };
 
-  const handleTextareaChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setSummaryValue(event.target.value);}
+  const handleTextareaChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setSummaryValue(event.target.value);
+  };
+
+  const [companyName, setCompanyName] = useRecoilState(companyNameState);
+  const [city, setCity] = useRecoilState(cityState);
+  const [country, setCountry] = useRecoilState(countryState);
+  const [companies, setCompanies] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [showCompanyOptions, setShowCompanyOptions] = useState(false);
+
+  const handleInputFocus = async () => {
+    try {
+      const response = await fetch(GRAPHQL_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+            query {
+              getAllCompanies {
+                edges {
+                  node {
+                    companyName
+                    companyAddresses {
+                      city
+                      country
+                    }
+                  }
+                }
+              }
+            }
+          `
+        }),
+      });
+
+      const responseData = await response.json();
+      const fetchedCompanies = responseData.data.getAllCompanies.edges.map(edge => edge.node);
+      setCompanies(fetchedCompanies);
+      setShowCompanyOptions(true);
+    } catch (error) {
+      console.error('Error fetching companies:', error);
+    }
+  };
+  const handleCompanySelect = (selectedCompany) => {
+    if (selectedCompany && selectedCompany.companyName) {
+      setCompanyName(selectedCompany.companyName);
+      // Set the cities associated with the selected company
+      setCities(selectedCompany.companyAddresses.map((address: { city: string; }) => address.city));
+      setCountries(selectedCompany.companyAddresses.map((address: { country: string; }) => address.country));
+      setShowCompanyOptions(false);
+    } else {
+      console.error('Invalid selected company:', selectedCompany);
+    }
+  };
 
   return (
     <div
       className={css({
-         marginTop:'50px',
+        marginTop: "50px",
         [$theme.mediaQuery.medium]: {
           marginRight: "2rem",
-          marginTop:'50px',
+          marginTop: "50px",
           paddingLeft: "25px",
           paddingBottom: "30px",
           display: "flex",
@@ -68,8 +157,7 @@ function Education() {
           display: "flex",
           flexDirection: "column",
           marginLeft: "17rem",
-          marginTop:'30px',
-
+          marginTop: "30px",
         },
       })}
     >
@@ -102,8 +190,7 @@ function Education() {
               },
             })}
           >
-            {" "}
-            Tell us about your most recent job{" "}
+            Tell us about your most recent job
           </h1>
           <p
             className={css({
@@ -122,8 +209,8 @@ function Education() {
               className={css({
                 backgroundColor: $theme.colors.primaryB,
                 padding: "0px 25px",
-                [$theme.mediaQuery.medium]:{
-                  padding:"0px 40px"
+                [$theme.mediaQuery.medium]: {
+                  padding: "0px 40px",
                 },
                 ...$theme.typography.LabelMedium,
               })}
@@ -185,8 +272,8 @@ function Education() {
                 style: ({ $theme }) => ({
                   backgroundColor: "white",
                   color: "#0C1986",
-                  position:"initial",
-                  marginTop:'15px',
+                  position: "initial",
+                  marginTop: "15px",
                   maxHeight: "50px",
                   ":hover": {
                     backgroundColor: $theme.colors.white,
@@ -212,7 +299,6 @@ function Education() {
         <div
           className={css({
             display: "flex",
-            Maxwidth: "1000px",
             flexDirection: "column",
             [$theme.mediaQuery.medium]: {
               flexDirection: "row",
@@ -223,44 +309,166 @@ function Education() {
           <CustomInput
             placeholder={"eg- developer"}
             label={"Job Title"}
-            value={""}
-            name={""}
-            onChange={handleHiddenInputChange}
+            value={workExpData.jobTitle}
+            name={"jobTitle"}
+            onChange={handleInputChange}
           />
-          <CustomInput
-            placeholder={"eg -company"}
-            onChange={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-            label={"Employer"}
-            value={""}
-            name={""}
-          />
+          <div className={css({
+            width: '100%',
+            position: 'relative',
+            marginBottom: $theme.sizing.scale400,
+          })}>
+            <div
+              className={css({
+                ...$theme.typography.LabelSmall,
+                marginTop: $theme.sizing.scale200,
+                marginBottom: $theme.sizing.scale500
+              })}>
+              Company Name
+            </div>
+            <Input
+              placeholder="Company Name"
+              value={companyName}
+              onFocus={handleInputFocus}
+              onChange={(e) => setCompanyName(e.target.value)}
+              overrides={{
+                Root: {
+                  style: ({ $theme }) => ({
+                    width: "100%",
+                    border
+                      : "1.5px solid #838fa0",
+                    ":focus-within": {
+                      border: "2px solid #0070d6",
+                    },
+                    backgroundColor: $theme.colors.primaryB,
+                    borderRadius: '6px',
+
+                  }),
+                },
+                Input: {
+                  style: ({ $theme }) => ({
+                    backgroundColor: $theme.colors.primaryB,
+                    width: '100%',
+                    borderWidth: '0',
+                    padding: '8px ',
+                    color: '#1a202c',
+                    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                    borderColor: 'transparent',
+                    outline: 'none',
+                    ring: '1px solid #cbd5e0',
+                    placeholder: { color: '#a0aec0' },
+                    focusRing: '2px solid #3b82f6',
+                    fontSize: '1rem',
+                    lineHeight: '1.25rem',
+                  }),
+                },
+              }}
+            />
+            {showCompanyOptions && (
+              <ul
+                className={css({
+                  marginTop: $theme.sizing.scale200,
+                  listStyle: "none",
+                  padding: "0",
+                  border: "1px solid #ccc",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  backgroundColor: "white",
+                  position: "absolute",
+                  left: 0,
+                  zIndex: 1,
+                  width: "calc(100% - 4px)",
+                  overflowY: "auto",
+                  maxHeight: "300px",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                  borderBottomLeftRadius: "10px",
+                  borderBottomRightRadius: "10px",
+                  maxWidth: "519px",
+                  [$theme.mediaQuery.medium]: {
+                    maxWidth: "519px",
+                    width: "100%",
+                  },
+                  [$theme.mediaQuery.large]: {
+                    maxWidth: "399px",
+                  },
+                })}
+              >
+                <>
+                  {companies.map((company, index) => (
+                    <li
+                      className={css({
+                        cursor: "pointer",
+                        padding: "10px",
+                        paddingLeft: "20px",
+                        ...$theme.typography.LabelMedium,
+                        ":hover": {
+                          backgroundColor: "#E7E7E7",
+                          fontWeight: "bolder",
+                        },
+                      })}
+                      key={index}
+                      onClick={() => handleCompanySelect(company)}        >
+                      {company.companyName}
+                    </li>
+                  ))}
+
+                </>
+              </ul>
+            )}
+          </div>
         </div>
         <div
           className={css({
             display: "flex",
             flexDirection: "column",
-            Maxwidth: "1100px",
+            Maxwidth: "1000px",
+            [$theme.mediaQuery.medium]: {
+              flexDirection: "row",
+              gap: "30px",
+            },
+            marginBottom: $theme.sizing.scale500,
+
           })}
         >
           <div
             className={css({
-              width: "100%",
               [$theme.mediaQuery.medium]: {
-                width: "48.5%",
+                width: "100%",
+                marginBottom: $theme.sizing.scale500,
               },
             })}
           >
-            <CustomInput
-              placeholder={"city state etc "}
-              onChange={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-              label={"Location"}
-              value={""}
-              name={""}
-            />
+            <label
+              className={css({
+                ...$theme.typography.LabelSmall,
+                [$theme.mediaQuery.medium]: {
+                  ...$theme.typography.LabelMedium,
+                },
+              })}
+            >
+              Location
+            </label>
+
+            <div
+              className={css({
+                display: 'flex',
+                gap: '30px',
+                marginTop: '13px'
+              })}>
+
+              <DropdownInput
+                placeholder="City"
+                value={city}
+                onChange={setCity}
+                options={cities}
+              />
+              <DropdownInput
+                placeholder="Country"
+                value={country}
+                onChange={setCountry}
+                options={countries}
+              />
+            </div>
           </div>
         </div>
 
@@ -456,12 +664,9 @@ function Education() {
           onClick={console.log}
           isSpecial
         />
-        <CustomButton
-          name={"Next"}
-          onClick={handleNextButtonClick}
-        />
+        <CustomButton name={"Next"} onClick={handleNextButtonClick} />
       </div>
     </div>
   );
 }
-export default Education;
+export default WorkExp;

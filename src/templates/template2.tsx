@@ -1,5 +1,4 @@
 import { useStyletron } from "baseui";
-import React from "react";
 
 interface ResumeProps {
   data: {
@@ -62,13 +61,12 @@ interface ResumeProps {
   };
 }
 
-const Resume2: React.FC<ResumeProps> = ({ data }) => {
+export default function Resume2({ data }: ResumeProps) {
   const [css, $theme] = useStyletron();
 
   const styles = {
     container: {
       fontFamily: "Arial, sans-serif",
-      maxWidth: "1000px",
       margin: "auto",
       padding: "20px",
       background: "#fff",
@@ -160,7 +158,6 @@ const Resume2: React.FC<ResumeProps> = ({ data }) => {
           marginBottom: "20px",
           maxWidth: "400px",
           paddingLeft: "20px",
-          borderBottom: "1px solid black",
           height: "120px",
         })}
       >
@@ -181,7 +178,6 @@ const Resume2: React.FC<ResumeProps> = ({ data }) => {
       <div
         className={css({
           minWidth: "250px",
-          borderBottom: "1px solid black",
           height: "130px",
         })}
       >
@@ -277,7 +273,6 @@ const Resume2: React.FC<ResumeProps> = ({ data }) => {
         className={css({
           marginBottom: "20px",
           minWidth: "150px",
-          borderBottom: "1px solid black",
         })}
         style={styles.section}
       >
@@ -306,7 +301,6 @@ const Resume2: React.FC<ResumeProps> = ({ data }) => {
       <div
         style={styles.section}
         className={css({
-          borderBottom: "1px solid black",
           paddingLeft: "20px",
         })}
       >
@@ -372,7 +366,6 @@ const Resume2: React.FC<ResumeProps> = ({ data }) => {
       <div
         className={css({
           marginBottom: "20px",
-          borderBottom: "1px solid black",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -436,7 +429,6 @@ const Resume2: React.FC<ResumeProps> = ({ data }) => {
       <div
         style={styles.section}
         className={css({
-          borderBottom: "1px solid black",
           paddingLeft: "20px",
         })}
       >
@@ -475,7 +467,6 @@ const Resume2: React.FC<ResumeProps> = ({ data }) => {
       <div
         style={styles.section}
         className={css({
-          borderBottom: "1px solid black",
         })}
       >
         <h2 style={styles.heading}>{heading || "Awards"}</h2>
@@ -555,6 +546,4 @@ const Resume2: React.FC<ResumeProps> = ({ data }) => {
       </div>
     </div>
   );
-};
-
-export default Resume2;
+}

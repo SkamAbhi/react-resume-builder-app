@@ -9,6 +9,9 @@ import {
 
 interface ResumeProps {
   data: {
+    summary?: {
+      summaryDetails?: string;
+    }
     personalInfo?: {
       firstName?: string;
       lastName?: string;
@@ -20,7 +23,7 @@ interface ResumeProps {
       website?: string;
       summary?: string;
       profession?: string;
-      photo?:string;
+      photo?: string;
     };
     educationDetails?: Array<{
       instituteName?: string;
@@ -149,6 +152,8 @@ export default function Resume3({ data }: ResumeProps) {
           >
             <Education education={data.educationDetails} heading={data.headings} />
             <WorkExperience experience={data.work} heading={data.headings} />
+            {Projects(data.projects, data.headings?.projects)}
+
           </div>
         </div>
         <div
@@ -273,7 +278,7 @@ export default function Resume3({ data }: ResumeProps) {
           >
             <Skills skills={data.skills} heading={data.headings} />
             <Awards award={data.awards} heading={data.headings} />
-            <Summary summary={data.personalInfo?.summary} />
+            <Summary summary={data.summary?.summaryDetails} />
           </div>
         </div>
       </div>
@@ -582,8 +587,44 @@ const Summary = ({ summary }: { summary: string | undefined }) => {
           color: $theme.colors.backgroundOverlayDark,
         })}
       >
-        {summaryDetails}
+        {summary}
       </div>
+    </div>
+  );
+};
+const Projects = (
+  projects?: ResumeProps["data"]["projects"],
+  heading?: string
+) => {
+  const [css, $theme] = useStyletron();
+  if (!projects) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h2 className={css({
+        color: "#333",
+        fontSize: "24px",
+        marginBottom: "15px",
+        paddingBottom: "15px",
+        borderBottom: "1px solid blue",
+      })}>{heading || "Projects"}</h2>
+      <ul className={css({
+            listStyleType: "none",
+            margin: "0",
+            padding: "0",
+      })}>
+        {projects.map((project) => (
+          <li key={project.title}>
+            <h3 >{project.title || ""}</h3>
+            <p>{`Project Role: ${project.role || ""}`}</p>
+            <p>{`Technologies: ${project.technologies?.join(", ") || ""}`}</p>
+            <p>{`Responsibilities: ${project.responsibilities || ""}`}</p>
+            <p>{`Results: ${project.results || ""}`}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

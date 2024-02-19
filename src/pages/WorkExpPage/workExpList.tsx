@@ -269,7 +269,7 @@ function ExperienceList() {
         >
           <CustomButton
             name={"Back"}
-            to={"/education"}
+            to={"/work-exp"}
             onClick={console.log}
             isSpecial
           />

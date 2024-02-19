@@ -242,3 +242,101 @@ function Languages({ nextLink }: LanguagesProps) {
 }
 
 export default Languages;
+// import { useState } from 'react';
+// import { useRecoilState } from 'recoil';
+// import { companyNameState, cityState, countryState } from '../../../utlis/resumeAtoms/index'; // Define Recoil atoms for form input values
+// import { useStyletron } from 'baseui';
+// import { Input } from 'baseui/input';
+// import DropdownInput from '../../../components/DropDownInput';
+// // import DropdownInput from '../../../components/DropDownInput';
+
+
+// const Languages = () => {
+//   const [companyName, setCompanyName] = useRecoilState(companyNameState);
+//   const [city, setCity] = useRecoilState(cityState);
+//   const [country, setCountry] = useRecoilState(countryState);
+//   const [companies, setCompanies] = useState([]);
+//   const [cities, setCities] = useState([]);
+//   const [countries, setCountries] = useState([]);
+//   const [showCompanyOptions, setShowCompanyOptions] = useState(false);
+
+//   const handleInputFocus = async () => {
+//     try {
+//       const response = await fetch(GRAPHQL_ENDPOINT, {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           query: `
+//             query {
+//               getAllCompanies {
+//                 edges {
+//                   node {
+//                     companyName
+//                     companyAddresses {
+//                       city
+//                       country
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           `
+//         }),
+//       });
+
+//       const responseData = await response.json();
+//       const fetchedCompanies = responseData.data.getAllCompanies.edges.map(edge => edge.node);
+//       setCompanies(fetchedCompanies);
+//       setShowCompanyOptions(true);
+//     } catch (error) {
+//       console.error('Error fetching companies:', error);
+//     }
+//   };
+//   const [css, $theme] = useStyletron();
+//   //  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+//   //   const { name, value } = e.target;
+//   //   localStorage.setItem(
+//   //     "userData",
+//   //     JSON.stringify({
+//   //       [name]: value,
+//   //     })
+//   //   );
+//   // };
+//   const handleCompanySelect = (selectedCompany) => {
+//     if (selectedCompany && selectedCompany.companyName) {
+//       setCompanyName(selectedCompany.companyName);
+//       // Set the cities associated with the selected company
+//       setCities(selectedCompany.companyAddresses.map((address: { city: string; }) => address.city));
+//       setCountries(selectedCompany.companyAddresses.map((address: { country: string; }) => address.country));
+//       setShowCompanyOptions(false);
+//     } else {
+//       console.error('Invalid selected company:', selectedCompany);
+//     }
+//   };
+
+
+//   return (
+//     <div className={css({
+//       marginLeft: '300px',
+//       display: 'flex',
+//       maxWidth: '500px',
+//       flexDirection: 'column',
+//       gap: '30px'
+//     })}>
+//       <h2>Create New Company</h2>
+//       {/* <input
+//         type="text"
+//         placeholder="Company Name"
+//         value={companyName}
+//         onFocus={handleInputFocus} 
+//       /> */}
+     
+
+     
+//     </div>
+//   );
+// };
+
+// export default Languages;
