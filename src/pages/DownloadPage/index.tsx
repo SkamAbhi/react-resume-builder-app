@@ -3,15 +3,15 @@ import { useStyletron } from 'baseui';
 import { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from "react-relay";
 import { DownloadPageQuery } from '../../__generated__/DownloadPageQuery.graphql'
-import Resume2 from '../../templates/template2';
+ import Resume2 from '../../templates/template2';
 import Resume1 from '../../templates/template1';
-import Resume3 from '../../templates/template3';
+ import Resume3 from '../../templates/template3';
 import CustomButton from '../../components/CustomButton';
 
 
 function Download() {
   const [css, $theme] = useStyletron();
-  const resumeId = "300b3adb-5107-4185-b2c0-6018faed1f41";
+  const resumeId = "dd2c5381-f24b-43fc-b570-5c4202cfe9dc";
   const data = useLazyLoadQuery<DownloadPageQuery>(
     graphql`
   query DownloadPageQuery($resumeId: ID!) {
@@ -24,6 +24,19 @@ function Download() {
         photo
         email
       }
+      workExperience{
+      jobTitle
+      company{
+        companyName
+      }
+      companyAddress{
+        city
+        country
+      }
+      startDate
+      endDate
+      description
+    }
       educationDetails {
         instituteName
         instituteLocation
@@ -50,13 +63,16 @@ function Download() {
     { resumeId },
   );
   const [resumeData, setResumeData] = useState<DownloadPageQuery['getResume'] | null>(null);
-  const resumes = [<Resume1 data={data.getResume} />, <Resume2 data={data.getResume} />, <Resume3  data={data.getResume}/>];
+  
+  const resumes = [<Resume1 data={resumeData} />,
+   <Resume2 data={resumeData} />, <Resume3  data={resumeData}/>
+  ];
   const [currentResumeIndex, setCurrentResumeIndex] = useState(0);
   useEffect(() => {
     if (data !== null && data !== undefined) { // Ensure data is not null or undefined
       setResumeData(data.getResume);
     }
-  }, [data]);
+  }, []);
 
   if (data === null || data === undefined) { // Handle null or undefined data
     return <div>Loading...</div>;
@@ -138,9 +154,9 @@ function Download() {
               <div style={{ display: 'flex', gap: '10%' }}>
                 {resumes.map((_resume, index) => (
                   <div key={index} style={{ display: index === currentResumeIndex ? 'block' : 'none' }}>
-                    {index === 0 && <Resume1 data={data.getResume} />}
-                    {index === 1 && <Resume2 data={data.getResume} />}
-                    {index === 2 && <Resume3 data={data.getResume} />}
+                    {index === 0 && <Resume1 data={resumeData} />}
+                    {index === 1 && <Resume2 data={resumeData} />}
+                    {index === 2 && <Resume3 data={resumeData} />}
                   </div>
                 ))}
               </div>

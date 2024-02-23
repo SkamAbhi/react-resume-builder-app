@@ -1,7 +1,7 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 
 const fetchFn = (params: { text: any; }, variables: any) => {
-  return fetch('https://bb7f-2405-201-1002-3014-6a4b-7e59-9aff-b1ea.ngrok-free.app/', {
+  return fetch('http://localhost:3001/graphql?', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

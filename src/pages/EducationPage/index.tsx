@@ -125,7 +125,7 @@
           degree: eduData.degree,
           startDate: eduData.startDate,
           endDate: eduData.endDate,
-          idResume: "421b0456-439c-4d34-9e96-86fda0a4288f",
+          idResume: "dd2c5381-f24b-43fc-b570-5c4202cfe9dc",
         };
         const response = await updateEducationalInfo({ variables: { input } });
 

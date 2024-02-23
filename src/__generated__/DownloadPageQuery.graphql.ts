@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<45a01017ed518a19c5440f3b61c8b2c2>>
+ * @generated SignedSource<<722b8803460493b28aa899089920961c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -42,6 +42,19 @@ export type DownloadPageQuery$data = {
     readonly summary: {
       readonly summaryDetails: string;
     } | null | undefined;
+    readonly workExperience: ReadonlyArray<{
+      readonly company: {
+        readonly companyName: string;
+      };
+      readonly companyAddress: {
+        readonly city: string;
+        readonly country: string;
+      };
+      readonly description: string;
+      readonly endDate: string;
+      readonly jobTitle: string;
+      readonly startDate: string;
+    } | null | undefined> | null | undefined;
   } | null | undefined;
 };
 export type DownloadPageQuery = {
@@ -110,52 +123,123 @@ v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "instituteName",
+  "name": "startDate",
   "storageKey": null
 },
 v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "instituteLocation",
+  "name": "endDate",
   "storageKey": null
 },
 v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "degree",
+  "name": "description",
   "storageKey": null
 },
 v11 = {
   "alias": null,
   "args": null,
-  "kind": "ScalarField",
-  "name": "fieldOfStudy",
+  "concreteType": "WorkExperience",
+  "kind": "LinkedField",
+  "name": "workExperience",
+  "plural": true,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "jobTitle",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Company",
+      "kind": "LinkedField",
+      "name": "company",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "companyName",
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Address",
+      "kind": "LinkedField",
+      "name": "companyAddress",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "city",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "country",
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    },
+    (v8/*: any*/),
+    (v9/*: any*/),
+    (v10/*: any*/)
+  ],
   "storageKey": null
 },
 v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "startDate",
+  "name": "instituteName",
   "storageKey": null
 },
 v13 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "endDate",
+  "name": "instituteLocation",
   "storageKey": null
 },
 v14 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "summaryDetails",
+  "name": "degree",
   "storageKey": null
 },
 v15 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "fieldOfStudy",
+  "storageKey": null
+},
+v16 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "summaryDetails",
+  "storageKey": null
+},
+v17 = {
   "alias": null,
   "args": null,
   "concreteType": "Skill",
@@ -173,7 +257,7 @@ v15 = {
   ],
   "storageKey": null
 },
-v16 = {
+v18 = {
   "alias": null,
   "args": null,
   "concreteType": "Project",
@@ -202,17 +286,11 @@ v16 = {
       "name": "technologies",
       "storageKey": null
     },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "description",
-      "storageKey": null
-    }
+    (v10/*: any*/)
   ],
   "storageKey": null
 },
-v17 = {
+v19 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -251,6 +329,7 @@ return {
             ],
             "storageKey": null
           },
+          (v11/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -259,12 +338,12 @@ return {
             "name": "educationDetails",
             "plural": true,
             "selections": [
-              (v8/*: any*/),
-              (v9/*: any*/),
-              (v10/*: any*/),
-              (v11/*: any*/),
               (v12/*: any*/),
-              (v13/*: any*/)
+              (v13/*: any*/),
+              (v14/*: any*/),
+              (v15/*: any*/),
+              (v8/*: any*/),
+              (v9/*: any*/)
             ],
             "storageKey": null
           },
@@ -276,12 +355,12 @@ return {
             "name": "summary",
             "plural": false,
             "selections": [
-              (v14/*: any*/)
+              (v16/*: any*/)
             ],
             "storageKey": null
           },
-          (v15/*: any*/),
-          (v16/*: any*/)
+          (v17/*: any*/),
+          (v18/*: any*/)
         ],
         "storageKey": null
       }
@@ -317,10 +396,11 @@ return {
               (v5/*: any*/),
               (v6/*: any*/),
               (v7/*: any*/),
-              (v17/*: any*/)
+              (v19/*: any*/)
             ],
             "storageKey": null
           },
+          (v11/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -329,13 +409,13 @@ return {
             "name": "educationDetails",
             "plural": true,
             "selections": [
-              (v8/*: any*/),
-              (v9/*: any*/),
-              (v10/*: any*/),
-              (v11/*: any*/),
               (v12/*: any*/),
               (v13/*: any*/),
-              (v17/*: any*/)
+              (v14/*: any*/),
+              (v15/*: any*/),
+              (v8/*: any*/),
+              (v9/*: any*/),
+              (v19/*: any*/)
             ],
             "storageKey": null
           },
@@ -347,29 +427,29 @@ return {
             "name": "summary",
             "plural": false,
             "selections": [
-              (v14/*: any*/),
-              (v17/*: any*/)
+              (v16/*: any*/),
+              (v19/*: any*/)
             ],
             "storageKey": null
           },
-          (v15/*: any*/),
-          (v16/*: any*/)
+          (v17/*: any*/),
+          (v18/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "6975cd8158afd1628babe859ec25ab1c",
+    "cacheID": "e9664a81371286e23be57b4943728de5",
     "id": null,
     "metadata": {},
     "name": "DownloadPageQuery",
     "operationKind": "query",
-    "text": "query DownloadPageQuery(\n  $resumeId: ID!\n) {\n  getResume(id: $resumeId) {\n    personalInfo {\n      firstName\n      lastName\n      profession\n      phoneNumber\n      photo\n      email\n      id\n    }\n    educationDetails {\n      instituteName\n      instituteLocation\n      degree\n      fieldOfStudy\n      startDate\n      endDate\n      id\n    }\n    summary {\n      summaryDetails\n      id\n    }\n    skills {\n      skillName\n    }\n    projects {\n      projectName\n      role\n      technologies\n      description\n    }\n  }\n}\n"
+    "text": "query DownloadPageQuery(\n  $resumeId: ID!\n) {\n  getResume(id: $resumeId) {\n    personalInfo {\n      firstName\n      lastName\n      profession\n      phoneNumber\n      photo\n      email\n      id\n    }\n    workExperience {\n      jobTitle\n      company {\n        companyName\n      }\n      companyAddress {\n        city\n        country\n      }\n      startDate\n      endDate\n      description\n    }\n    educationDetails {\n      instituteName\n      instituteLocation\n      degree\n      fieldOfStudy\n      startDate\n      endDate\n      id\n    }\n    summary {\n      summaryDetails\n      id\n    }\n    skills {\n      skillName\n    }\n    projects {\n      projectName\n      role\n      technologies\n      description\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "be6fcf2fbe9ecaa21cb164f2243741b5";
+(node as any).hash = "2063ffec62e0b86bf0a9bbd5a8001380";
 
 export default node;

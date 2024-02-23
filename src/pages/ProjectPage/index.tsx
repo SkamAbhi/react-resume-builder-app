@@ -48,7 +48,7 @@ function Project() {
         technologies: proData.technologies,
         description: proData.description,
         results: proData.results,
-        idResume: "421b0456-439c-4d34-9e96-86fda0a4288f",
+        idResume: "dd2c5381-f24b-43fc-b570-5c4202cfe9dc",
       };
       const response = await addNewProject({ variables: { input } });
 

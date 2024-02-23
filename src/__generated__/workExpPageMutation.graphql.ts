@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a1018eb31ac0087add0d0d946f28ca44>>
+ * @generated SignedSource<<f4ce41d1c08ce5851b4bc7ac96de275c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,14 +10,15 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type AddNewWorkExperienceAndCompanyAndCompanyAddressInput = {
-  city: string;
-  companyName: string;
-  country: string;
-  description: string;
-  endDate: string;
-  idResume: string;
-  jobTitle: string;
-  startDate: string;
+  companyAddressId?: string | null | undefined;
+  companyCity?: string | null | undefined;
+  companyCountry?: string | null | undefined;
+  companyId?: string | null | undefined;
+  companyName?: string | null | undefined;
+  endDate?: string | null | undefined;
+  jobTitle?: string | null | undefined;
+  resumeId: string;
+  startDate?: string | null | undefined;
 };
 export type workExpPageMutation$variables = {
   input: AddNewWorkExperienceAndCompanyAndCompanyAddressInput;
@@ -26,7 +27,7 @@ export type workExpPageMutation$data = {
   readonly addNewWorkExperienceAndCompanyAndCompanyAddress: {
     readonly companyAddressId: string | null | undefined;
     readonly companyId: string | null | undefined;
-    readonly success: boolean;
+    readonly success: boolean | null | undefined;
     readonly workExperienceId: string | null | undefined;
   };
 };

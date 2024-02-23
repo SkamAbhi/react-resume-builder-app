@@ -8,8 +8,8 @@ interface ResumeProps {
       summaryDetails?: string;
     }
     personalInfo?: {
-      firstName: string;
-      lastName: string;
+      firstName?: string;
+      lastName?: string;
       email?: string;
       phoneNumber?: string;
       location?: {
@@ -26,13 +26,20 @@ interface ResumeProps {
       endDate?: string;
       degree?: string;
     }>;
-    work?: Array<{
-      name?: string;
+    workExperience?:Array<{
+      description?: string;
+      jobTitle?: string;
       position?: string;
-      location?: string;
       startDate?: string;
       endDate?: string;
-      highlights?: string[];
+      company?: {
+        companyName?: string;
+      }
+        companyAddress?: {
+          city?: string;
+          country?: string;
+        
+      };
     }>;
     skills?: Array<{
       skillName?: string;
@@ -289,42 +296,61 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
       </div>
     );
   };
-  const renderWork = (work?: ResumeProps["data"]["work"], heading?: string) => {
-    if (!work) {
+  const renderWork = (
+    workExperience?: ResumeProps["data"]["workExperience"],
+    heading?: string
+  ) => {
+    if (!workExperience) {
+      return null;
+    }
+      return (
+        <div style={styles.section}>
+          <h2 style={styles.heading}>{heading || "Work Experience"}</h2>
+          {/* Map over each work experience item and render its details */}
+          {workExperience.map((experience, index) => (
+            <div key={index}>
+              <p>Job Title: {experience.jobTitle}</p>
+              {experience.company && (
+                <div>
+                  <p>{experience.company.companyName}</p>
+                  <p>{experience.companyAddress?.city}, {experience.companyAddress?.country}</p>
+                </div>
+              )}
+              <p> {experience.startDate} - {experience.endDate}</p>
+              <p>Description: {experience.description}</p>
+
+            </div>
+          ))}
+        </div>
+      );
+   }
+  
+
+  const renderProjects = (
+    projects?: ResumeProps["data"]["projects"],
+    heading?: string
+  ) => {
+    if (!projects) {
       return null;
     }
 
     return (
       <div style={styles.section}>
-        <h2 style={styles.heading}>{heading || " Work Experience"}</h2>
+        <h2 style={styles.heading}>{heading || "Projects"}</h2>
         <ul style={styles.list}>
-          {work.map((job) => (
-            <li key={job.name} style={styles.listItem}>
-              <p>{`${job.startDate || ""} – ${job.endDate || "Present"}`}</p>
-
-              <p style={styles.subheading}>{job.position}</p>
-              <p>{`${job.name || ""}, ${job.location || ""}`}</p>
-              {job.highlights && (
-                <ul style={styles.list}>
-                  {job.highlights.map((duty, index) => (
-                    <li
-                      key={index}
-                      className={css({
-                        ...$theme.typography.LabelMedium,
-                      })}
-                    >
-                      {duty}
-                    </li>
-                  ))}
-                </ul>
-              )}
+          {projects.map((project) => (
+            <li key={project.title} style={styles.listItem}>
+              <h3 style={styles.subheading}>{project.title || ""}</h3>
+              <p>{`Project Role: ${project.role || ""}`}</p>
+              <p>{`Technologies: ${project.technologies?.join(", ") || ""}`}</p>
+              <p>{`Responsibilities: ${project.responsibilities || ""}`}</p>
+              <p>{`Results: ${project.results || ""}`}</p>
             </li>
           ))}
         </ul>
       </div>
     );
   };
-
   const renderSkills = (
     skills?: ResumeProps["data"]["skills"],
     heading?: string
@@ -375,31 +401,7 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
     );
   };
 
-  const renderProjects = (
-    projects?: ResumeProps["data"]["projects"],
-    heading?: string
-  ) => {
-    if (!projects) {
-      return null;
-    }
 
-    return (
-      <div style={styles.section}>
-        <h2 style={styles.heading}>{heading || "Projects"}</h2>
-        <ul style={styles.list}>
-          {projects.map((project) => (
-            <li key={project.title} style={styles.listItem}>
-              <h3 style={styles.subheading}>{project.title || ""}</h3>
-              <p>{`Project Role: ${project.role || ""}`}</p>
-              <p>{`Technologies: ${project.technologies?.join(", ") || ""}`}</p>
-              <p>{`Responsibilities: ${project.responsibilities || ""}`}</p>
-              <p>{`Results: ${project.results || ""}`}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
 
   const renderAwards = (
     awards?: ResumeProps["data"]["awards"],
@@ -442,15 +444,15 @@ const Resume1: React.FC<ResumeProps> = ({ data }) => {
           maxWidth: "300px",
         })}
       >
-        {renderProfile(data.personalInfo)}
-        <Summary summary={data.summary?.summaryDetails} />
+        {renderProfile(data?.personalInfo)}
+        <Summary summary={data?.summary?.summaryDetails} />
       </div>
       <div>
-        {renderWork(data.work, data.headings?.work)}
-        {renderEducation(data.educationDetails, data.headings?.education)}
-        {renderSkills(data.skills, data.headings?.skills)}
-        {renderProjects(data.projects, data.headings?.projects)}
-        {renderAwards(data.awards, data.headings?.awards)}
+        {renderWork(data?.workExperience, data?.headings?.work)}
+        {renderEducation(data?.educationDetails, data?.headings?.education)}
+        {renderSkills(data?.skills, data?.headings?.skills)}
+        {renderProjects(data?.projects, data?.headings?.projects)}
+        {renderAwards(data?.awards, data?.headings?.awards)}
       </div>
     </div>
   );

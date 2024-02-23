@@ -20,7 +20,7 @@ export default function Home() {
       const response = await addNewResumeID({
         variables: {
           input: {
-            userId: '9d9a45ac-578a-4977-b13e-212eb6e50565',
+            userId: 'a23ffa0b-dfd6-4e4e-bac7-e0993d07e6b1',
             name: 'resume'
 
           }

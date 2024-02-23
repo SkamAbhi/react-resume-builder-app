@@ -33,13 +33,20 @@ interface ResumeProps {
       endDate?: string;
       degree?: string;
     }>;
-    work?: Array<{
-      name?: string;
+    workExperience?:Array<{
+      description?: string;
+      jobTitle?: string;
       position?: string;
-      location?: string;
       startDate?: string;
       endDate?: string;
-      highlights?: string[];
+      company?: {
+        companyName?: string;
+      }
+        companyAddress?: {
+          city?: string;
+          country?: string;
+        
+      };
     }>;
     skills?: Array<{
       skillName?: string;
@@ -150,9 +157,9 @@ export default function Resume3({ data }: ResumeProps) {
               paddingRight: $theme.sizing.scale900,
             })}
           >
-            <Education education={data.educationDetails} heading={data.headings} />
-            <WorkExperience experience={data.work} heading={data.headings} />
-            {Projects(data.projects, data.headings?.projects)}
+            <Education education={data?.educationDetails} heading={data?.headings} />
+            <WorkExperience experience={data?.workExperience} heading={data?.headings} />
+            {Projects(data?.projects, data?.headings?.projects)}
 
           </div>
         </div>
@@ -185,7 +192,7 @@ export default function Resume3({ data }: ResumeProps) {
                   gap: "10px",
                 })}
               >
-                {data.personalInfo?.phone && (
+                {data?.personalInfo?.phone && (
                   <div
                     className={css({
                       display: "flex",
@@ -201,11 +208,11 @@ export default function Resume3({ data }: ResumeProps) {
                         ...$theme.typography.LabelSmall,
                       })}
                     >
-                      {data.personalInfo?.phone}
+                      {data?.personalInfo?.phone}
                     </div>
                   </div>
                 )}
-                {data.personalInfo?.email && (
+                {data?.personalInfo?.email && (
                   <div
                     className={css({
                       display: "flex",
@@ -221,11 +228,11 @@ export default function Resume3({ data }: ResumeProps) {
                         ...$theme.typography.LabelSmall,
                       })}
                     >
-                      {data.personalInfo?.email}
+                      {data?.personalInfo?.email}
                     </div>
                   </div>
                 )}
-                {data.personalInfo?.location && (
+                {data?.personalInfo?.location && (
                   <div
                     className={css({
                       display: "flex",
@@ -241,11 +248,11 @@ export default function Resume3({ data }: ResumeProps) {
                         ...$theme.typography.LabelSmall,
                       })}
                     >
-                      {data.personalInfo?.location?.address}
+                      {data?.personalInfo?.location?.address}
                     </div>
                   </div>
                 )}
-                {data.personalInfo?.website && (
+                {data?.personalInfo?.website && (
                   <div
                     className={css({
                       display: "flex",
@@ -261,7 +268,7 @@ export default function Resume3({ data }: ResumeProps) {
                         ...$theme.typography.LabelSmall,
                       })}
                     >
-                      {data.personalInfo?.website}
+                      {data?.personalInfo?.website}
                     </div>
                   </div>
                 )}
@@ -276,9 +283,9 @@ export default function Resume3({ data }: ResumeProps) {
               paddingBottom: $theme.sizing.scale800,
             })}
           >
-            <Skills skills={data.skills} heading={data.headings} />
-            <Awards award={data.awards} heading={data.headings} />
-            <Summary summary={data.summary?.summaryDetails} />
+            <Skills skills={data?.skills} heading={data?.headings} />
+            <Awards award={data?.awards} heading={data?.headings} />
+            <Summary summary={data?.summary?.summaryDetails} />
           </div>
         </div>
       </div>
@@ -359,16 +366,16 @@ const Education = ({
 };
 
 const WorkExperience = ({
-  experience,
+  experience: workExperience,
   heading,
 }: {
-  experience: ResumeProps["data"]["work"];
+  experience: ResumeProps["data"]["workExperience"];
   heading: ResumeProps["data"]["headings"];
 }) => {
   const [css, $theme] = useStyletron();
 
-  if (!experience) {
-    return null;
+  if (!Array.isArray(workExperience) || workExperience.length === 0) {
+    return null; 
   }
   return (
     <div
@@ -396,7 +403,7 @@ const WorkExperience = ({
           gap: "25px",
         })}
       >
-        {experience?.map((ele) => (
+        {workExperience?.map((ele) => (
           <div>
             <div
               className={css({
@@ -405,8 +412,12 @@ const WorkExperience = ({
                 paddingBottom: $theme.sizing.scale100,
               })}
             >
-              {`${ele.position}`}
+              {`${ele.jobTitle}`}
             </div>
+            <div>
+              {ele.company?.companyName}
+              {ele.companyAddress?.city},{ele.companyAddress?.country}
+              </div>
             <div
               className={css({
                 ...$theme.typography.LabelMedium,
@@ -415,7 +426,7 @@ const WorkExperience = ({
                 color: $theme.colors.primary700,
               })}
             >
-              {`${ele.name || ""}`} / {`${ele.startDate || ""}`}-
+              {`${ele.startDate || ""}`}/
               {`${ele.endDate || "Present"}`}
             </div>
             <div
@@ -424,8 +435,7 @@ const WorkExperience = ({
                 color: $theme.colors.backgroundOverlayDark,
               })}
             >
-              {`${ele.highlights || ""}`}
-            </div>
+           </div>
           </div>
         ))}
       </div>

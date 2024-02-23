@@ -503,7 +503,7 @@ export default function Resume2({ data }: ResumeProps) {
           backgroundColor: "#f4f4f4",
         })}
       >
-        {renderProfile(data.personalInfo)}
+        {renderProfile(data?.personalInfo)}
       </div>
 
       <div
@@ -520,10 +520,10 @@ export default function Resume2({ data }: ResumeProps) {
           })}
         >
           <div>
-            {renderContact(data.contact)}
-            {renderSkills(data.skills, data.headings?.skills)}
-            {renderEducation(data.educationDetails, data.headings?.education)}
-            {renderAwards(data.awards, data.headings?.awards)}
+            {renderContact(data?.contact)}
+            {renderSkills(data?.skills, data?.headings?.skills)}
+            {renderEducation(data?.educationDetails, data?.headings?.education)}
+            {renderAwards(data?.awards, data?.headings?.awards)}
           </div>
         </div>
 
@@ -534,13 +534,13 @@ export default function Resume2({ data }: ResumeProps) {
           })}
         >
           <div>
-            {renderSummary(data.summary?.summary)}
+            {renderSummary(data?.summary?.summary)}
             {renderWorkOrProjects(
-              data.work,
-              data.projects,
-              data.headings?.work
+              data?.work,
+              data?.projects,
+              data?.headings?.work
             )}
-            {renderProjects(data.projects, data.headings?.projects)}
+            {renderProjects(data?.projects, data?.headings?.projects)}
           </div>
         </div>
       </div>

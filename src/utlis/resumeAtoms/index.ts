@@ -52,21 +52,23 @@ export const educationData = atom<educationData>({
 
 interface workExperienceData {
   jobTitle: string;
-  CompanyName: string;
+  companyName: string;
   city: string;
-  Country: string;
+  country: string;
   startDate: string;
   endDate: string;
   description: string;
+  
 }
+
 
 export const workExperienceData = atom<workExperienceData>({
   key: "workExpData",
   default: {
     jobTitle: "",
-    CompanyName: "",
+    companyName: "",
     city: "",
-    Country: "",
+    country: "",
     startDate: "",  
     endDate: "",
     description: "",
@@ -116,17 +118,3 @@ export const userIdState = atom({
   default: null,
 });
 
-export const companyNameState = atom({
-  key: 'companyNameState',
-  default: '',
-});
-
-export const cityState = atom({
-  key: 'cityState',
-  default: '',
-});
-
-export const countryState = atom({
-  key: 'countryState',
-  default: '',
-})

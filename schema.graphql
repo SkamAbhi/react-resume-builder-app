@@ -18,15 +18,16 @@
 # schema.graphql
 type Mutation {
   addNewPersonalInfoAndAddress(
-    input:  AddNewPersonalInfoAndAddressInput!
+    input: AddNewPersonalInfoAndAddressInput!
   ): AddNewPersonalInfoAndAddressPayload!
   addNewEducation(input: AddNewEducationInput!): AddEducationPayload
   addNewResume(input: AddNewResumeInput!): AddNewResumePayload
   addNewProject(input: AddNewProjectInput!): AddNewProjectPayload
   addNewSkill(input: AddNewSkillInput!): AddNewSkillPayload!
   addNewSummary(input: AddNewSummaryInput): AddSummaryPayload
-  addNewWorkExperienceAndCompanyAndCompanyAddress(input: AddNewWorkExperienceAndCompanyAndCompanyAddressInput!): AddNewWorkExperienceAndCompanyAndCompanyAddressPayload!
-
+  addNewWorkExperienceAndCompanyAndCompanyAddress(
+    input: AddNewWorkExperienceAndCompanyAndCompanyAddressInput!
+  ): AddNewWorkExperienceAndCompanyAndCompanyAddressPayload!
 }
 input AddNewSkillInput {
   idResume: ID!
@@ -52,7 +53,7 @@ type AddNewProjectPayload {
   id: ID!
 }
 
-input  AddNewPersonalInfoAndAddressInput {
+input AddNewPersonalInfoAndAddressInput {
   firstName: String!
   lastName: String!
   idResume: ID!
@@ -166,6 +167,7 @@ type ResumePreview {
   personalInfo: PersonalInfo
   educationDetails: [EducationDetails]
   summary: Summary
+  workExperience: [WorkExperience]
   skills: [Skill]
   projects: [Project]
 }
@@ -175,19 +177,37 @@ type Resume {
   educationDetails: [EducationDetails]
 }
 
-input AddNewWorkExperienceAndCompanyAndCompanyAddressInput {
+type WorkExperience {
   jobTitle: String!
-  companyName: String!
-  city: String!
-  country: String!
-  idResume: ID!
+  company: Company!
+  companyAddress: Address!
   startDate: String!
   endDate: String!
   description: String!
 }
 
+type Company {
+  companyName: String!
+}
+
+type Address {
+  city: String!
+  country: String!
+}
+
+input AddNewWorkExperienceAndCompanyAndCompanyAddressInput {
+  jobTitle: String
+  companyName: String
+  companyCity: String
+  companyCountry: String
+  startDate: String
+  endDate: String
+  resumeId: ID!
+  companyId: ID
+  companyAddressId: ID
+}
 type AddNewWorkExperienceAndCompanyAndCompanyAddressPayload {
-  success: Boolean!
+  success: Boolean
   companyId: ID
   companyAddressId: ID
   workExperienceId: ID
