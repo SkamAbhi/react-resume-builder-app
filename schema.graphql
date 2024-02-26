@@ -28,6 +28,7 @@ type Mutation {
   addNewWorkExperienceAndCompanyAndCompanyAddress(
     input: AddNewWorkExperienceAndCompanyAndCompanyAddressInput!
   ): AddNewWorkExperienceAndCompanyAndCompanyAddressPayload!
+  deleteProjectDetails(input: DeleteProjectInput!): DeleteProjectPayload!
 }
 input AddNewSkillInput {
   idResume: ID!
@@ -211,4 +212,12 @@ type AddNewWorkExperienceAndCompanyAndCompanyAddressPayload {
   companyId: ID
   companyAddressId: ID
   workExperienceId: ID
+}
+
+input DeleteProjectInput {
+  id: ID!
+}
+
+type DeleteProjectPayload {
+  success: Boolean!
 }

@@ -32,6 +32,11 @@ export default function DropdownInput({ placeholder, value, onChange, options }:
       position:'relative',
     })}>
       <Input
+       onBlur={() => {
+        setTimeout(() => {
+          setShowDropdown(false);
+        }, 300);
+      }}
         placeholder={placeholder}
         value={value}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
@@ -79,18 +84,17 @@ export default function DropdownInput({ placeholder, value, onChange, options }:
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             backgroundColor: "white",
             position: "absolute",
-            top: 'calc(100% + 4px)', // Position below the input
+            top: 'calc(100% + 4px)', 
             left: 0,
             zIndex: 1,
             width: "calc(100% - 4px)",
-        
             overflowY: "auto",
             maxHeight: "300px",
-            borderTopLeftRadius: "10px",
-            borderTopRightRadius: "10px",
-            borderBottomLeftRadius: "10px",
-            borderBottomRightRadius: "10px",
             maxWidth: "519px",
+            borderTopLeftRadius: $theme.sizing.scale400,
+            borderTopRightRadius: $theme.sizing.scale400,
+            borderBottomLeftRadius: $theme.sizing.scale400,
+            borderBottomRightRadius: $theme.sizing.scale400,
             [$theme.mediaQuery.medium]: {
               maxWidth: "519px",
               width: "100%",
@@ -105,16 +109,15 @@ export default function DropdownInput({ placeholder, value, onChange, options }:
               key={index}
               className={css({
                 cursor: "pointer",
-                padding: "10px",
-                paddingLeft: "20px",
+                padding: $theme.sizing.scale400,
+                paddingLeft: $theme.sizing.scale700,
                 ...$theme.typography.LabelMedium,
                 ":hover": {
                   backgroundColor: "#E7E7E7",
                   fontWeight: "bolder",
                 },
               })}
-              onClick={() => handleOptionClick(option)} // Set the selected option
-            >
+              onClick={() => handleOptionClick(option)} >
               {option}
             </li>
           ))}

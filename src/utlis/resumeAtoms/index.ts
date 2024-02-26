@@ -28,8 +28,8 @@ export const userDataState = atom<UserData>({
 });
 
 interface educationData {
-  schoolName: string;
-  schoolLocation: string;
+  instituteName: string;
+  instituteLocation: string;
   degree: string;
   fieldOfStudy: string;
   startDate: string;
@@ -40,8 +40,8 @@ interface educationData {
 export const educationData = atom<educationData>({
   key: "educationData",
   default: {
-    schoolName: "",
-    schoolLocation: "",
+    instituteName: "",
+    instituteLocation: "",
     degree: "",
     fieldOfStudy: "",
     startDate: "",
@@ -81,7 +81,7 @@ interface projectData {
   description: string;
   results: string;
 }
-export const projectData = atom({
+export const projectData = atom<projectData>({
   key: "projectData",
   default: {
     projectName: "",

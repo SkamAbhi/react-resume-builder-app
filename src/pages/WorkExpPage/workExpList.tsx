@@ -4,14 +4,59 @@ import { StatefulPopover } from "baseui/popover";
 import { useStyletron } from "baseui";
 import CustomButton from "../../components/CustomButton";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function ExperienceList() {
   const [css, $theme] = useStyletron();
   const navigate = useNavigate();
+  const GRAPHQL_ENDPOINT = 'http://localhost:3001/graphql?';
 
   const handleAddWorkExp = () => {
     navigate("/work-exp");
   };
+
+  const [workExperience, setWorkExperience] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(GRAPHQL_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: `
+            query{
+              getResume(id:"dd2c5381-f24b-43fc-b570-5c4202cfe9dc")
+              {
+                workExperience{
+                  jobTitle
+                  company{
+                    companyName
+                  }
+                  companyAddress{
+                    city
+                    country
+                  }
+                  startDate
+                  endDate
+                }
+              }
+            }
+              `
+          }),
+        });
+
+        const { data } = await response.json();
+        setWorkExperience(data.getResume.workExperience);
+          } catch (error) {
+        console.error('Error fetching companies:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div>
       <div
@@ -55,6 +100,7 @@ function ExperienceList() {
               },
             })}
           >
+          
             <h1
               className={css({
                 ...$theme.typography.HeadingMedium,
@@ -149,8 +195,10 @@ function ExperienceList() {
             </Button>
           </StatefulPopover>
         </div>
-        <div
-          className={css({
+        {workExperience.map((exp, index) => (   
+       <div
+        key={index}  
+        className={css({
             border: "1px solid black",
             height: "200px",
             maxWidth: "1100px",
@@ -158,7 +206,7 @@ function ExperienceList() {
             borderRadius: "10px",
             marginBottom: "50px",
           })}
-        >
+        >   
           <div
             className={css({
               display: "flex",
@@ -169,29 +217,27 @@ function ExperienceList() {
                 marginLeft: "90px",
                 ...$theme.typography.LabelMedium,
               })}
-            >
-              E-commerce Platform
+            > companyName :{exp.company.companyName}
             </h4>
-            <p
+           
+          </div>
+          <div
               className={css({
                 marginTop: "21px",
-                marginLeft: "10px",
+                marginLeft: "90px",
                 ...$theme.typography.LabelMedium,
               })}
             >
-              Role: Front-End Developer
-            </p>
-          </div>
-          <p
+              Role: {exp.jobTitle}
+            </div>
+          <div
             className={css({
               marginLeft: "90px",
               marginTop: "0px",
               ...$theme.typography.LabelMedium,
             })}
           >
-            Technologies Used = Angular, Node.js, MongoDB
-          </p>
-          <p
+            Location: {exp.companyAddress.city}, {exp.companyAddress.country}</div><div
             className={css({
               marginLeft: "90px",
               marginTop: "0px",
@@ -199,20 +245,19 @@ function ExperienceList() {
               paddingRight: "30px",
             })}
           >
-            Description of Project : Developed responsive user interfaces,
-            integrated payment gateways, collaborated with UX/UI designers.
-          </p>
-          <p
+            Description of Project : 
+          </div>
+          <div
             className={css({
               marginLeft: "90px",
               marginTop: "0px",
               ...$theme.typography.LabelMedium,
             })}
           >
-            Result : Increased user engagement and sales by 25% within the first
-            quarter.
-          </p>
+           {exp.startDate} - {exp.endDate}
+          </div>
         </div>
+        ))}
 
         <div
           className={css({
@@ -281,54 +326,3 @@ function ExperienceList() {
 }
 
 export default ExperienceList;
-
-// import * as React from "react";
-// import { List, arrayMove, arrayRemove } from "baseui/dnd-list";
-// import { useStyletron } from "baseui";
-
-// const CustomListItem = ({ title, role, technologies, description, result }) => {
-//   const [css, $theme] = useStyletron();
-
-//   return (
-//     <div className={css({ display: "flex" })}>
-//       <h4 className={css({ marginLeft: "90px", ...$theme.typography.LabelMedium })}>
-//         {title}
-//       </h4>
-//       <p className={css({ marginTop: "21px", marginLeft: "10px", ...$theme.typography.LabelMedium })}>
-//         Role: {role}
-//       </p>
-//       <p className={css({ marginLeft: "90px", marginTop: "0px", ...$theme.typography.LabelMedium })}>
-//         Technologies Used = {technologies.join(", ")}
-//       </p>
-//       <p className={css({ marginLeft: "90px", marginTop: "0px", ...$theme.typography.LabelMedium, paddingRight: "30px" })}>
-//         Description of Project: {description}
-//       </p>
-//       <p className={css({ marginLeft: "90px", marginTop: "0px", ...$theme.typography.LabelMedium })}>
-//         Result: {result}
-//       </p>
-//     </div>
-//   );
-// };
-
-//  function ProjectList(){
-//   const [items, setItems] = React.useState([
-//     { title: "E-commerce Platform", role: "Front-End Developer", technologies: ["Angular", "Node.js", "MongoDB"], description: "Developed responsive user interfaces, integrated payment gateways, collaborated with UX/UI designers.", result: "Increased user engagement and sales by 25% within the first quarter." },
-//     // Add more items as needed
-//   ]);
-
-//   return (
-//     <List
-//       items={items}
-//       onChange={({ oldIndex, newIndex }) =>
-//         setItems(
-//           newIndex === -1
-//             ? arrayRemove(items, oldIndex)
-//             : arrayMove(items, oldIndex, newIndex)
-//         )
-//       }
-//       renderItem={({ item, index }) => <CustomListItem {...item} />}
-//     />
-//   );
-// };
-
-// export default ProjectList

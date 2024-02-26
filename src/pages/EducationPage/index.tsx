@@ -119,8 +119,8 @@
     const handleNextButtonClick = async () => {
       try {
         const input = {
-          instituteName: eduData.schoolName,
-          instituteLocation: eduData.schoolLocation,
+          instituteName: eduData.instituteName,
+          instituteLocation: eduData.instituteLocation,
           fieldOfStudy: eduData.fieldOfStudy,
           degree: eduData.degree,
           startDate: eduData.startDate,
@@ -129,7 +129,7 @@
         };
         const response = await updateEducationalInfo({ variables: { input } });
 
-        if (eduData.schoolName.trim() !== "") {
+        if (eduData.instituteName.trim() !== "") {
           // Navigate to a different link when input data is provided
           navigate("/education-list");
         } else {
@@ -355,14 +355,14 @@
               placeholder={""}
               onChange={handleInputChange}
               label={"School Name"}
-              value={eduData.schoolName}
+              value={eduData.instituteName}
               name={"schoolName"}
             />
             <CustomInput
               placeholder={""}
               onChange={handleInputChange}
               label={"School Location"}
-              value={eduData.schoolLocation}
+              value={eduData.instituteLocation}
               name={"schoolLocation"}
             />
           </div>

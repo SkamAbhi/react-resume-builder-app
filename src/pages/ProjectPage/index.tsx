@@ -65,18 +65,6 @@ function Project() {
     }
 
   };
-  // const handleNextButtonClick = () => {
-  //   // Check if input data is provided
-  //   if (inputValue.trim() !== "") {
-  //     // Navigate to a different link when input data is provided
-  //     navigate("/project-list");
-
-  //   } else {
-  //     // Navigate to the given link when no input data is provided
-  //     navigate("/skills");
-
-  //   }
-  // }
   const handleTextareaChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setSummaryValue(event.target.value);
   }

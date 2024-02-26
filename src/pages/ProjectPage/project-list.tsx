@@ -1,17 +1,144 @@
-import { Add, Idea } from "@carbon/icons-react";
+interface projectData {
+  projectName: string;
+  role: string;
+  technologies: string;
+  description: string;
+  results: string;
+}
+
+import { Add, Idea, Subtract } from "@carbon/icons-react";
 import { Button } from "baseui/button";
 import { StatefulPopover } from "baseui/popover";
 import { useStyletron } from "baseui";
 import CustomButton from "../../components/CustomButton";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect, ChangeEvent } from "react";
+import { ANCHOR, Drawer } from "baseui/drawer";
+import CustomInput from "../../components/CustomInput";
+import Textarea from "baseui/textarea/textarea";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { projectData } from "../../utlis/resumeAtoms";
+import { DeleteProjectDetailsMutation } from "../../mutations/DeleteMutations/deleteProjectDetails";
+import { useMutation } from "react-relay";
 
 function ProjectList() {
   const [css, $theme] = useStyletron();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const proData = useRecoilValue(projectData);
+  const setProData = useSetRecoilState(projectData);
+  const [showInput, setShowInput] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [summaryValue, setSummaryValue] = useState("");
 
+  const handleProjectInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInputValue(e.target.value);
+
+    setProData((prevProData) => {
+      const updatedProData = {
+        ...prevProData,
+        [name]: value,
+      };
+      localStorage.setItem("projectData", JSON.stringify(updatedProData));
+      return updatedProData;
+    });
+  };
+  const handleTextareaChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSummaryValue(event.target.value);
+  }
   const handleAddProject = () => {
     navigate("/project");
   };
+  const GRAPHQL_ENDPOINT = 'http://localhost:3001/graphql?';
+
+  const handleButtonClick = () => {
+    setShowInput(!showInput);
+  };
+
+  const [projectList, setProjectList] = useState<projectData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(GRAPHQL_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: `
+            query{
+              getResume(id:"dd2c5381-f24b-43fc-b570-5c4202cfe9dc")
+              {
+                projects{
+                  projectName
+                  role
+                  technologies
+                  results
+                  description
+                }
+              }
+            }
+              `
+          }),
+        });
+
+        const { data } = await response.json();
+        setProjectList(data.getResume.projects);
+        
+        if (data.getResume.projects.length > 0) {
+          const { projectName, role, technologies, results, description } = data.getResume.projects[0];
+          setInputValue(projectName);
+          setProData((prevProData) => ({
+            ...prevProData,
+            projectName,
+            role,
+            technologies,
+            results,
+            description,
+          }));
+          setSummaryValue(description);
+        }
+      } catch (error) {
+        console.error('Error fetching companies:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDrawerButtonClick = (index: number) => {
+    setIsMobileMenuOpen(true); // Open the drawer
+    const selectedProject = projectList[index];
+    setProData(selectedProject); // Update the projectData state with the selected project data
+  };
+  const [deleteProject,] = useMutation(DeleteProjectDetailsMutation);
+
+  const handleDeleteClick = async () => {
+    try {
+      const { data } = await deleteProject({
+        variables: {
+          input: {
+            id: "69c30d24-efda-4055-9ba5-edca623d4476"
+          }
+        }
+      });
+      
+      if (data.deleteProjectDetails.success) {
+
+        console.log('Project deleted successfully');
+      } else {
+        // Handle failure
+        console.error('Failed to delete project');
+      }
+    } catch (error) {
+      // Handle error
+      console.error('Error deleting project:', error);
+    }
+  };
+
+ 
   return (
     <div>
       {" "}
@@ -151,107 +278,364 @@ function ProjectList() {
             </Button>
           </StatefulPopover>
         </div>
-        <div
-          className={css({
-            border: "1px solid black",
-            height: "200px",
-            maxWidth: "1100px",
-            width: "100%",
-            borderRadius: "10px",
-            marginBottom: "50px",
-          })}
-        >
+
+        <div className={css({
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center'
+        })}>
           <div
             className={css({
               display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "2px dashed #0C1986",
+              borderRadius: "16px",
+              borderColor: "#0C1986",
+              color: "#0C1986",
+              backgroundColor: "#fff",
+              textAlign: "center",
+              maxWidth: "345px",
+              height: "266px",
+              marginRight: $theme.sizing.scale400,
+              marginLeft: $theme.sizing.scale400,
+              marginBottom: $theme.sizing.scale700,
+              ...$theme.typography.LabelXSmall,
+              [$theme.mediaQuery.medium]: {
+                ...$theme.typography.LabelMedium,
+                width: "100%",
+              },
+              ":hover": {
+                backgroundColor: "rgba(232, 241, 247, 0.8)",
+              },
             })}
+            onClick={handleAddProject}
           >
-            <h4
+
+            <div
               className={css({
-                marginLeft: "90px",
-                ...$theme.typography.LabelMedium,
+                ...$theme.typography.HeadingSmall,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               })}
             >
-              E-commerce Platform
-            </h4>
-            <p
-              className={css({
-                marginTop: "21px",
-                marginLeft: "10px",
-                ...$theme.typography.LabelMedium,
-              })}
-            >
-              Role: Front-End Developer
-            </p>
+              <Add size={64} />
+
+              Add another project
+            </div>
           </div>
-          <p
-            className={css({
-              marginLeft: "90px",
-              marginTop: "0px",
-              ...$theme.typography.LabelMedium,
-            })}
+          {projectList.map((projects, index) => (
+            <div
+              key={index}
+              className={css({
+                border: "1px solid black",
+                maxWidth: "300px",
+                borderRadius: $theme.sizing.scale600,
+                padding: $theme.sizing.scale800,
+                marginTop: $theme.sizing.scale0,
+                marginRight: $theme.sizing.scale400,
+                marginLeft: $theme.sizing.scale400,
+                marginBottom: $theme.sizing.scale800,
+                width: "100%",
+                height: "216px",
+
+              })}
+            >
+              <div
+                className={css({
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: "10px",
+                })}
+              >
+                <div
+                  className={css({
+                    backgroundColor: "lightblue",
+                    width: $theme.sizing.scale400,
+                    padding: $theme.sizing.scale200,
+                    borderRadius: $theme.sizing.scale200,
+                    ...$theme.typography.LabelMedium,
+                  })}
+                >
+                  {index + 1}
+                </div>
+
+              </div>
+              <div
+                className={css({
+                  ...$theme.typography.LabelLarge,
+                  fontWeight: "bolder",
+                  display: "flex",
+                  alignItems: "center",
+                  paddingTop: $theme.sizing.scale400,
+                })}
+              >
+                {projects.projectName}
+              </div>
+              <div
+                className={css({
+                  paddingTop: $theme.sizing.scale400,
+                  ...$theme.typography.LabelSmall,
+                })}
+              >
+                Role - {projects.role}
+              </div>
+              <div
+                className={css({
+                  ...$theme.typography.LabelSmall,
+                  paddingTop: $theme.sizing.scale400,
+
+                })}
+              >
+                Technologies Used - {projects.technologies}
+              </div>
+              <div
+                className={css({
+                  ...$theme.typography.LabelSmall,
+                  paddingTop: $theme.sizing.scale400,
+
+                })}
+              >
+                Description of Project - {projects.description}
+              </div>
+              <div
+                className={css({
+                  ...$theme.typography.LabelSmall,
+                  paddingTop: $theme.sizing.scale400,
+
+                })}
+              >
+                Result - {projects.results}
+              </div>
+              <div
+                className={css({
+                  display: "flex",
+                  gap: "10px",
+                  marginTop: $theme.sizing.scale600
+                })}
+              >
+                <Button
+                  overrides={{
+                    BaseButton: {
+                      style: ({ $theme }) => ({
+                        paddingLeft: $theme.sizing.scale500,
+                        paddingRight: $theme.sizing.scale500,
+                        paddingTop: $theme.sizing.scale0,
+                        paddingBottom: $theme.sizing.scale0,
+                        height: $theme.sizing.scale900,
+                        ...$theme.typography.LabelXSmall,
+                        backgroundColor: "rgb(236,236,236)",
+                        color: $theme.colors.primaryA,
+                        ":hover": {
+                          backgroundColor: "rgb(228,228,228)",
+                        },
+                      }),
+                    },
+                  }}
+                  onClick={()=>handleDrawerButtonClick(index)}
+                >
+                  Edit{" "}
+                </Button>
+                <Button
+                  overrides={{
+                    BaseButton: {
+                      style: ({ $theme }) => ({
+                        paddingLeft: $theme.sizing.scale500,
+                        paddingRight: $theme.sizing.scale500,
+                        paddingTop: $theme.sizing.scale0,
+                        paddingBottom: $theme.sizing.scale0,
+                        height: $theme.sizing.scale900,
+                        ...$theme.typography.LabelXSmall,
+                        backgroundColor: "rgb(236,236,236)",
+                        color: $theme.colors.primaryA,
+                        ":hover": {
+                          backgroundColor: "rgb(228,228,228)",
+                        },
+                      }),
+                    },
+                  }}
+                  onClick={handleDeleteClick}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))}
+          <Drawer
+            isOpen={isMobileMenuOpen}
+            autoFocus
+            onClose={() => setIsMobileMenuOpen(false)}
+            anchor={ANCHOR.left}
+            overrides={{
+              Root: {
+                style: () => ({
+                  zIndex: 999,
+                  margin: '0',
+               
+                })
+              }, DrawerBody: {
+                style: () => ({
+                  margin: "0",
+                })
+              },
+              DrawerContainer: {
+                style: ({ $theme }) => ({
+                  width: "800px",
+                  backgroundColor: "white",
+                  [$theme.mediaQuery.medium]: {
+                    width: "700px",
+                  },
+
+                }),
+              },
+              Close: {
+                style: () => ({
+                  display: "none",
+                }),
+              },
+            }}
           >
-            Technologies Used = Angular, Node.js, MongoDB
-          </p>
-          <p
-            className={css({
-              marginLeft: "90px",
-              marginTop: "0px",
-              ...$theme.typography.LabelMedium,
-              paddingRight: "30px",
-            })}
-          >
-            Description of Project : Developed responsive user interfaces,
-            integrated payment gateways, collaborated with UX/UI designers.
-          </p>
-          <p
-            className={css({
-              marginLeft: "90px",
-              marginTop: "0px",
-              ...$theme.typography.LabelMedium,
-            })}
-          >
-            Result : Increased user engagement and sales by 25% within the first
-            quarter.
-          </p>
+            <div
+              className={css({
+                color: 'white',
+                ...$theme.typography.LabelMedium,
+              })}
+            >
+              <div
+                className={css({
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                  marginTop: "45px",
+                })}
+              >
+                <div
+                  className={css({
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingRight: $theme.sizing.scale1200,
+                    paddingLeft: $theme.sizing.scale1200,
+                  })}
+                >
+                  <CustomInput
+                    placeholder={"project name"}
+                    label={"Project Name"}
+                    value={proData.projectName}
+                    name={"projectName"}
+                    onChange={handleProjectInputChange}
+                  />
+                  <CustomInput
+                    placeholder={"Your role in project"}
+                    onChange={handleProjectInputChange}
+                    label={"Project Role"}
+                    value={proData.role}
+                    name={"role"}
+                  />
+                </div>
+                <div
+                  className={css({
+                    display: "flex",
+                    flexDirection: "column",
+                  })}
+                >
+                  <div
+                    className={css({
+                      display: 'flex',
+                      flexDirection: 'column',
+                      paddingRight: $theme.sizing.scale1200,
+                      paddingLeft: $theme.sizing.scale1200,
+                    })}
+                  >
+                    <CustomInput
+                      placeholder={"Tech Stack Used in Project "}
+                      onChange={handleProjectInputChange}
+                      label={"Technologies Used"}
+                      value={proData.technologies}
+                      name={"technologies"}
+                    />
+                    <CustomInput
+                      placeholder={"Results or accomplishments about ptoject "}
+                      onChange={handleProjectInputChange}
+                      label={"Result"}
+                      value={proData.results}
+                      name={"results"}
+                    />
+                  </div>
+                </div>
+
+
+                <div
+                  className={css({
+                    marginTop: "20px",
+                    paddingRight: $theme.sizing.scale1200,
+                    paddingLeft: $theme.sizing.scale1200,
+                  })}
+                >
+                  <Button
+                    onClick={handleButtonClick}
+                    overrides={{
+                      BaseButton: {
+                        style: ({ $theme }) => ({
+                          backgroundColor: $theme.colors.primaryB,
+                          color: "#0C1986",
+                          ":hover": {
+                            backgroundColor: "rgba(232, 241, 247, 0.8)",
+                          },
+                        }),
+                      },
+                    }}
+                  >
+                    {showInput ? (
+                      <>
+                        {" "}
+                        <Subtract /> Add description about Project{" "}
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        <Add /> Add description about Project{" "}
+                      </>
+                    )}
+                  </Button>
+
+                  {showInput && (
+                    <div
+                      className={css({
+                        marginTop: "10px",
+                      })}
+                    >
+                      <Textarea
+                        value={summaryValue}
+                        onChange={handleTextareaChange}
+                        placeholder="Give a brief idea of project"
+                        overrides={{
+                          Input: {
+                            style: ({ $theme }) => ({
+                              borderRadius: "4px",
+                              minHeight: "300px",
+                              backgroundColor: $theme.colors.primaryB,
+                            }),
+                          },
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div className={css({
+                    display:'flex',
+                    gap:'40px',
+                    marginTop:$theme.sizing.scale400,
+                    justifyContent:'end'
+                  })}>
+                  <CustomButton name="Cancel" isSpecial/>
+                  <CustomButton name={"Save"}/>
+              </div>
+                </div>
+              </div>
+            </div>
+          </Drawer>
         </div>
 
-        <div
-          className={css({
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "2px dashed #0C1986",
-            borderRadius: "20px",
-            borderColor: "#0C1986",
-            color: "#0C1986",
-            backgroundColor: "#fff",
-            marginBottom: "20px",
-            height: "45px",
-            textAlign: "center",
-            margin: " 0 10px",
-            ...$theme.typography.LabelXSmall,
-            [$theme.mediaQuery.medium]: {
-              ...$theme.typography.LabelMedium,
-              width: "100%",
-              maxWidth: "990px",
-            },
-            ":hover": {
-              backgroundColor: "rgba(232, 241, 247, 0.8)",
-            },
-          })}
-          onClick={handleAddProject}
-        >
-          <div
-            className={css({
-              ...$theme.typography.LabelMedium,
-            })}
-          >
-            {" "}
-            <Add />
-            Add another project
-          </div>
-        </div>
         <div
           className={css({
             display: "flex",
@@ -272,60 +656,10 @@ function ProjectList() {
           <CustomButton name={"Back"} to={"/work-exp"} isSpecial />
           <CustomButton name={"Next"} to={"/skills"} />
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
+
   );
 }
 
 export default ProjectList;
-
-// import * as React from "react";
-// import { List, arrayMove, arrayRemove } from "baseui/dnd-list";
-// import { useStyletron } from "baseui";
-
-// const CustomListItem = ({ title, role, technologies, description, result }) => {
-//   const [css, $theme] = useStyletron();
-
-//   return (
-//     <div className={css({ display: "flex" })}>
-//       <h4 className={css({ marginLeft: "90px", ...$theme.typography.LabelMedium })}>
-//         {title}
-//       </h4>
-//       <p className={css({ marginTop: "21px", marginLeft: "10px", ...$theme.typography.LabelMedium })}>
-//         Role: {role}
-//       </p>
-//       <p className={css({ marginLeft: "90px", marginTop: "0px", ...$theme.typography.LabelMedium })}>
-//         Technologies Used = {technologies.join(", ")}
-//       </p>
-//       <p className={css({ marginLeft: "90px", marginTop: "0px", ...$theme.typography.LabelMedium, paddingRight: "30px" })}>
-//         Description of Project: {description}
-//       </p>
-//       <p className={css({ marginLeft: "90px", marginTop: "0px", ...$theme.typography.LabelMedium })}>
-//         Result: {result}
-//       </p>
-//     </div>
-//   );
-// };
-
-//  function ProjectList(){
-//   const [items, setItems] = React.useState([
-//     { title: "E-commerce Platform", role: "Front-End Developer", technologies: ["Angular", "Node.js", "MongoDB"], description: "Developed responsive user interfaces, integrated payment gateways, collaborated with UX/UI designers.", result: "Increased user engagement and sales by 25% within the first quarter." },
-//     // Add more items as needed
-//   ]);
-
-//   return (
-//     <List
-//       items={items}
-//       onChange={({ oldIndex, newIndex }) =>
-//         setItems(
-//           newIndex === -1
-//             ? arrayRemove(items, oldIndex)
-//             : arrayMove(items, oldIndex, newIndex)
-//         )
-//       }
-//       renderItem={({ item, index }) => <CustomListItem {...item} />}
-//     />
-//   );
-// };
-
-// export default ProjectList

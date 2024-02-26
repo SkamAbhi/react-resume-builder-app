@@ -1,9 +1,20 @@
-import { Add, Idea } from "@carbon/icons-react";
-import { Button } from "baseui/button";
-import { StatefulPopover } from "baseui/popover";
+interface educationData {
+  instituteName: string;
+  instituteLocation: string;
+  degree: string;
+  fieldOfStudy: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+}
+
+import { Add } from "@carbon/icons-react";
 import { useStyletron } from "baseui";
 import CustomButton from "../../components/CustomButton";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import CustomPopover from "../../components/CustomPopover";
+import { Button } from "baseui/button";
 
 function EducationList() {
   const [css, $theme] = useStyletron();
@@ -12,6 +23,47 @@ function EducationList() {
   const handleAddEducation = () => {
     navigate("/education");
   };
+
+  const GRAPHQL_ENDPOINT = "http://localhost:3001/graphql?";
+
+  const [educationList, setEducationList] = useState<educationData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(GRAPHQL_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query: `
+            query{
+              getResume(id:"dd2c5381-f24b-43fc-b570-5c4202cfe9dc")
+              {
+                educationDetails{
+                  instituteName
+                  instituteLocation
+                  degree
+                  fieldOfStudy
+                  startDate
+                  endDate
+                }
+              }
+            }
+              `,
+          }),
+        });
+
+        const { data } = await response.json();
+        setEducationList(data.getResume.educationDetails);
+      } catch (error) {
+        console.error("Error fetching companies:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div>
       {" "}
@@ -64,10 +116,11 @@ function EducationList() {
                 },
               })}
             >
-             Educational Summary
+              Educational Summary
             </h1>
           </div>
-          <StatefulPopover
+          <CustomPopover
+            placement="bottom"
             content={
               <div
                 className={css({
@@ -90,7 +143,7 @@ function EducationList() {
                   <ul>
                     <li
                       className={css({
-                        marginBottom: "8px",
+                        marginBottom: $theme.sizing.scale300,
                       })}
                     >
                       List the schools you have attended and any degrees you
@@ -98,7 +151,7 @@ function EducationList() {
                     </li>
                     <li
                       className={css({
-                        marginBottom: "8px",
+                        marginBottom: $theme.sizing.scale300,
                       })}
                     >
                       {" "}
@@ -107,7 +160,7 @@ function EducationList() {
                     </li>
                     <li
                       className={css({
-                        marginBottom: "8px",
+                        marginBottom: $theme.sizing.scale300,
                       })}
                     >
                       {" "}
@@ -118,103 +171,152 @@ function EducationList() {
                 </p>
               </div>
             }
-            accessibilityType={"tooltip"}
-            placement={"bottomRight"}
-            overrides={{
-              Body: {
-                style: ({ $theme }) => ({
-                  maxWidth: "500px",
-                  backgroundColor: $theme.colors.primaryB,
-                  margin: "0 20px",
-                }),
-              },
-            }}
-          >
-            <Button
-              overrides={{
-                BaseButton: {
-                  style: ({ $theme }) => ({
-                    backgroundColor: "white",
-                    color: "#0C1986",
-                    position: "initial",
-                    marginTop: "15px",
-                    maxHeight: "50px",
-                    ":hover": {
-                      backgroundColor: $theme.colors.white,
-                      color: "blue",
-                    },
-                  }),
-                },
-              }}
-            >
-              <Idea /> Tips
-            </Button>
-          </StatefulPopover>
+            buttonText={"Tips"}
+          />
         </div>
-        <div
-          className={css({
-            border: "1px solid black",
-            height: "200px",
-            maxWidth: "1100px",
-            width: "100%",
-            borderRadius: "10px",
-            marginBottom: "50px",
-          })}
-        >
+        {educationList.map((education, index) => (
           <div
+            key={index}
             className={css({
-              display: "flex",
+              borderBottom: "1px solid black",
+              maxWidth: "750px",
+              padding: $theme.sizing.scale300,
+              paddingBottom: $theme.sizing.scale600,
+              marginTop: $theme.sizing.scale0,
+              marginRight: $theme.sizing.scale400,
+              marginLeft: $theme.sizing.scale400,
+              marginBottom: "50px",
+              [$theme.mediaQuery.medium]: {
+                width: "100%",
+              },
+              [$theme.mediaQuery.large]: {
+                maxWidth: "1000px",
+              },
             })}
           >
-            <h4
+            <div
               className={css({
-                marginLeft: "90px",
+                backgroundColor: "lightblue",
+                width: $theme.sizing.scale400,
+                padding: $theme.sizing.scale200,
+                borderRadius: $theme.sizing.scale200,
                 ...$theme.typography.LabelMedium,
               })}
             >
-              E-commerce Platform
-            </h4>
-            <p
+              {index + 1}
+            </div>
+            <div
               className={css({
-                marginTop: "21px",
-                marginLeft: "10px",
-                ...$theme.typography.LabelMedium,
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "10px",
               })}
             >
-              Role: Front-End Developer
-            </p>
+              <div
+                className={css({
+                  display: "flex",
+                })}
+              >
+                <div
+                  className={css({
+                    ...$theme.typography.LabelLarge,
+                    fontWeight: "bolder",
+                    display: "flex",
+                    alignItems: "center",
+                  })}
+                >
+                  {education.degree} - {education.fieldOfStudy}
+                </div>
+              </div>
+              <div
+                className={css({
+                  display: "flex",
+                  gap: "10px",
+                })}
+              >
+                <Button
+                  overrides={{
+                    BaseButton: {
+                      style: ({ $theme }) => ({
+                        paddingLeft: $theme.sizing.scale500,
+                        paddingRight: $theme.sizing.scale500,
+                        paddingTop: $theme.sizing.scale0,
+                        paddingBottom: $theme.sizing.scale0,
+                        height: $theme.sizing.scale900,
+                        ...$theme.typography.LabelXSmall,
+                        backgroundColor: "rgb(236,236,236)",
+                        color: $theme.colors.primaryA,
+                        ":hover": {
+                          backgroundColor: "rgb(228,228,228)",
+                        },
+                      }),
+                    },
+                  }}
+                >
+                  Edit{" "}
+                </Button>
+                <Button
+                  overrides={{
+                    BaseButton: {
+                      style: ({ $theme }) => ({
+                        paddingLeft: $theme.sizing.scale500,
+                        paddingRight: $theme.sizing.scale500,
+                        paddingTop: $theme.sizing.scale0,
+                        paddingBottom: $theme.sizing.scale0,
+                        height: $theme.sizing.scale900,
+                        ...$theme.typography.LabelXSmall,
+                        backgroundColor: "rgb(236,236,236)",
+                        color: $theme.colors.primaryA,
+                        ":hover": {
+                          backgroundColor: "rgb(228,228,228)",
+                        },
+                      }),
+                    },
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+
+            <div
+              className={css({
+                flexDirection: "column",
+                marginTop: $theme.sizing.scale800,
+                ...$theme.typography.LabelSmall,
+
+              })}
+            >
+              {education.instituteName}
+            </div>
+            <div
+              className={css({
+                marginTop: $theme.sizing.scale200,
+                ...$theme.typography.LabelSmall,
+                paddingRight: "30px",
+              })}
+            >
+              {education.instituteLocation}
+            </div>
+            <div
+              className={css({
+                marginTop: $theme.sizing.scale200,
+                ...$theme.typography.LabelSmall,
+              })}
+            >
+              {education.description}
+            </div>
+            <div
+              className={css({
+                marginTop: $theme.sizing.scale200,
+                ...$theme.typography.LabelSmall,
+                fontWeight: "bold",
+              })}
+            >
+              {education.startDate} / {education.endDate}
+            </div>
           </div>
-          <p
-            className={css({
-              marginLeft: "90px",
-              marginTop: "0px",
-              ...$theme.typography.LabelMedium,
-            })}
-          >
-            Technologies Used = Angular, Node.js, MongoDB
-          </p>
-          <p
-            className={css({
-              marginLeft: "90px",
-              marginTop: "0px",
-              ...$theme.typography.LabelMedium,
-              paddingRight: "30px",
-            })}
-          >
-            Description of Project : Developed responsive user interfaces,
-            integrated payment gateways, collaborated with UX/UI designers.
-          </p>
-          <p
-            className={css({
-              marginLeft: "90px",
-              marginTop: "0px",
-              ...$theme.typography.LabelMedium,
-            })}
-          >
-            Result : Increased user engagement and sales by 25% within the first
-            quarter.
-          </p>
-        </div>
+        ))}
 
         <div
           className={css({
@@ -249,7 +351,7 @@ function EducationList() {
           >
             {" "}
             <Add />
-            Add another project
+            Add another Education
           </div>
         </div>
         <div
