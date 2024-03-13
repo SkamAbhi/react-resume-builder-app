@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
-import MobileHeader from "../MobileHeader";
-import Sidebar from "../Sidebar";
+import Navigation from "../Sidebar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,8 +8,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <MobileHeader />
-      <Sidebar />
+      <Navigation/>
       <main>{children}</main>
     </>
   );

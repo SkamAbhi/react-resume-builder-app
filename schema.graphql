@@ -1,0 +1,223 @@
+# ## schema.graphql
+# interface Node {
+#   id: ID!
+# }
+
+# type User implements Node {
+#   id: ID!
+#   name: String
+# }
+
+# type Query {
+#   user(id: ID!): User
+# }
+
+# schema {
+#   query: Query
+# }
+# schema.graphql
+type Mutation {
+  addNewPersonalInfoAndAddress(
+    input: AddNewPersonalInfoAndAddressInput!
+  ): AddNewPersonalInfoAndAddressPayload!
+  addNewEducation(input: AddNewEducationInput!): AddEducationPayload
+  addNewResume(input: AddNewResumeInput!): AddNewResumePayload
+  addNewProject(input: AddNewProjectInput!): AddNewProjectPayload
+  addNewSkill(input: AddNewSkillInput!): AddNewSkillPayload!
+  addNewSummary(input: AddNewSummaryInput): AddSummaryPayload
+  addNewWorkExperienceAndCompanyAndCompanyAddress(
+    input: AddNewWorkExperienceAndCompanyAndCompanyAddressInput!
+  ): AddNewWorkExperienceAndCompanyAndCompanyAddressPayload!
+  deleteProjectDetails(input: DeleteProjectDetailsInput!): DeleteProjectPayload!
+}
+input AddNewSkillInput {
+  idResume: ID!
+  skillName: String!
+}
+type AddNewSkillPayload {
+  id: ID!
+  success: Boolean!
+}
+
+input AddNewResumeInput {
+  userId: String
+  name: String
+}
+
+type AddNewResumePayload {
+  success: Boolean
+  id: ID!
+}
+
+type AddNewProjectPayload {
+  success: Boolean
+  id: ID!
+}
+
+input AddNewPersonalInfoAndAddressInput {
+  firstName: String!
+  lastName: String!
+  idResume: ID!
+  email: String!
+  profession: String!
+  phoneNumber: String!
+  city: String!
+  country: String!
+  zipcode: String!
+}
+
+type AddNewPersonalInfoAndAddressPayload {
+  success: Boolean!
+  personalInfoId: ID
+  personalAddressId: ID
+}
+type User {
+  id: ID!
+  name: String
+  email: String
+}
+type Query {
+  getPersonalInfo: PersonalInfo
+  getEducationDetails(id: ID!): EducationDetails
+  getResume(id: ID!): ResumePreview
+  addNewSummary(id: ID!): Summary
+}
+input AddNewEducationInput {
+  instituteName: String!
+  instituteLocation: String!
+  degree: String!
+  fieldOfStudy: String!
+  startDate: String!
+  endDate: String!
+  description: String
+}
+
+type AddEducationPayload {
+  success: Boolean!
+  id: ID!
+}
+
+input AddNewProjectInput {
+  idResume: ID!
+  projectName: String!
+  role: String!
+  technologies: [String!]
+  description: String
+  results: String
+}
+
+type AddSummaryPayload {
+  id: ID!
+  success: Boolean!
+}
+input AddNewSummaryInput {
+  summaryDetails: String
+}
+input AddSkillInput {
+  idResume: ID!
+  skillName: String!
+}
+
+type AddSkillPayload {
+  id: ID
+  success: Boolean
+}
+
+type Summary {
+  id: ID!
+  summaryDetails: String!
+}
+
+type Skill {
+  skillName: String
+}
+
+type Project {
+  projectName: String
+  role: String
+  technologies: [String]
+  description: String
+}
+type EducationDetails {
+  id: ID!
+  instituteName: String!
+  instituteLocation: String!
+  fieldOfStudy: String!
+  startDate: String!
+  endDate: String!
+  currentlyAttendsHere: Boolean!
+  resume: Resume
+  createdAt: String!
+  updatedAt: String!
+  description: String!
+  degree: String!
+}
+type PersonalInfo {
+  id: ID!
+  firstName: String
+  middleName: String
+  lastName: String
+  birthdate: String
+  email: String
+  profession: String
+  phoneNumber: String
+  photo: String
+  resume: Resume
+}
+type ResumePreview {
+  personalInfo: PersonalInfo
+  educationDetails: [EducationDetails]
+  summary: Summary
+  workExperience: [WorkExperience]
+  skills: [Skill]
+  projects: [Project]
+}
+
+type Resume {
+  personalInfo: PersonalInfo
+  educationDetails: [EducationDetails]
+}
+
+type WorkExperience {
+  jobTitle: String!
+  company: Company!
+  companyAddress: Address!
+  startDate: String!
+  endDate: String!
+  description: String!
+}
+
+type Company {
+  companyName: String!
+}
+
+type Address {
+  city: String!
+  country: String!
+}
+
+input AddNewWorkExperienceAndCompanyAndCompanyAddressInput {
+  jobTitle: String
+  companyName: String
+  companyCity: String
+  companyCountry: String
+  startDate: String
+  endDate: String
+  resumeId: ID!
+  companyId: ID
+  companyAddressId: ID
+}
+type AddNewWorkExperienceAndCompanyAndCompanyAddressPayload {
+  success: Boolean
+  companyId: ID
+  companyAddressId: ID
+  workExperienceId: ID
+}
+
+input DeleteProjectDetailsInput {
+  id: ID!
+}
+
+type DeleteProjectPayload {
+  success: Boolean!
+}

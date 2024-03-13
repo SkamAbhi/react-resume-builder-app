@@ -1,50 +1,120 @@
 import { atom } from "recoil";
 
 interface UserData {
+  phoneNumber: string;
   firstName: string;
-  surName: string;
+  lastName: string;
   profession: string;
   city: string;
   country: string;
-  pinCode: string;
-  phone: string;
+  ZipCode: string;
   email: string;
+  photo: string;
 }
 
 export const userDataState = atom<UserData>({
-  key: 'userDataState',
+  key: "userDataState",
   default: {
-    firstName: '',
-    surName: '',
-    profession: '',
-    city: '',
-    country: '',
-    pinCode: '',
-    phone: '',
-    email: '',
+    firstName: "",
+    lastName: "",
+    profession: "",
+    city: "",
+    country: "",
+    ZipCode: "",
+    phoneNumber: "",
+    email: "",
+    photo: "",
   },
 });
 
 interface educationData {
-  schoolName:string,
-  schoolLocation:string,
-  degree:string,
-  fieldOfStudy:string,
-  startDate:string,
-  endDate:string,
-  description:string,
+  instituteName: string;
+  instituteLocation: string;
+  degree: string;
+  fieldOfStudy: string;
+  startDate: string;
+  endDate: string;
+  description: string;
 }
 
 export const educationData = atom<educationData>({
-  key:'educationData',
-  default:{
-    schoolName:'',
-    schoolLocation:'',
-    degree:'',
-    fieldOfStudy:'',
-    startDate:'',
-    endDate:'',
-    description:'',
-  }
-})
+  key: "educationData",
+  default: {
+    instituteName: "",
+    instituteLocation: "",
+    degree: "",
+    fieldOfStudy: "",
+    startDate: "",
+    endDate: "",
+    description: "",
+  },
+});
+
+interface workExperienceData {
+  jobTitle: string;
+  companyName: string;
+  city: string;
+  country: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  
+}
+
+
+export const workExperienceData = atom<workExperienceData>({
+  key: "workExpData",
+  default: {
+    jobTitle: "",
+    companyName: "",
+    city: "",
+    country: "",
+    startDate: "",  
+    endDate: "",
+    description: "",
+  },
+});
+interface projectData {
+  projectName: string;
+  role: string;
+  technologies: string;
+  description: string;
+  results: string;
+}
+export const projectData = atom<projectData>({
+  key: "projectData",
+  default: {
+    projectName: "",
+    role: "",
+    technologies: "",
+    description: "",
+    results: "",
+  },
+});
+
+export const userState = atom({
+  key: "userState",
+  default: {
+    isAuthenticated: false,
+    username: "",
+  },
+});
+
+export const LoginDataState = atom({
+  key: "LoginDataState",
+  default: {
+    name: "",
+    email: "",
+  },
+});
+
+export const dynamicLinksState = atom({
+  key: "dynamicLinksState",
+  default: [],
+});
+
+export const userIdState = atom({
+  key: "userIdState",
+  default: null,
+});
 

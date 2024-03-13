@@ -6,11 +6,16 @@ import CustomButton from "../../components/CustomButton";
 import { StatefulInput } from "baseui/input";
 import { Checkmark, Add } from "@carbon/icons-react";
 import jsonData from "../../data /data.json";
+import { addNewSummaryMutation } from "../../mutations/summaryPageMutation"
+import { useMutation } from "react-relay";
+import { useNavigate } from "react-router-dom";
 
 const Summary: React.FC = () => {
   const [css, $theme] = useStyletron();
   const [inputValue, setInputValue] = useState<string>("");
   const [selectedSummary, setSelectedSummary] = useState<string | null>(null);
+  const [addSummaryMutation] = useMutation(addNewSummaryMutation);
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
     setInputValue((e.target as HTMLTextAreaElement).value);
@@ -34,6 +39,23 @@ const Summary: React.FC = () => {
     );
   };
 
+  const handleNextClick = async () => {
+    try {
+      // Execute the mutation
+      const response = await addSummaryMutation({
+        variables: {
+          input: {
+            idResume: "a5718b49-d596-4078-86bd-075be01f67c2",
+            summaryDetails: selectedSummary 
+            },
+        },
+      });
+     navigate('/finalize')
+      console.log("Mutation response:", response);
+    } catch (error) {
+      console.error("Error in mutation:", error);
+    }
+  };
   const skillsData = jsonData;
 
   return (
@@ -42,29 +64,34 @@ const Summary: React.FC = () => {
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
-        MaxWidth: "1000px",
+        marginTop:'50px',
         ...$theme.typography.LabelMedium,
-
+        [$theme.mediaQuery.medium]:{
+           alignItems:'center',
+           marginTop:'50px'
+        },
         [$theme.mediaQuery.large]: {
-          marginLeft: "17rem",
-          marginTop: "40px",
+          display:'flex',
+          justifyContent:'center',
+          alignItems:'center',
+          marginRight:'30px',
+          marginLeft: "17.5rem",
+          marginTop:'30px',
         },
       })}
     >
-      <div
-        className={css({
-          display: "flex",
-          justifyContent: "space-between",
-        })}
-      >
+     
         <div
           className={css({
             marginLeft: "30px",
             marginRight: "20px",
-
             [$theme.mediaQuery.medium]: {
-              marginLeft: "0px",
-              marginRight: "0px",
+             
+            },
+            [$theme.mediaQuery.large]: {
+              width:'100%',
+              maxWidth:'1100px',
+              margin:0,
             },
           })}
         >
@@ -80,15 +107,22 @@ const Summary: React.FC = () => {
           </h1>
           <p>Choose from our pre-written examples below or write your own.</p>
         </div>
-      </div>
       <div
         className={css({
           display: "flex",
-          margin: "0 20px",
           gap: "40px",
           backgroundColor: "#f3f8ff",
-          padding: "30px ",
+          padding: " 30px 20px ",
           borderRadius: "20px",
+          flexDirection:'column',
+          [$theme.mediaQuery.medium]:{
+            maxWidth:'800px'
+          },
+          [$theme.mediaQuery.large]:{
+            maxWidth:'1100px',
+            flexDirection:'row'
+
+          }
         })}
       >
         <div
@@ -106,9 +140,13 @@ const Summary: React.FC = () => {
               Input: {
                 style: ({ $theme }) => ({
                   borderRadius: "4px",
-                  minHeight: "400px",
-                  width: "400px",
+                  minHeight:'300px',
                   backgroundColor: $theme.colors.primaryB,
+                  [$theme.mediaQuery.large]:{
+                    width: "400px",
+                    minHeight: "400px",
+
+                  }
                 }),
               },
             }}
@@ -128,7 +166,6 @@ const Summary: React.FC = () => {
               overrides={{
                 Root: {
                   style: ({ $theme }) => ({
-                    maxWidth: "520px",
                     border: "1.5px solid #838fa0",
                     borderBottomLeftRadius: "0px",
                     borderBottomRightRadius: "0px",
@@ -187,6 +224,7 @@ const Summary: React.FC = () => {
                 })}
               >
                 {skillsData.map((skill) => (
+                  
                   <div
                     className={css({
                       border: "1.2px solid #d3d9de",
@@ -195,6 +233,7 @@ const Summary: React.FC = () => {
                       display: "flex",
                       overflowY: "auto",
                       marginBottom: "10px",
+                      cursor:'pointer',
                       ":hover": {
                         borderColor: "#2b2d2f",
                         boxShadow:
@@ -206,6 +245,8 @@ const Summary: React.FC = () => {
                       alignItems: "center",
                       opacity: selectedSummary === skill.summary ? 0.5 : 1,
                     })}
+                    onClick={() => handleAddSummary(skill.summary)}
+
                   >
                     <button
                       className={css({
@@ -248,9 +289,17 @@ const Summary: React.FC = () => {
         className={css({
           display: "flex",
           justifyContent: "space-between",
-          marginRight: "20px",
-          marginLeft: "20px",
-          marginTop: "60px",
+          marginRight: "25px",
+          marginLeft: "25px",
+          marginTop: "7vh",
+          [$theme.mediaQuery.medium]: {
+            width: "100%",
+            maxWidth: "750px",
+          },
+          [$theme.mediaQuery.large]: {
+            width: "100%",
+            maxWidth: "1100px",
+          },
         })}
       >
         <CustomButton
@@ -261,8 +310,7 @@ const Summary: React.FC = () => {
         />
         <CustomButton
           name={"Next: Final View"}
-          onClick={console.log}
-          to={"/finalize"}
+          onClick={handleNextClick}
         />
       </div>
     </div>
