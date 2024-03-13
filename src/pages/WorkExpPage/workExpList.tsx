@@ -28,7 +28,7 @@ function ExperienceList() {
           body: JSON.stringify({
             query: `
             query{
-              getResume(id:"dd2c5381-f24b-43fc-b570-5c4202cfe9dc")
+              getResume(id:"a5718b49-d596-4078-86bd-075be01f67c2")
               {
                 workExperience{
                   jobTitle
@@ -212,19 +212,20 @@ function ExperienceList() {
               display: "flex",
             })}
           >
-            <h4
+            <div
               className={css({
-                marginLeft: "90px",
+                marginLeft: "50px",
+                padding:'8px',
                 ...$theme.typography.LabelMedium,
               })}
             > companyName :{exp.company.companyName}
-            </h4>
+            </div>
            
           </div>
           <div
               className={css({
-                marginTop: "21px",
-                marginLeft: "90px",
+                marginLeft: "50px",
+                padding:'8px',
                 ...$theme.typography.LabelMedium,
               })}
             >
@@ -232,14 +233,16 @@ function ExperienceList() {
             </div>
           <div
             className={css({
-              marginLeft: "90px",
+              marginLeft: "50px",
+              padding:'8px',
               marginTop: "0px",
               ...$theme.typography.LabelMedium,
             })}
           >
             Location: {exp.companyAddress.city}, {exp.companyAddress.country}</div><div
             className={css({
-              marginLeft: "90px",
+              marginLeft: "50px",
+              padding:'8px',
               marginTop: "0px",
               ...$theme.typography.LabelMedium,
               paddingRight: "30px",
@@ -249,7 +252,8 @@ function ExperienceList() {
           </div>
           <div
             className={css({
-              marginLeft: "90px",
+              marginLeft: "50px",
+              padding:'8px',
               marginTop: "0px",
               ...$theme.typography.LabelMedium,
             })}

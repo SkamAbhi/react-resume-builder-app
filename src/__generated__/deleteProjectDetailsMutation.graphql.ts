@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<698544b186909f5c8d5b83d114a347a5>>
+ * @generated SignedSource<<39a538f83399bd4728f33486f020f596>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,11 +9,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type DeleteProjectInput = {
+export type DeleteProjectDetailsInput = {
   id: string;
 };
 export type deleteProjectDetailsMutation$variables = {
-  input: DeleteProjectInput;
+  input: DeleteProjectDetailsInput;
 };
 export type deleteProjectDetailsMutation$data = {
   readonly deleteProjectDetails: {
@@ -77,16 +77,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "2061633d3a60680a2d38e0c93e6679f2",
+    "cacheID": "f3060f121c3f4b61e0bec35d6be19999",
     "id": null,
     "metadata": {},
     "name": "deleteProjectDetailsMutation",
     "operationKind": "mutation",
-    "text": "mutation deleteProjectDetailsMutation(\n  $input: DeleteProjectInput!\n) {\n  deleteProjectDetails(input: $input) {\n    success\n  }\n}\n"
+    "text": "mutation deleteProjectDetailsMutation(\n  $input: DeleteProjectDetailsInput!\n) {\n  deleteProjectDetails(input: $input) {\n    success\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "d3e0e2ad2202ad4e9d427624c539f683";
+(node as any).hash = "676a4c6788c4bcab7c7c525b3a2654d4";
 
 export default node;

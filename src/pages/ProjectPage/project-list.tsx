@@ -69,7 +69,7 @@ function ProjectList() {
           body: JSON.stringify({
             query: `
             query{
-              getResume(id:"dd2c5381-f24b-43fc-b570-5c4202cfe9dc")
+              getResume(id:"a5718b49-d596-4078-86bd-075be01f67c2")
               {
                 projects{
                   projectName
@@ -120,23 +120,23 @@ function ProjectList() {
       const { data } = await deleteProject({
         variables: {
           input: {
-            id: "69c30d24-efda-4055-9ba5-edca623d4476"
+            id: "cd0c5908-7879-40b3-87f9-d7ca5b25631e" // Make sure this id is correct
           }
         }
       });
+  
+      console.log("Mutation response data:", data); // Log the response data
       
-      if (data.deleteProjectDetails.success) {
-
+      if (data && data.deleteProjectDetails && data.deleteProjectDetails.success) {
         console.log('Project deleted successfully');
       } else {
-        // Handle failure
         console.error('Failed to delete project');
       }
     } catch (error) {
-      // Handle error
       console.error('Error deleting project:', error);
     }
   };
+  
 
  
   return (

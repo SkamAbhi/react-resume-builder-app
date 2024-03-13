@@ -45,7 +45,7 @@ const Summary: React.FC = () => {
       const response = await addSummaryMutation({
         variables: {
           input: {
-            idResume: "dd2c5381-f24b-43fc-b570-5c4202cfe9dc",
+            idResume: "a5718b49-d596-4078-86bd-075be01f67c2",
             summaryDetails: selectedSummary 
             },
         },
